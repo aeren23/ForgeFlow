@@ -1,0 +1,12 @@
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\contracts\ForgeFlow.Contracts\bin\Debug\net8.0\ForgeFlow.Contracts.deps.json
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\contracts\ForgeFlow.Contracts\bin\Debug\net8.0\ForgeFlow.Contracts.dll
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\contracts\ForgeFlow.Contracts\bin\Debug\net8.0\ForgeFlow.Contracts.pdb
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\contracts\ForgeFlow.Contracts\obj\Debug\net8.0\ForgeFlow.Contracts.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\contracts\ForgeFlow.Contracts\obj\Debug\net8.0\ForgeFlow.Contracts.AssemblyInfoInputs.cache
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\contracts\ForgeFlow.Contracts\obj\Debug\net8.0\ForgeFlow.Contracts.AssemblyInfo.cs
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\contracts\ForgeFlow.Contracts\obj\Debug\net8.0\ForgeFlow.Contracts.csproj.CoreCompileInputs.cache
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\contracts\ForgeFlow.Contracts\obj\Debug\net8.0\ForgeFlow.Contracts.sourcelink.json
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\contracts\ForgeFlow.Contracts\obj\Debug\net8.0\ForgeFlow.Contracts.dll
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\contracts\ForgeFlow.Contracts\obj\Debug\net8.0\refint\ForgeFlow.Contracts.dll
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\contracts\ForgeFlow.Contracts\obj\Debug\net8.0\ForgeFlow.Contracts.pdb
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\contracts\ForgeFlow.Contracts\obj\Debug\net8.0\ref\ForgeFlow.Contracts.dll

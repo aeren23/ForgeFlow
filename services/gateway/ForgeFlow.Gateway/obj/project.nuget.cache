@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "vzOTBGgEJcQ=",
+  "success": true,
+  "projectFilePath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\gateway\\ForgeFlow.Gateway\\ForgeFlow.Gateway.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\alihe\\.nuget\\packages\\system.io.hashing\\8.0.0\\system.io.hashing.8.0.0.nupkg.sha512",
+    "C:\\Users\\alihe\\.nuget\\packages\\yarp.reverseproxy\\2.3.0\\yarp.reverseproxy.2.3.0.nupkg.sha512"
+  ],
+  "logs": []
+}

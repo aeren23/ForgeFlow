@@ -1,0 +1,170 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: forgeflow-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: forgeflow
+      RABBITMQ_DEFAULT_PASS: forgeflow
+    networks:
+      - forgeflow-net
+
+  seq:
+    image: datalust/seq:latest
+    container_name: forgeflow-seq
+    environment:
+      ACCEPT_EULA: "Y"
+      SEQ_FIRSTRUN_NOAUTHENTICATION: "true"
+    ports:
+      - "5380:80"
+    networks:
+      - forgeflow-net
+
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: forgeflow-mssql
+    ports:
+      - "1433:1433"
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "YourStrong(!)Password123"
+      MSSQL_PID: "Developer"
+    volumes:
+      - forgeflow_mssql:/var/opt/mssql
+    networks:
+      - forgeflow-net
+    healthcheck:
+      test: [ "CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'YourStrong(!)Password123' -Q 'SELECT 1' -C || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+
+  # MSSQL ayağa kalkınca DB'leri oluştursun:
+  db-init:
+    image: mcr.microsoft.com/mssql-tools:latest
+    container_name: forgeflow-db-init
+    depends_on:
+      mssql:
+        condition: service_healthy
+    networks:
+      - forgeflow-net
+    volumes:
+      - ./mssql/init:/init
+    command: >
+      /bin/bash -c " echo 'Waiting a bit...' && sleep 2 && /opt/mssql-tools/bin/sqlcmd -S mssql -U sa -P 'YourStrong(!)Password123' -i /init/001-create-dbs.sql && echo 'DB init done.' "
+
+  gateway:
+    build:
+      context: ..
+      dockerfile: services/gateway/ForgeFlow.Gateway/Dockerfile
+    container_name: forgeflow-gateway
+    ports:
+      - "8090:8080"
+    environment:
+      ASPNETCORE_URLS: http://+:8080
+    depends_on:
+      - identity
+      - work
+      - artifact
+    networks:
+      - forgeflow-net
+
+  identity:
+    build:
+      context: ..
+      dockerfile: services/identity/ForgeFlow.Identity.Api/Dockerfile
+    container_name: forgeflow-identity
+    ports:
+      - "8081:8080"
+    environment:
+      ASPNETCORE_URLS: http://+:8080
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__Db: "Server=mssql,1433;Database=ForgeFlow_Identity;User Id=sa;Password=YourStrong(!)Password123;TrustServerCertificate=True;Encrypt=False"
+      RabbitMq__Host: rabbitmq
+      RabbitMq__Username: forgeflow
+      RabbitMq__Password: forgeflow
+      Seq__ServerUrl: http://seq
+    depends_on:
+      mssql:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
+      db-init:
+        condition: service_completed_successfully
+    networks:
+      - forgeflow-net
+
+  work:
+    build:
+      context: ..
+      dockerfile: services/work/ForgeFlow.Work.Api/Dockerfile
+    container_name: forgeflow-work
+    ports:
+      - "8082:8080"
+    environment:
+      ASPNETCORE_URLS: http://+:8080
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__Db: "Server=mssql,1433;Database=ForgeFlow_Work;User Id=sa;Password=YourStrong(!)Password123;TrustServerCertificate=True;Encrypt=False"
+      RabbitMq__Host: rabbitmq
+      RabbitMq__Username: forgeflow
+      RabbitMq__Password: forgeflow
+      Seq__ServerUrl: http://seq
+    depends_on:
+      mssql:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
+      db-init:
+        condition: service_completed_successfully
+    networks:
+      - forgeflow-net
+
+  artifact:
+    build:
+      context: ..
+      dockerfile: services/artifact/ForgeFlow.Artifact.Api/Dockerfile
+    container_name: forgeflow-artifact
+    ports:
+      - "8084:8080"
+    environment:
+      ASPNETCORE_URLS: http://+:8080
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__Db: "Server=mssql,1433;Database=ForgeFlow_Artifact;User Id=sa;Password=YourStrong(!)Password123;TrustServerCertificate=True;Encrypt=False"
+      RabbitMq__Host: rabbitmq
+      RabbitMq__Username: forgeflow
+      RabbitMq__Password: forgeflow
+      Seq__ServerUrl: http://seq
+    depends_on:
+      mssql:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
+      db-init:
+        condition: service_completed_successfully
+    networks:
+      - forgeflow-net
+
+  ai-orchestrator:
+    build:
+      context: ..
+      dockerfile: services/ai-orchestrator/ForgeFlow.AiOrchestrator.Worker/Dockerfile
+    container_name: forgeflow-ai-orchestrator
+    environment:
+      RabbitMq__Host: rabbitmq
+      RabbitMq__Username: forgeflow
+      RabbitMq__Password: forgeflow
+      Seq__ServerUrl: http://seq
+    depends_on:
+      rabbitmq:
+        condition: service_started
+    networks:
+      - forgeflow-net
+
+networks:
+  forgeflow-net:
+    name: forgeflow-net
+
+volumes:
+  forgeflow_mssql:

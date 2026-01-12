@@ -1,0 +1,39 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v9.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v9.0": {
+      "ForgeFlow.Gateway/1.0.0": {
+        "dependencies": {
+          "ForgeFlow.Contracts": "1.0.0"
+        },
+        "runtime": {
+          "ForgeFlow.Gateway.dll": {}
+        }
+      },
+      "ForgeFlow.Contracts/1.0.0": {
+        "runtime": {
+          "ForgeFlow.Contracts.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "ForgeFlow.Gateway/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "ForgeFlow.Contracts/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
