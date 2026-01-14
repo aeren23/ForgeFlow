@@ -9,8 +9,9 @@ namespace ForgeFlow.Work.Api.Controllers;
 public class IssuesController : ControllerBase
 {
     private readonly IPublishEndpoint _publish;
+    private readonly ILogger<IssuesController> _logger;
 
-    public IssuesController(IPublishEndpoint publish) => _publish = publish;
+    public IssuesController(IPublishEndpoint publish, ILogger<IssuesController> logger) => (_publish, _logger) = (publish, logger);
 
     [HttpPost("{issueId}/generate")]
     public async Task<IActionResult> Generate(string issueId)
@@ -31,6 +32,7 @@ public class IssuesController : ControllerBase
                 Strictness: "STANDARD"
             )
         );
+        _logger.LogInformation("Published AiPlanRequested | CorrelationId={CorrelationId} IssueId={IssueId}", correlationId, issueId);
 
         await _publish.Publish(evt);
 

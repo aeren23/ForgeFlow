@@ -1,0 +1,16 @@
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\artifact\ForgeFlow.Artifact.Application\bin\Debug\net8.0\ForgeFlow.Artifact.Application.deps.json
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\artifact\ForgeFlow.Artifact.Application\bin\Debug\net8.0\ForgeFlow.Artifact.Application.dll
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\artifact\ForgeFlow.Artifact.Application\bin\Debug\net8.0\ForgeFlow.Artifact.Application.pdb
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\artifact\ForgeFlow.Artifact.Application\bin\Debug\net8.0\ForgeFlow.Artifact.Domain.dll
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\artifact\ForgeFlow.Artifact.Application\bin\Debug\net8.0\ForgeFlow.Artifact.Domain.pdb
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\artifact\ForgeFlow.Artifact.Application\obj\Debug\net8.0\ForgeFlow.Artifact.Application.csproj.AssemblyReference.cache
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\artifact\ForgeFlow.Artifact.Application\obj\Debug\net8.0\ForgeFlow.Artifact.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\artifact\ForgeFlow.Artifact.Application\obj\Debug\net8.0\ForgeFlow.Artifact.Application.AssemblyInfoInputs.cache
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\artifact\ForgeFlow.Artifact.Application\obj\Debug\net8.0\ForgeFlow.Artifact.Application.AssemblyInfo.cs
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\artifact\ForgeFlow.Artifact.Application\obj\Debug\net8.0\ForgeFlow.Artifact.Application.csproj.CoreCompileInputs.cache
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\artifact\ForgeFlow.Artifact.Application\obj\Debug\net8.0\ForgeFlow.Artifact.Application.sourcelink.json
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\artifact\ForgeFlow.Artifact.Application\obj\Debug\net8.0\ForgeFlo.6BD3C330.Up2Date
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\artifact\ForgeFlow.Artifact.Application\obj\Debug\net8.0\ForgeFlow.Artifact.Application.dll
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\artifact\ForgeFlow.Artifact.Application\obj\Debug\net8.0\refint\ForgeFlow.Artifact.Application.dll
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\artifact\ForgeFlow.Artifact.Application\obj\Debug\net8.0\ForgeFlow.Artifact.Application.pdb
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\artifact\ForgeFlow.Artifact.Application\obj\Debug\net8.0\ref\ForgeFlow.Artifact.Application.dll

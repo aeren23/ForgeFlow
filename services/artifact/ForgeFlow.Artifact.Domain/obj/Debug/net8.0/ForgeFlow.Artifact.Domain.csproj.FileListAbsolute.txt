@@ -1,0 +1,10 @@
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\artifact\ForgeFlow.Artifact.Domain\bin\Debug\net8.0\ForgeFlow.Artifact.Domain.deps.json
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\artifact\ForgeFlow.Artifact.Domain\bin\Debug\net8.0\ForgeFlow.Artifact.Domain.dll
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\artifact\ForgeFlow.Artifact.Domain\bin\Debug\net8.0\ForgeFlow.Artifact.Domain.pdb
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\artifact\ForgeFlow.Artifact.Domain\obj\Debug\net8.0\ForgeFlow.Artifact.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\artifact\ForgeFlow.Artifact.Domain\obj\Debug\net8.0\ForgeFlow.Artifact.Domain.csproj.CoreCompileInputs.cache
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\artifact\ForgeFlow.Artifact.Domain\obj\Debug\net8.0\ForgeFlow.Artifact.Domain.sourcelink.json
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\artifact\ForgeFlow.Artifact.Domain\obj\Debug\net8.0\ForgeFlow.Artifact.Domain.dll
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\artifact\ForgeFlow.Artifact.Domain\obj\Debug\net8.0\refint\ForgeFlow.Artifact.Domain.dll
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\artifact\ForgeFlow.Artifact.Domain\obj\Debug\net8.0\ForgeFlow.Artifact.Domain.pdb
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\artifact\ForgeFlow.Artifact.Domain\obj\Debug\net8.0\ref\ForgeFlow.Artifact.Domain.dll

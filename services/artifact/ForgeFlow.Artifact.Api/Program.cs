@@ -1,5 +1,9 @@
 using ForgeFlow.Artifact.Api.Consumers;
+using ForgeFlow.Artifact.Application;
+using ForgeFlow.Artifact.Infrastructure;
+using ForgeFlow.Artifact.Infrastructure.Persistence;
 using MassTransit;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -35,12 +39,26 @@ builder.Services.AddMassTransit(x =>
     });
 });
 
+var cs = builder.Configuration.GetConnectionString("Db");
+if (string.IsNullOrWhiteSpace(cs))
+    throw new InvalidOperationException("ConnectionStrings:Db is missing for Artifact service.");
+
+builder.Services.AddArtifactInfrastructure(cs);
+builder.Services.AddArtifactApplication();
+
 // Add services
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+// Apply pending migrations on startup
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ArtifactDbContext>();
+    db.Database.Migrate();
+}
 
 // Configure pipeline
 if (app.Environment.IsDevelopment())
