@@ -21,22 +21,24 @@ public class ArtifactGeneratedConsumer : IConsumer<EventEnvelope<ArtifactGenerat
     {
         var msg = context.Message;
 
-        // Seq üzerinde CorrelationId ile tüm akışı izleyebiliriz
+        // Seq üzerinde CorrelationId ve UserId ile tüm akışı izleyebiliriz
         using var scope = _logger.BeginScope(new Dictionary<string, object>
         {
             ["CorrelationId"] = msg.CorrelationId,
-            ["EventId"] = msg.EventId
+            ["EventId"] = msg.EventId,
+            ["UserId"] = msg.UserId
         });
 
         _logger.LogInformation(
-            "Processing ArtifactGenerated event | IssueId={IssueId} Type={Type}",
-            msg.Data.IssueId, msg.Data.ArtifactType);
+            "Processing ArtifactGenerated event | IssueId={IssueId} Type={Type} UserId={UserId}",
+            msg.Data.IssueId, msg.Data.ArtifactType, msg.UserId);
 
         var contentJson = $$"""
         {
           "type": "{{msg.Data.ArtifactType}}",
           "issueId": "{{msg.Data.IssueId}}",
           "generatedAtUtc": "{{DateTime.UtcNow:O}}",
+          "generatedBy": "{{msg.UserId}}",
           "note": "Placeholder content - AI output will be stored here later"
         }
         """;
@@ -46,7 +48,8 @@ public class ArtifactGeneratedConsumer : IConsumer<EventEnvelope<ArtifactGenerat
             IssueId: msg.Data.IssueId,
             Type: msg.Data.ArtifactType,
             ContentJson: contentJson,
-            CorrelationId: msg.CorrelationId
+            CorrelationId: msg.CorrelationId,
+            UserId: msg.UserId  // Actor bilgisini geçiriyoruz!
         ), context.CancellationToken);
 
         if (rev == -1) // Idempotency flag - duplicate event
@@ -58,7 +61,7 @@ public class ArtifactGeneratedConsumer : IConsumer<EventEnvelope<ArtifactGenerat
         }
 
         _logger.LogInformation(
-            "Saved Artifact revision | IssueId={IssueId} Type={Type} Rev={Rev}",
-            msg.Data.IssueId, msg.Data.ArtifactType, rev);
+            "Saved Artifact revision | IssueId={IssueId} Type={Type} Rev={Rev} UserId={UserId}",
+            msg.Data.IssueId, msg.Data.ArtifactType, rev, msg.UserId);
     }
 }

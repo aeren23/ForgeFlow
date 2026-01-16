@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using ArtifactEntity = ForgeFlow.Artifact.Domain.Entities.Artifact;
 using ArtifactRevisionEntity = ForgeFlow.Artifact.Domain.Entities.ArtifactRevision;
+using AuditLogEntity = ForgeFlow.Artifact.Domain.Entities.AuditLog;
 
 namespace ForgeFlow.Artifact.Infrastructure.Persistence;
 
@@ -10,6 +11,7 @@ public class ArtifactDbContext : DbContext
 
     public DbSet<ArtifactEntity> Artifacts => Set<ArtifactEntity>();
     public DbSet<ArtifactRevisionEntity> ArtifactRevisions => Set<ArtifactRevisionEntity>();
+    public DbSet<AuditLogEntity> AuditLogs => Set<AuditLogEntity>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -49,5 +51,25 @@ public class ArtifactDbContext : DbContext
 
             b.HasIndex(x => new { x.ArtifactId, x.RevisionNo }).IsUnique();
         });
+
+        // AuditLog mapping
+        modelBuilder.Entity<AuditLogEntity>(b =>
+        {
+            b.HasKey(x => x.Id);
+
+            b.Property(x => x.EntityName).IsRequired().HasMaxLength(100);
+            b.Property(x => x.EntityId).IsRequired().HasMaxLength(200);
+            b.Property(x => x.Action).IsRequired().HasMaxLength(50);
+            b.Property(x => x.UserId).IsRequired().HasMaxLength(100);
+            b.Property(x => x.CorrelationId).IsRequired().HasMaxLength(100);
+            b.Property(x => x.Changes).HasColumnType("nvarchar(max)");
+
+            // Sorgulama için indexler
+            b.HasIndex(x => x.CorrelationId);
+            b.HasIndex(x => x.UserId);
+            b.HasIndex(x => x.CreatedAtUtc);
+            b.HasIndex(x => new { x.EntityName, x.EntityId });
+        });
     }
 }
+

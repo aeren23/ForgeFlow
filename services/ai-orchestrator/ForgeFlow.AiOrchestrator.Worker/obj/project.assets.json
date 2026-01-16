@@ -2524,11 +2524,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\ai-orchestrator\\ForgeFlow.AiOrchestrator.Worker\\ForgeFlow.AiOrchestrator.Worker.csproj",
+      "projectUniqueName": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\ai-orchestrator\\ForgeFlow.AiOrchestrator.Worker\\ForgeFlow.AiOrchestrator.Worker.csproj",
       "projectName": "ForgeFlow.AiOrchestrator.Worker",
-      "projectPath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\ai-orchestrator\\ForgeFlow.AiOrchestrator.Worker\\ForgeFlow.AiOrchestrator.Worker.csproj",
+      "projectPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\ai-orchestrator\\ForgeFlow.AiOrchestrator.Worker\\ForgeFlow.AiOrchestrator.Worker.csproj",
       "packagesPath": "C:\\Users\\alihe\\.nuget\\packages\\",
-      "outputPath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\ai-orchestrator\\ForgeFlow.AiOrchestrator.Worker\\obj\\",
+      "outputPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\ai-orchestrator\\ForgeFlow.AiOrchestrator.Worker\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -2549,8 +2549,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\contracts\\ForgeFlow.Contracts\\ForgeFlow.Contracts.csproj": {
-              "projectPath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\contracts\\ForgeFlow.Contracts\\ForgeFlow.Contracts.csproj"
+            "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\contracts\\ForgeFlow.Contracts\\ForgeFlow.Contracts.csproj": {
+              "projectPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\contracts\\ForgeFlow.Contracts\\ForgeFlow.Contracts.csproj"
             }
           }
         }

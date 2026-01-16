@@ -19,23 +19,31 @@ public class IssuesController : ControllerBase
         // Correlation: bir zinciri takip etmek için aynı id.
         var correlationId = Guid.NewGuid().ToString("N");
 
+        // TODO: Gerçek uygulamada bu JWT'den veya HttpContext'ten alınacak
+        var userId = "USR-1"; // Placeholder - Identity entegrasyonunda güncellenecek
+
         var evt = new EventEnvelope<AiPlanRequested>(
             EventId: Guid.NewGuid(),
             OccurredAtUtc: DateTime.UtcNow,
             CorrelationId: correlationId,
+            UserId: userId,  // Audit trail için kullanıcı bilgisi
             CausationId: null,
             Data: new AiPlanRequested(
                 IssueId: issueId,
                 ProjectId: "PRJ-1",
-                RequestedByUserId: "USR-1",
+                RequestedByUserId: userId,
                 BundleType: "BUNDLE_V1",
                 Strictness: "STANDARD"
             )
         );
-        _logger.LogInformation("Published AiPlanRequested | CorrelationId={CorrelationId} IssueId={IssueId}", correlationId, issueId);
+
+        _logger.LogInformation(
+            "Published AiPlanRequested | CorrelationId={CorrelationId} IssueId={IssueId} UserId={UserId}",
+            correlationId, issueId, userId);
 
         await _publish.Publish(evt);
 
-        return Ok(new { correlationId, issueId });
+        return Ok(new { correlationId, issueId, userId });
     }
 }
+

@@ -11,6 +11,8 @@ public static class DependencyInjection
     {
         services.AddDbContext<ArtifactDbContext>(opt => opt.UseSqlServer(connectionString));
         services.AddScoped<IArtifactRepository, ArtifactRepository>();
+        services.AddScoped<IAuditLogRepository, AuditLogRepository>();
         return services;
     }
 }
+
