@@ -21,4 +21,8 @@ public class ArtifactRepository : IArtifactRepository
 
     public Task SaveChangesAsync(CancellationToken ct)
         => _db.SaveChangesAsync(ct);
+
+    public Task<bool> RevisionExistsByCorrelationIdAsync(string correlationId, CancellationToken ct)
+        => _db.ArtifactRevisions.AnyAsync(r => r.CorrelationId == correlationId, ct);
 }
+

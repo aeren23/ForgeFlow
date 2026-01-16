@@ -2030,7 +2030,8 @@
         "dependencies": {
           "ForgeFlow.Artifact.Domain": "1.0.0",
           "MediatR": "12.2.0",
-          "MediatR.Extensions.Microsoft.DependencyInjection": "11.1.0"
+          "MediatR.Extensions.Microsoft.DependencyInjection": "11.1.0",
+          "Microsoft.Extensions.Logging.Abstractions": "8.0.0"
         },
         "compile": {
           "bin/placeholder/ForgeFlow.Artifact.Application.dll": {}

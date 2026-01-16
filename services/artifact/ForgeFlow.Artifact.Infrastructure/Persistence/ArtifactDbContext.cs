@@ -41,6 +41,12 @@ public class ArtifactDbContext : DbContext
             b.Property(x => x.ContentJson).IsRequired();
             b.Property(x => x.ContentHash).IsRequired();
 
+            // Idempotency için CorrelationId unique index
+            // Kod tarafında kontrolü kaçırsak bile DB hata fırlatır ve tutarlılık bozulmaz
+            b.HasIndex(x => x.CorrelationId)
+                .IsUnique()
+                .HasFilter("[CorrelationId] IS NOT NULL"); // NULL değerler hariç
+
             b.HasIndex(x => new { x.ArtifactId, x.RevisionNo }).IsUnique();
         });
     }

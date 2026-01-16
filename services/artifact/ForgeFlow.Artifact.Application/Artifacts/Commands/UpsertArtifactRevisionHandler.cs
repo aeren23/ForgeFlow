@@ -2,6 +2,7 @@ using System.Security.Cryptography;
 using System.Text;
 using ForgeFlow.Artifact.Application.Abstractions;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using ArtifactEntity = ForgeFlow.Artifact.Domain.Entities.Artifact;
 
 namespace ForgeFlow.Artifact.Application.Artifacts.Commands;
@@ -9,15 +10,28 @@ namespace ForgeFlow.Artifact.Application.Artifacts.Commands;
 public class UpsertArtifactRevisionHandler : IRequestHandler<UpsertArtifactRevisionCommand, int>
 {
     private readonly IArtifactRepository _repository;
+    private readonly ILogger<UpsertArtifactRevisionHandler> _logger;
 
-    public UpsertArtifactRevisionHandler(IArtifactRepository repository)
+    public UpsertArtifactRevisionHandler(IArtifactRepository repository, ILogger<UpsertArtifactRevisionHandler> logger)
     {
         _repository = repository;
+        _logger = logger;
     }
 
     public async Task<int> Handle(UpsertArtifactRevisionCommand request, CancellationToken cancellationToken)
     {
-        // Find existing artifact or create new one
+        // 1. Idempotency Check: Bu CorrelationId ile daha önce bir revision kaydedilmiş mi?
+        var existingRevision = await _repository.RevisionExistsByCorrelationIdAsync(request.CorrelationId, cancellationToken);
+
+        if (existingRevision)
+        {
+            _logger.LogWarning(
+                "Duplicate event detected. CorrelationId: {CorrelationId} already processed. Skipping.",
+                request.CorrelationId);
+            return -1; // Duplicate - skip processing
+        }
+
+        // 2. Eğer yoksa normal sürece devam et (Artifact bul/yarat, Revision ekle)
         var artifact = await _repository.FindAsync(
             request.ProjectId,
             request.IssueId,
@@ -39,8 +53,8 @@ public class UpsertArtifactRevisionHandler : IRequestHandler<UpsertArtifactRevis
         // Calculate content hash
         var contentHash = ComputeHash(request.ContentJson);
 
-        // Add revision using the domain method
-        var revision = artifact.AddRevision(request.ContentJson, contentHash);
+        // Add revision using the domain method (with correlationId for idempotency)
+        var revision = artifact.AddRevision(request.ContentJson, contentHash, request.CorrelationId);
 
         await _repository.SaveChangesAsync(cancellationToken);
 

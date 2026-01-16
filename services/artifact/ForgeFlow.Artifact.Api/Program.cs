@@ -33,7 +33,8 @@ builder.Services.AddMassTransit(x =>
 
         cfg.ReceiveEndpoint("q.artifact.generated", e =>
         {
-            e.UseMessageRetry(r => r.Interval(3, TimeSpan.FromSeconds(2)));
+            // Geçici hatalar (DB timeout vb.) için 3 kez dene (artan aralıklarla)
+            e.UseMessageRetry(r => r.Incremental(3, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(2)));
             e.ConfigureConsumer<ArtifactGeneratedConsumer>(context);
         });
     });

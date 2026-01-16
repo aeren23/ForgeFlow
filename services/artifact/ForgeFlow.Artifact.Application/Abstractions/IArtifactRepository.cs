@@ -7,4 +7,10 @@ public interface IArtifactRepository
     Task<ArtifactEntity?> FindAsync(string projectId, string issueId, string type, CancellationToken ct);
     Task AddAsync(ArtifactEntity artifact, CancellationToken ct);
     Task SaveChangesAsync(CancellationToken ct);
+
+    /// <summary>
+    /// Idempotency kontrolü: Bu CorrelationId ile daha önce bir revision kaydedilmiş mi?
+    /// </summary>
+    Task<bool> RevisionExistsByCorrelationIdAsync(string correlationId, CancellationToken ct);
 }
+
