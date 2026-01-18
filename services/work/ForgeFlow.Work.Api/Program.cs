@@ -1,5 +1,7 @@
+using ForgeFlow.Work.Api.Services;
 using MassTransit;
 using Serilog;
+
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,9 +31,12 @@ builder.Services.AddMassTransit(x =>
 });
 
 // Add services
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 
 var app = builder.Build();
 

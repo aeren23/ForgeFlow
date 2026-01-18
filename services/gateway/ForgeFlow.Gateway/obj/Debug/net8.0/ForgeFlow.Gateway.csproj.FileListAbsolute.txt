@@ -32,3 +32,11 @@ C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\gateway\ForgeFlow.
 C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\gateway\ForgeFlow.Gateway\obj\Debug\net8.0\ref\ForgeFlow.Gateway.dll
 C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\gateway\ForgeFlow.Gateway\bin\Debug\net8.0\System.IO.Hashing.dll
 C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\gateway\ForgeFlow.Gateway\bin\Debug\net8.0\Yarp.ReverseProxy.dll
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\gateway\ForgeFlow.Gateway\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\gateway\ForgeFlow.Gateway\bin\Debug\net8.0\Microsoft.IdentityModel.Abstractions.dll
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\gateway\ForgeFlow.Gateway\bin\Debug\net8.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\gateway\ForgeFlow.Gateway\bin\Debug\net8.0\Microsoft.IdentityModel.Logging.dll
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\gateway\ForgeFlow.Gateway\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.dll
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\gateway\ForgeFlow.Gateway\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\gateway\ForgeFlow.Gateway\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\gateway\ForgeFlow.Gateway\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll

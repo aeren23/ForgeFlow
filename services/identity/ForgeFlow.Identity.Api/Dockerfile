@@ -4,6 +4,9 @@ WORKDIR /src
 
 # Copy project files for restore
 COPY ["contracts/ForgeFlow.Contracts/ForgeFlow.Contracts.csproj", "contracts/ForgeFlow.Contracts/"]
+COPY ["services/identity/ForgeFlow.Identity.Domain/ForgeFlow.Identity.Domain.csproj", "services/identity/ForgeFlow.Identity.Domain/"]
+COPY ["services/identity/ForgeFlow.Identity.Application/ForgeFlow.Identity.Application.csproj", "services/identity/ForgeFlow.Identity.Application/"]
+COPY ["services/identity/ForgeFlow.Identity.Infrastructure/ForgeFlow.Identity.Infrastructure.csproj", "services/identity/ForgeFlow.Identity.Infrastructure/"]
 COPY ["services/identity/ForgeFlow.Identity.Api/ForgeFlow.Identity.Api.csproj", "services/identity/ForgeFlow.Identity.Api/"]
 
 # Restore
@@ -25,3 +28,4 @@ EXPOSE 8080
 
 COPY --from=build /app/publish ./
 ENTRYPOINT ["dotnet", "ForgeFlow.Identity.Api.dll"]
+

@@ -1,0 +1,13 @@
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\identity\ForgeFlow.Identity.Domain\bin\Debug\net8.0\ForgeFlow.Identity.Domain.deps.json
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\identity\ForgeFlow.Identity.Domain\bin\Debug\net8.0\ForgeFlow.Identity.Domain.dll
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\identity\ForgeFlow.Identity.Domain\bin\Debug\net8.0\ForgeFlow.Identity.Domain.pdb
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\identity\ForgeFlow.Identity.Domain\obj\Debug\net8.0\ForgeFlow.Identity.Domain.csproj.AssemblyReference.cache
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\identity\ForgeFlow.Identity.Domain\obj\Debug\net8.0\ForgeFlow.Identity.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\identity\ForgeFlow.Identity.Domain\obj\Debug\net8.0\ForgeFlow.Identity.Domain.AssemblyInfoInputs.cache
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\identity\ForgeFlow.Identity.Domain\obj\Debug\net8.0\ForgeFlow.Identity.Domain.AssemblyInfo.cs
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\identity\ForgeFlow.Identity.Domain\obj\Debug\net8.0\ForgeFlow.Identity.Domain.csproj.CoreCompileInputs.cache
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\identity\ForgeFlow.Identity.Domain\obj\Debug\net8.0\ForgeFlow.Identity.Domain.sourcelink.json
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\identity\ForgeFlow.Identity.Domain\obj\Debug\net8.0\ForgeFlow.Identity.Domain.dll
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\identity\ForgeFlow.Identity.Domain\obj\Debug\net8.0\refint\ForgeFlow.Identity.Domain.dll
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\identity\ForgeFlow.Identity.Domain\obj\Debug\net8.0\ForgeFlow.Identity.Domain.pdb
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\identity\ForgeFlow.Identity.Domain\obj\Debug\net8.0\ref\ForgeFlow.Identity.Domain.dll

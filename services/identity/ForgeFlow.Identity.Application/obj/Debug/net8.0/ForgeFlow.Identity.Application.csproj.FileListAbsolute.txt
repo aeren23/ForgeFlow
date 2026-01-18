@@ -1,0 +1,16 @@
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\identity\ForgeFlow.Identity.Application\obj\Debug\net8.0\ForgeFlow.Identity.Application.csproj.AssemblyReference.cache
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\identity\ForgeFlow.Identity.Application\obj\Debug\net8.0\ForgeFlow.Identity.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\identity\ForgeFlow.Identity.Application\obj\Debug\net8.0\ForgeFlow.Identity.Application.AssemblyInfoInputs.cache
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\identity\ForgeFlow.Identity.Application\obj\Debug\net8.0\ForgeFlow.Identity.Application.AssemblyInfo.cs
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\identity\ForgeFlow.Identity.Application\obj\Debug\net8.0\ForgeFlow.Identity.Application.csproj.CoreCompileInputs.cache
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\identity\ForgeFlow.Identity.Application\obj\Debug\net8.0\ForgeFlow.Identity.Application.sourcelink.json
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\identity\ForgeFlow.Identity.Application\bin\Debug\net8.0\ForgeFlow.Identity.Application.deps.json
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\identity\ForgeFlow.Identity.Application\bin\Debug\net8.0\ForgeFlow.Identity.Application.dll
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\identity\ForgeFlow.Identity.Application\bin\Debug\net8.0\ForgeFlow.Identity.Application.pdb
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\identity\ForgeFlow.Identity.Application\bin\Debug\net8.0\ForgeFlow.Identity.Domain.dll
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\identity\ForgeFlow.Identity.Application\bin\Debug\net8.0\ForgeFlow.Identity.Domain.pdb
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\identity\ForgeFlow.Identity.Application\obj\Debug\net8.0\ForgeFlo.B4DBA16F.Up2Date
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\identity\ForgeFlow.Identity.Application\obj\Debug\net8.0\ForgeFlow.Identity.Application.dll
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\identity\ForgeFlow.Identity.Application\obj\Debug\net8.0\refint\ForgeFlow.Identity.Application.dll
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\identity\ForgeFlow.Identity.Application\obj\Debug\net8.0\ForgeFlow.Identity.Application.pdb
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\identity\ForgeFlow.Identity.Application\obj\Debug\net8.0\ref\ForgeFlow.Identity.Application.dll

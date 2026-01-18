@@ -64,12 +64,16 @@ services:
       - "8090:8080"
     environment:
       ASPNETCORE_URLS: http://+:8080
+      JWT_SECRET: "ForgeFlow-Super-Secret-Key-Min-32-Chars-2026!"
+      JWT_ISSUER: "ForgeFlow.Identity"
+      JWT_AUDIENCE: "ForgeFlow.Services"
     depends_on:
       - identity
       - work
       - artifact
     networks:
       - forgeflow-net
+
 
   identity:
     build:
@@ -86,6 +90,9 @@ services:
       RabbitMq__Username: forgeflow
       RabbitMq__Password: forgeflow
       Seq__ServerUrl: http://seq
+      JWT_SECRET: "ForgeFlow-Super-Secret-Key-Min-32-Chars-2026!"
+      JWT_ISSUER: "ForgeFlow.Identity"
+      JWT_AUDIENCE: "ForgeFlow.Services"
     depends_on:
       mssql:
         condition: service_healthy

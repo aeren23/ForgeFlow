@@ -7,7 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.11">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
     <PackageReference Include="Serilog.Sinks.Seq" Version="9.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.0" />
@@ -15,6 +21,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\contracts\ForgeFlow.Contracts\ForgeFlow.Contracts.csproj" />
+    <ProjectReference Include="..\ForgeFlow.Identity.Application\ForgeFlow.Identity.Application.csproj" />
+    <ProjectReference Include="..\ForgeFlow.Identity.Infrastructure\ForgeFlow.Identity.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
+
