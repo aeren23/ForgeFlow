@@ -113,7 +113,7 @@ services:
     environment:
       ASPNETCORE_URLS: http://+:8080
       ASPNETCORE_ENVIRONMENT: Development
-      ConnectionStrings__Db: "Server=mssql,1433;Database=ForgeFlow_Work;User Id=sa;Password=YourStrong(!)Password123;TrustServerCertificate=True;Encrypt=False"
+      ConnectionStrings__WorkDb: "Server=mssql,1433;Database=ForgeFlow_Work;User Id=sa;Password=YourStrong(!)Password123;TrustServerCertificate=True;Encrypt=False"
       RabbitMq__Host: rabbitmq
       RabbitMq__Username: forgeflow
       RabbitMq__Password: forgeflow

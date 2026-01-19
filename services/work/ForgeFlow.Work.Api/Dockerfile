@@ -4,6 +4,9 @@ WORKDIR /src
 
 # Copy project files for restore
 COPY ["contracts/ForgeFlow.Contracts/ForgeFlow.Contracts.csproj", "contracts/ForgeFlow.Contracts/"]
+COPY ["services/work/ForgeFlow.Work.Domain/ForgeFlow.Work.Domain.csproj", "services/work/ForgeFlow.Work.Domain/"]
+COPY ["services/work/ForgeFlow.Work.Application/ForgeFlow.Work.Application.csproj", "services/work/ForgeFlow.Work.Application/"]
+COPY ["services/work/ForgeFlow.Work.Infrastructure/ForgeFlow.Work.Infrastructure.csproj", "services/work/ForgeFlow.Work.Infrastructure/"]
 COPY ["services/work/ForgeFlow.Work.Api/ForgeFlow.Work.Api.csproj", "services/work/ForgeFlow.Work.Api/"]
 
 # Restore

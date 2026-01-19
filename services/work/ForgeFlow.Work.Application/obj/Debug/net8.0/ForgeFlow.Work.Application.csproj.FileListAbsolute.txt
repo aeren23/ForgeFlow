@@ -1,0 +1,16 @@
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\work\ForgeFlow.Work.Application\bin\Debug\net8.0\ForgeFlow.Work.Application.deps.json
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\work\ForgeFlow.Work.Application\bin\Debug\net8.0\ForgeFlow.Work.Application.dll
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\work\ForgeFlow.Work.Application\bin\Debug\net8.0\ForgeFlow.Work.Application.pdb
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\work\ForgeFlow.Work.Application\bin\Debug\net8.0\ForgeFlow.Work.Domain.dll
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\work\ForgeFlow.Work.Application\bin\Debug\net8.0\ForgeFlow.Work.Domain.pdb
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\work\ForgeFlow.Work.Application\obj\Debug\net8.0\ForgeFlow.Work.Application.csproj.AssemblyReference.cache
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\work\ForgeFlow.Work.Application\obj\Debug\net8.0\ForgeFlow.Work.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\work\ForgeFlow.Work.Application\obj\Debug\net8.0\ForgeFlow.Work.Application.AssemblyInfoInputs.cache
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\work\ForgeFlow.Work.Application\obj\Debug\net8.0\ForgeFlow.Work.Application.AssemblyInfo.cs
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\work\ForgeFlow.Work.Application\obj\Debug\net8.0\ForgeFlow.Work.Application.csproj.CoreCompileInputs.cache
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\work\ForgeFlow.Work.Application\obj\Debug\net8.0\ForgeFlow.Work.Application.sourcelink.json
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\work\ForgeFlow.Work.Application\obj\Debug\net8.0\ForgeFlo.E2A8640A.Up2Date
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\work\ForgeFlow.Work.Application\obj\Debug\net8.0\ForgeFlow.Work.Application.dll
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\work\ForgeFlow.Work.Application\obj\Debug\net8.0\refint\ForgeFlow.Work.Application.dll
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\work\ForgeFlow.Work.Application\obj\Debug\net8.0\ForgeFlow.Work.Application.pdb
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\work\ForgeFlow.Work.Application\obj\Debug\net8.0\ref\ForgeFlow.Work.Application.dll

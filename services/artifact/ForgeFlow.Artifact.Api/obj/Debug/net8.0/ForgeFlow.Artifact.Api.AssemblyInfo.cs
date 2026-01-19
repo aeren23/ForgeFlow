@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ForgeFlow.Artifact.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ebe4f26854dac01fbc54435014a9cdcbde42b683")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+17d1a5ee6241be5bd41f47b2605af671ec9720e5")]
 [assembly: System.Reflection.AssemblyProductAttribute("ForgeFlow.Artifact.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ForgeFlow.Artifact.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
