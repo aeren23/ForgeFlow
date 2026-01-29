@@ -74,7 +74,6 @@ services:
     networks:
       - forgeflow-net
 
-
   identity:
     build:
       context: ..
@@ -159,13 +158,31 @@ services:
       dockerfile: services/ai-orchestrator/ForgeFlow.AiOrchestrator.Worker/Dockerfile
     container_name: forgeflow-ai-orchestrator
     environment:
+      # RabbitMQ
       RabbitMq__Host: rabbitmq
       RabbitMq__Username: forgeflow
       RabbitMq__Password: forgeflow
-      Seq__ServerUrl: http://seq
+      # Seq Logging
+      Seq__ServerUrl: http://seq:5341
+      # Database
+      ConnectionStrings__AiOrchestratorDb: "Server=mssql,1433;Database=ForgeFlow_AiOrchestrator;User Id=sa;Password=YourStrong(!)Password123;TrustServerCertificate=True;Encrypt=False"
+      # Service URLs
+      Services__WorkApiUrl: http://work:8080
+      # AI Providers
+      AI__DefaultProvider: Gemini
+      AI__Providers__Gemini__ApiKey: "${GEMINI_API_KEY:-}"
+      AI__Providers__Gemini__Model: gemini-2.5-flash
+      AI__Providers__Groq__ApiKey: "${GROQ_API_KEY:-}"
+      AI__Providers__Groq__Model: llama3-70b-8192
     depends_on:
+      mssql:
+        condition: service_healthy
       rabbitmq:
         condition: service_started
+      work:
+        condition: service_started
+      db-init:
+        condition: service_completed_successfully
     networks:
       - forgeflow-net
 

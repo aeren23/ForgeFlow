@@ -128,11 +128,18 @@ public class IssuesController : ControllerBase
     }
 
     /// <summary>
-    /// AI plan oluştur (mevcut endpoint)
+    /// AI plan oluştur - Issue için AI destekli plan üretimi başlat
     /// </summary>
-    [HttpPost("{issueId}/generate")]
-    public async Task<IActionResult> Generate(string issueId)
+    [HttpPost("{issueKey}/generate")]
+    public async Task<IActionResult> Generate(string issueKey, [FromBody] GeneratePlanRequest? request = null)
     {
+        request ??= new GeneratePlanRequest();
+
+        // Get issue to find project ID
+        var issue = await _mediator.Send(new GetIssueQuery(issueKey));
+        if (issue == null)
+            return NotFound(new { error = $"Issue '{issueKey}' not found" });
+
         var correlationId = Guid.NewGuid().ToString("N");
         var userId = _currentUser.UserId ?? "anonymous";
 
@@ -143,28 +150,38 @@ public class IssuesController : ControllerBase
             UserId: userId,
             CausationId: null,
             Data: new AiPlanRequested(
-                IssueId: issueId,
-                ProjectId: "PRJ-1",
+                IssueId: issueKey,
+                ProjectId: issue.ProjectId.ToString(),
                 RequestedByUserId: userId,
-                BundleType: "BUNDLE_V1",
-                Strictness: "STANDARD"
+                BundleType: request.BundleType ?? "FullStack",
+                Strictness: request.Strictness ?? "Normal",
+                PreferredProvider: request.PreferredProvider
             )
         );
 
         using (_logger.BeginScope(new Dictionary<string, object>
         {
             ["CorrelationId"] = correlationId,
-            ["UserId"] = userId
+            ["UserId"] = userId,
+            ["IssueKey"] = issueKey
         }))
         {
             _logger.LogInformation(
-                "Published AiPlanRequested | IssueId={IssueId}",
-                issueId);
+                "Published AiPlanRequested | IssueKey={IssueKey} Provider={Provider} BundleType={BundleType}",
+                issueKey, request.PreferredProvider ?? "Default", request.BundleType ?? "FullStack");
         }
 
         await _publish.Publish(evt);
 
-        return Ok(new { correlationId, issueId, userId });
+        return Accepted(new
+        {
+            correlationId,
+            issueKey,
+            userId,
+            provider = request.PreferredProvider ?? "Default",
+            bundleType = request.BundleType ?? "FullStack",
+            message = "AI plan generation started. Check Seq logs for progress."
+        });
     }
 }
 
@@ -193,3 +210,12 @@ public record UpdateIssueRequest(
 
 public record ChangeStatusRequest(IssueStatus Status);
 public record AssignIssueRequest(string? AssigneeId);
+
+/// <summary>
+/// Request for AI plan generation
+/// </summary>
+public record GeneratePlanRequest(
+    string? BundleType = "FullStack",      // "FullStack", "Backend", "Frontend"
+    string? Strictness = "Normal",          // "Strict", "Normal", "Flexible"
+    string? PreferredProvider = null        // "Gemini", "Groq", etc. Null = use default
+);

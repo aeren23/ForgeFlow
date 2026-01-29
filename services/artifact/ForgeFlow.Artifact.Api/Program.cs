@@ -18,6 +18,7 @@ builder.Services.AddMassTransit(x =>
 {
     x.SetKebabCaseEndpointNameFormatter();
     x.AddConsumer<ArtifactGeneratedConsumer>();
+    x.AddConsumer<AiPlanGeneratedConsumer>();
 
     x.UsingRabbitMq((context, cfg) =>
     {
@@ -36,6 +37,12 @@ builder.Services.AddMassTransit(x =>
             // Geçici hatalar (DB timeout vb.) için 3 kez dene (artan aralıklarla)
             e.UseMessageRetry(r => r.Incremental(3, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(2)));
             e.ConfigureConsumer<ArtifactGeneratedConsumer>(context);
+        });
+
+        cfg.ReceiveEndpoint("q.artifact.ai-plan-generated", e =>
+        {
+            e.UseMessageRetry(r => r.Incremental(3, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(2)));
+            e.ConfigureConsumer<AiPlanGeneratedConsumer>(context);
         });
     });
 });

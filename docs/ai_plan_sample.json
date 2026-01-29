@@ -1,0 +1,50 @@
+{
+    "project_name": "ForgeFlow",
+    "issue_id": "FORGE-3",
+    "issue_description": "Implement user authentication (login/register endpoints with JWT)",
+    "architectural_principles": [
+        "Clean Architecture",
+        "SOLID Principles"
+    ],
+    "tech_stack_assumptions": [
+        ".NET 8",
+        "ASP.NET Core Web API",
+        "Entity Framework Core (for data persistence)",
+        "MediatR (for command/query dispatching)",
+        "BCrypt.Net-NEXT (for password hashing)"
+    ],
+    "implementation_plan": {
+        "summary": "This plan outlines the implementation of user authentication (registration and login) using JWT tokens, strictly adhering to Clean Architecture and SOLID principles. The solution will separate concerns into Domain, Application, Infrastructure, and Presentation layers, ensuring maintainability, testability, and scalability. MediatR will be used for command/query dispatching, and Entity Framework Core for data persistence. Password hashing will be implemented using BCrypt.",
+        "list_of_changes": [
+            "**Domain Layer:** Define core User entity, interfaces for user repository and token service, and custom domain exceptions.",
+            "**Application Layer:** Define DTOs for authentication results, commands for user registration and login, and their respective handlers. Introduce an abstraction for password hashing. Implement validation for commands.",
+            "**Infrastructure Layer:** Provide concrete implementations for `IUserRepository` (using EF Core) and `ITokenService` (JWT generation). Implement the concrete password hasher. Configure EF Core DbContext and migrations.",
+            "**Presentation Layer (Web API):** Create an `AuthController` with `/register` and `/login` endpoints. Configure JWT authentication middleware in `Program.cs`. Set up dependency injection.",
+            "**Configuration:** Add JWT settings to `appsettings.json`.",
+            "**NuGet Packages:** Add necessary packages (e.g., `Microsoft.AspNetCore.Authentication.JwtBearer`, `MediatR`, `MediatR.Extensions.Microsoft.DependencyInjection`, `Microsoft.EntityFrameworkCore`, `Microsoft.EntityFrameworkCore.Design`, `BCrypt.Net-NEXT`, `FluentValidation`, `FluentValidation.DependencyInjectionExtensions`)."
+        ],
+        "file_by_file_changes": [
+            {
+                "layer": "ForgeFlow.Domain",
+                "purpose": "Core business entities, value objects, and interfaces, independent of infrastructure.",
+                "files": [
+                    {
+                        "filename": "Entities/User.cs",
+                        "description": "Represents the user entity with properties like Id, Username, Email, PasswordHash, and Timestamp.",
+                        "code_example": "```csharp\nnamespace ForgeFlow.Domain.Entities\n{\n    public class User\n    {\n        public Guid Id { get; private set; }\n        public string Username { get; private set; }\n        public string Email { get; private set; }\n        public string PasswordHash { get; private set; }\n        public DateTime CreatedAt { get; private set; }\n\n        private User() { } // Required for EF Core\n\n        public User(string username, string email, string passwordHash)\n        {\n            Id = Guid.NewGuid();\n            Username = username ?? throw new ArgumentNullException(nameof(username));\n            Email = email ?? throw new ArgumentNullException(nameof(email));\n            PasswordHash = passwordHash ?? throw new ArgumentNullException(nameof(passwordHash));\n            CreatedAt = DateTime.UtcNow;\n        }\n\n        public void UpdatePasswordHash(string newPasswordHash)\n        {\n            if (string.IsNullOrWhiteSpace(newPasswordHash))\n            {\n                throw new ArgumentException(\"Password hash cannot be empty.\", nameof(newPasswordHash));\n            }\n            PasswordHash = newPasswordHash;\n        }\n    }\n}\n```"
+                    },
+                    {
+                        "filename": "Interfaces/IUserRepository.cs",
+                        "description": "Abstraction for user data access operations. Follows DIP.",
+                        "code_example": "```csharp\nusing ForgeFlow.Domain.Entities;\n\nnamespace ForgeFlow.Domain.Interfaces\n{\n    public interface IUserRepository\n    {\n        Task<User?> GetByUsernameAsync(string username);\n        Task<User?> GetByEmailAsync(string email);\n        Task AddAsync(User user);\n        Task UpdateAsync(User user);\n        Task<bool> ExistsByUsernameAsync(string username);\n        Task<bool> ExistsByEmailAsync(string email);\n    }\n}\n```"
+                    },
+                    {
+                        "filename": "Interfaces/ITokenService.cs",
+                        "description": "Abstraction for JWT token generation. Follows DIP.",
+                        "code_example": "```csharp\nusing ForgeFlow.Domain.Entities;\n\nnamespace ForgeFlow.Domain.Interfaces\n{\n    public interface ITokenService\n    {\n        string GenerateToken(User user);\n    }\n}\n```"
+                    }
+                ]
+            }
+        ]
+    }
+}

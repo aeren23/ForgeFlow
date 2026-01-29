@@ -1,0 +1,12 @@
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\ai-orchestrator\ForgeFlow.AiOrchestrator.Domain\bin\Debug\net8.0\ForgeFlow.AiOrchestrator.Domain.deps.json
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\ai-orchestrator\ForgeFlow.AiOrchestrator.Domain\bin\Debug\net8.0\ForgeFlow.AiOrchestrator.Domain.dll
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\ai-orchestrator\ForgeFlow.AiOrchestrator.Domain\bin\Debug\net8.0\ForgeFlow.AiOrchestrator.Domain.pdb
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\ai-orchestrator\ForgeFlow.AiOrchestrator.Domain\obj\Debug\net8.0\ForgeFlow.AiOrchestrator.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\ai-orchestrator\ForgeFlow.AiOrchestrator.Domain\obj\Debug\net8.0\ForgeFlow.AiOrchestrator.Domain.AssemblyInfoInputs.cache
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\ai-orchestrator\ForgeFlow.AiOrchestrator.Domain\obj\Debug\net8.0\ForgeFlow.AiOrchestrator.Domain.AssemblyInfo.cs
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\ai-orchestrator\ForgeFlow.AiOrchestrator.Domain\obj\Debug\net8.0\ForgeFlow.AiOrchestrator.Domain.csproj.CoreCompileInputs.cache
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\ai-orchestrator\ForgeFlow.AiOrchestrator.Domain\obj\Debug\net8.0\ForgeFlow.AiOrchestrator.Domain.sourcelink.json
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\ai-orchestrator\ForgeFlow.AiOrchestrator.Domain\obj\Debug\net8.0\ForgeFlow.AiOrchestrator.Domain.dll
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\ai-orchestrator\ForgeFlow.AiOrchestrator.Domain\obj\Debug\net8.0\refint\ForgeFlow.AiOrchestrator.Domain.dll
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\ai-orchestrator\ForgeFlow.AiOrchestrator.Domain\obj\Debug\net8.0\ForgeFlow.AiOrchestrator.Domain.pdb
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\ai-orchestrator\ForgeFlow.AiOrchestrator.Domain\obj\Debug\net8.0\ref\ForgeFlow.AiOrchestrator.Domain.dll
