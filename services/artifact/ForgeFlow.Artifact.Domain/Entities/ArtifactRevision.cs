@@ -11,6 +11,11 @@ public class ArtifactRevision
     public string ContentHash { get; private set; } = default!;
 
     /// <summary>
+    /// Ekstra bilgileri (OriginalType, Provider, TokenUsage vb.) JSON formatında saklar.
+    /// </summary>
+    public string? Metadata { get; private set; }
+
+    /// <summary>
     /// Idempotency için kullanılır. Aynı CorrelationId ile tekrar gelen event'ler işlenmez.
     /// </summary>
     public string? CorrelationId { get; private set; }
@@ -19,13 +24,14 @@ public class ArtifactRevision
 
     private ArtifactRevision() { } // EF
 
-    public ArtifactRevision(Guid artifactId, int revisionNo, string contentJson, string contentHash, string? correlationId = null)
+    public ArtifactRevision(Guid artifactId, int revisionNo, string contentJson, string contentHash, string? correlationId = null, string? metadata = null)
     {
         ArtifactId = artifactId;
         RevisionNo = revisionNo;
         ContentJson = contentJson;
         ContentHash = contentHash;
         CorrelationId = correlationId;
+        Metadata = metadata;
     }
 }
 

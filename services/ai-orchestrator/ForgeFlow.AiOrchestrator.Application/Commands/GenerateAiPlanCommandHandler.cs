@@ -35,8 +35,8 @@ public class GenerateAiPlanCommandHandler : IRequestHandler<GenerateAiPlanComman
 
         // 1. Gather context from Work Service
         var context = await _contextProvider.GetContextAsync(
-            request.ProjectId, 
-            request.IssueKey, 
+            request.ProjectId,
+            request.IssueKey,
             cancellationToken);
 
         // 2. Build prompts
@@ -59,7 +59,7 @@ public class GenerateAiPlanCommandHandler : IRequestHandler<GenerateAiPlanComman
         // 4. Get the appropriate AI service
         var aiService = _aiServiceFactory.GetService(preferredProvider);
 
-        _logger.LogInformation("Using AI provider: {Provider}, Model: {Model}", 
+        _logger.LogInformation("Using AI provider: {Provider}, Model: {Model}",
             aiService.ProviderType, aiService.ModelName);
 
         // 5. Generate content
@@ -98,52 +98,56 @@ public class GenerateAiPlanCommandHandler : IRequestHandler<GenerateAiPlanComman
     }
 
     private static (string SystemPrompt, string UserPrompt) BuildPrompts(
-        GenerateAiPlanCommand request, 
-        AiContext context)
+    GenerateAiPlanCommand request,
+    AiContext context)
     {
-        var systemPrompt = $"""
-            Sen deneyimli bir Software Architect'sin. ForgeFlow projesi için teknik planlar üretiyorsun.
-            
-            Kurallar:
-            - Clean Architecture prensiplerini uygula
-            - SOLID prensiplerini takip et
-            - Kod örnekleri C# olmalı (.NET 8)
-            - Çıktını JSON formatında ver
-            - Mevcut kodu analiz et ve ona uygun değişiklikler öner
-            
-            Strictness: {request.Strictness}
-            Bundle Type: {request.BundleType}
-            """;
-
-        var techStackInfo = context.Project.TechStack.Count > 0
+        // 1. TechStack'i düzgün bir string haline getirelim
+        var techStack = context.Project.TechStack is { Count: > 0 }
             ? string.Join(", ", context.Project.TechStack)
-            : "Not specified";
+            : "Genel modern yazılım dilleri ve mimarileri";
 
-        // Build code context section (from GitHub when available)
+        // 2. SYSTEM PROMPT: AI'ya kimliğini ve projenin "ruhunu" veriyoruz
+        // Sadece TechStack ve Issue bilgilerine odaklanmasını sağlıyoruz.
+        var systemPrompt = $"""
+        Sen bir Senior Software Engineer'sın. ForgeFlow platformu üzerinden teknik planlar üretiyorsun.
+        
+        ## Mimari Prensiplerin:
+        - Projenin ana teknolojileri: {techStack}
+        - Eğer mevcutsa, projenin klasör yapısını ve kod stilini analiz et.
+        - Çözümlerin mutlaka projenin kullandığı teknoloji yığınına ({techStack}) uygun olmalı.
+        - Yanıtını her zaman geçerli bir JSON formatında ver.
+        - Gereksiz açıklamalardan kaçın, doğrudan teknik implementasyona ve dosya bazlı değişikliklere odaklan.
+        """;
+
+        // 3. CODE CONTEXT: GitHub'dan gelen dosyaları (varsa) buraya ekleyeceğiz
         var codeContextSection = BuildCodeContextSection(context);
 
+        // 4. USER PROMPT: Elimizdeki modelleri (ProjectContextDto & IssueContextDto) kullanıyoruz
         var userPrompt = $"""
-            ## Proje Bilgisi
-            - **Proje:** {context.Project.Name} ({context.Project.Key})
-            - **Açıklama:** {context.Project.Description ?? "Yok"}
-            - **Tech Stack:** {techStackInfo}
-            - **Repository:** {context.Project.RepositoryUrl ?? "Bağlı değil"}
-            
-            ## Issue Bilgisi
-            - **Issue:** {context.Issue.Key} - {context.Issue.Title}
-            - **Tip:** {context.Issue.Type ?? "Task"}
-            - **Öncelik:** {context.Issue.Priority ?? "Normal"}
-            - **Açıklama:** {context.Issue.Description ?? "Detay yok"}
-            
-            {codeContextSection}
-            
-            ## Görev
-            Bu issue için detaylı bir implementation plan oluştur. Plan şunları içermeli:
-            1. Yapılacak değişikliklerin listesi
-            2. Dosya bazında değişiklikler
-            3. Kod örnekleri
-            4. Test senaryoları
-            """;
+        Aşağıdaki issue için detaylı bir geliştirme planı üret:
+
+        ### 📋 PROJE BİLGİSİ
+        - İsim: {context.Project.Name} ({context.Project.Key})
+        - Açıklama: {context.Project.Description ?? "Belirtilmemiş"}
+        - Teknoloji Yığını: {techStack}
+
+        ### 🎯 HEDEF (ISSUE)
+        - Kimlik: {context.Issue.Key} - {context.Issue.Title}
+        - Tanım: {context.Issue.Description ?? "Detaylı açıklama yok."}
+        - Tip/Öncelik: {context.Issue.Type} / {context.Issue.Priority}
+
+        {codeContextSection}
+
+        ### 📝 BEKLENTİLER (JSON FORMATI)
+        - summary: İşin genel teknik özeti
+        - implementation_plan: 
+            - summary: Implementasyonun kısa özeti
+            - list_of_changes: Yapılacak genel adımların listesi
+            - file_by_file_changes: 
+                - layer: Değişikliğin yapıldığı katman (örn: API, Application)
+                - purpose: Değişikliğin amacı
+                - files: (filename, description, code_example)
+        """;
 
         return (systemPrompt, userPrompt);
     }
@@ -176,7 +180,7 @@ public class GenerateAiPlanCommandHandler : IRequestHandler<GenerateAiPlanComman
         // Build source code snippets
         var sourceCodeSection = new System.Text.StringBuilder();
         sourceCodeSection.AppendLine("### Mevcut Kod Dosyaları");
-        
+
         foreach (var file in context.SourceFiles.Take(10)) // Limit to 10 files for token efficiency
         {
             var language = file.Language ?? DetectLanguage(file.Path);

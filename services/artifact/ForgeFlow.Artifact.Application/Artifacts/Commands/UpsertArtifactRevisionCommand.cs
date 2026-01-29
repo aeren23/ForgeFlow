@@ -13,7 +13,8 @@ public record UpsertArtifactRevisionCommand(
     string Type,
     string ContentJson,
     string CorrelationId,
-    string UserId
+    string UserId,
+    string? Metadata = null
 ) : IRequest<int>, IAuditLoggable
 {
     // IAuditLoggable implementation

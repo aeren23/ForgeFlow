@@ -1,4 +1,5 @@
 using ForgeFlow.Work.Api.Services;
+using ForgeFlow.Work.Application.Abstractions;
 using ForgeFlow.Work.Application.Projects.Commands;
 using ForgeFlow.Work.Application.Projects.Queries;
 using ForgeFlow.Work.Domain.Enums;
@@ -89,7 +90,21 @@ public class ProjectsController : ControllerBase
         var result = await _mediator.Send(command);
         return Ok(result);
     }
+
+    /// <summary>
+    /// Projeye üye ekle
+    /// </summary>
+    [HttpPost("{key}/members")]
+    public async Task<ActionResult> AddMember(string key, [FromBody] AddMemberRequest request)
+    {
+        var command = new AddProjectMemberCommand(key, request.UserId, request.Role ?? "Member");
+        var result = await _mediator.Send(command);
+        if (!result) return NotFound();
+        return Ok();
+    }
 }
+
+public record AddMemberRequest(string UserId, string? Role);
 
 // Request DTOs
 public record CreateProjectRequest(

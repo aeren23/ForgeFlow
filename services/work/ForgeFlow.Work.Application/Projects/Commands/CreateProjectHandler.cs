@@ -47,6 +47,9 @@ public class CreateProjectHandler : IRequestHandler<CreateProjectCommand, Create
             NextIssueNumber = 1
         };
 
+        // Add creator as "Owner"
+        project.AddMember(request.CreatorId, "Owner");
+
         _context.Projects.Add(project);
         await _context.SaveChangesAsync(cancellationToken);
 

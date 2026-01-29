@@ -54,7 +54,7 @@ public class UpsertArtifactRevisionHandler : IRequestHandler<UpsertArtifactRevis
         var contentHash = ComputeHash(request.ContentJson);
 
         // Add revision using the domain method (with correlationId for idempotency)
-        var revision = artifact.AddRevision(request.ContentJson, contentHash, request.CorrelationId);
+        var revision = artifact.AddRevision(request.ContentJson, contentHash, request.CorrelationId, request.Metadata);
 
         await _repository.SaveChangesAsync(cancellationToken);
 

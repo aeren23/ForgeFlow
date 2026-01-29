@@ -33,19 +33,30 @@ public class AiPlanGeneratedConsumer : IConsumer<EventEnvelope<AiPlanGenerated>>
             msg.Data.IssueId, msg.Data.ArtifactType);
 
         // AI Plan'ı Artifact olarak kaydet
-        // Type olarak "ImplementationPlan" kullanıyoruz ki UI'da veya başka yerlerde bu tip ile bilinsin.
-        // msg.Data.ArtifactType genellikle "FullStack", "BackendOnly" gibi bundle bilgisidir.
-        // Bunu Artifact'in metadata'sına koymak daha doğru olabilir ama şimdilik Type'a "ImplementationPlan" diyelim
-        // ya da direkt gelen tipi kullanalım. Kullanıcı "artifact oluştu mu" dediğine göre
-        // muhtemelen bir "ImplementationPlan" dosyası bekliyor.
+        // Type olarak "ImplementationPlan" kullanıyoruz.
+        // Gelecekte farklı artifact tipleri (TestPlan, CodePr vb.) eklenebilir.
+
+        // Metadata oluştur: Orijinal tip ve diğer detayları sakla
+        var metadata = new Dictionary<string, object>
+        {
+            ["OriginalType"] = msg.Data.ArtifactType ?? "Unknown",
+            ["AiProvider"] = msg.Data.UsedProvider,
+            ["PromptTokens"] = msg.Data.PromptTokens,
+            ["CompletionTokens"] = msg.Data.CompletionTokens,
+            ["DurationMs"] = msg.Data.DurationMs,
+            ["GeneratedAt"] = DateTime.UtcNow
+        };
+
+        var metadataJson = System.Text.Json.JsonSerializer.Serialize(metadata);
 
         var command = new UpsertArtifactRevisionCommand(
             ProjectId: msg.Data.ProjectId,
             IssueId: msg.Data.IssueId,
-            Type: "ImplementationPlan", // Sabit tip: Plan
+            Type: "ImplementationPlan",
             ContentJson: msg.Data.GeneratedContent,
             CorrelationId: msg.CorrelationId,
-            UserId: msg.UserId
+            UserId: msg.UserId,
+            Metadata: metadataJson
         );
 
         var rev = await _mediator.Send(command, context.CancellationToken);

@@ -1,5 +1,6 @@
 using ForgeFlow.Contracts.Events;
 using ForgeFlow.Work.Api.Services;
+using ForgeFlow.Work.Application.Abstractions;
 using ForgeFlow.Work.Application.Issues.Commands;
 using ForgeFlow.Work.Application.Issues.Queries;
 using ForgeFlow.Work.Domain.Enums;

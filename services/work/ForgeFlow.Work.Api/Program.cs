@@ -1,5 +1,6 @@
 using ForgeFlow.Work.Api.Services;
 using ForgeFlow.Work.Application;
+using ForgeFlow.Work.Application.Abstractions;
 using ForgeFlow.Work.Infrastructure;
 using ForgeFlow.Work.Infrastructure.Persistence;
 using MassTransit;

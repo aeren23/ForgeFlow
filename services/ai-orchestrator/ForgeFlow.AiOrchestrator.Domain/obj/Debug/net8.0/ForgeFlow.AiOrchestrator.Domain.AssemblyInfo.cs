@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ForgeFlow.AiOrchestrator.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1d7938f9159fcff9f1b663da78601312372f6a12")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2af688a113c756973a5cb5df88bc580374998583")]
 [assembly: System.Reflection.AssemblyProductAttribute("ForgeFlow.AiOrchestrator.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ForgeFlow.AiOrchestrator.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

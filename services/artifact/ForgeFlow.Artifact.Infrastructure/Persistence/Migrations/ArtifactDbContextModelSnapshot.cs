@@ -84,6 +84,9 @@ namespace ForgeFlow.Artifact.Infrastructure.Persistence.Migrations
                     b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Metadata")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("RevisionNo")
                         .HasColumnType("int");
 

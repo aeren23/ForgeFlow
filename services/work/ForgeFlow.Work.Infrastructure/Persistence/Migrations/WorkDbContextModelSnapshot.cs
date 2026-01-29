@@ -174,6 +174,28 @@ namespace ForgeFlow.Work.Infrastructure.Persistence.Migrations
                     b.ToTable("Projects", (string)null);
                 });
 
+            modelBuilder.Entity("ForgeFlow.Work.Domain.Entities.ProjectMember", b =>
+                {
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("UserId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("JoinedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("ProjectId", "UserId");
+
+                    b.ToTable("ProjectMember");
+                });
+
             modelBuilder.Entity("ForgeFlow.Work.Domain.Entities.Issue", b =>
                 {
                     b.HasOne("ForgeFlow.Work.Domain.Entities.Issue", "ParentIssue")
@@ -192,6 +214,17 @@ namespace ForgeFlow.Work.Infrastructure.Persistence.Migrations
                     b.Navigation("Project");
                 });
 
+            modelBuilder.Entity("ForgeFlow.Work.Domain.Entities.ProjectMember", b =>
+                {
+                    b.HasOne("ForgeFlow.Work.Domain.Entities.Project", "Project")
+                        .WithMany("Members")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Project");
+                });
+
             modelBuilder.Entity("ForgeFlow.Work.Domain.Entities.Issue", b =>
                 {
                     b.Navigation("ChildIssues");
@@ -200,6 +233,8 @@ namespace ForgeFlow.Work.Infrastructure.Persistence.Migrations
             modelBuilder.Entity("ForgeFlow.Work.Domain.Entities.Project", b =>
                 {
                     b.Navigation("Issues");
+
+                    b.Navigation("Members");
                 });
 #pragma warning restore 612, 618
         }

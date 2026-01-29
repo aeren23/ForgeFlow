@@ -27,11 +27,11 @@ public class Artifact
         Type = type;
     }
 
-    public ArtifactRevision AddRevision(string contentJson, string contentHash, string? correlationId = null)
+    public ArtifactRevision AddRevision(string contentJson, string contentHash, string? correlationId = null, string? metadata = null)
     {
         var next = _revisions.Count == 0 ? 1 : _revisions.Max(r => r.RevisionNo) + 1;
 
-        var rev = new ArtifactRevision(Id, next, contentJson, contentHash, correlationId);
+        var rev = new ArtifactRevision(Id, next, contentJson, contentHash, correlationId, metadata);
         _revisions.Add(rev);
 
         CurrentRevisionId = rev.Id;

@@ -1,26 +1,6 @@
+using ForgeFlow.Work.Application.Abstractions;
+
 namespace ForgeFlow.Work.Api.Services;
-
-/// <summary>
-/// ICurrentUserService - Gateway'den gelen X-User-Id header'ını okur.
-/// Strict Clean Architecture: Controller bu interface'i kullanır.
-/// </summary>
-public interface ICurrentUserService
-{
-    /// <summary>
-    /// Mevcut kullanıcının ID'si (Gateway X-User-Id header'ından)
-    /// </summary>
-    string? UserId { get; }
-
-    /// <summary>
-    /// Mevcut kullanıcının email'i (Gateway X-User-Email header'ından)
-    /// </summary>
-    string? Email { get; }
-
-    /// <summary>
-    /// Kullanıcı authenticate olmuş mu?
-    /// </summary>
-    bool IsAuthenticated { get; }
-}
 
 /// <summary>
 /// CurrentUserService - HttpContext'ten X-User-Id header'ını okur.
@@ -40,6 +20,21 @@ public class CurrentUserService : ICurrentUserService
 
     public string? Email =>
         _httpContextAccessor.HttpContext?.Request.Headers["X-User-Email"].FirstOrDefault();
+
+    public IEnumerable<string> Roles
+    {
+        get
+        {
+            var rolesHeader = _httpContextAccessor.HttpContext?.Request.Headers["X-User-Roles"].FirstOrDefault();
+            if (string.IsNullOrEmpty(rolesHeader))
+                return Enumerable.Empty<string>();
+
+            // Gateway virgülle ayırıp gönderir: "Admin,User"
+            return rolesHeader.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        }
+    }
+
+    public bool IsInRole(string role) => Roles.Contains(role, StringComparer.OrdinalIgnoreCase);
 
     public bool IsAuthenticated => !string.IsNullOrEmpty(UserId);
 }
