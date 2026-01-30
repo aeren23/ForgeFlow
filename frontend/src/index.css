@@ -1,0 +1,39 @@
+@import "tailwindcss";
+
+@theme {
+  /* Molten Core Theme */
+  --color-background: #0f172a;
+  --color-surface: #1e293b;
+  --color-primary: #f97316;
+  --color-secondary: #fbbf24;
+  --color-text: #f1f5f9;
+  --color-muted: #94a3b8;
+  --color-success: #22c55e;
+  --color-error: #ef4444;
+  --color-warning: #f59e0b;
+  --color-info: #3b82f6;
+}
+
+/* Base styles */
+body {
+  @apply bg-background text-text antialiased;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-background;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-surface rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-muted;
+}

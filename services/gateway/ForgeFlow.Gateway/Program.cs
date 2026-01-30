@@ -76,9 +76,29 @@ builder.Services.AddAuthorization(options =>
 builder.Services.AddReverseProxy()
     .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
 
+// CORS - Frontend erişimi için
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.WithOrigins(
+                "http://localhost:3000",      // Docker frontend
+                "http://localhost:5173",      // Vite dev server
+                "http://127.0.0.1:3000",
+                "http://127.0.0.1:5173"
+            )
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials();
+    });
+});
+
 var app = builder.Build();
 
 // Middleware sırası ÇOK ÖNEMLİ!
+// 0. CORS: Preflight (OPTIONS) isteklerini karşıla - EN BAŞTA olmalı!
+app.UseCors();
+
 // 1. Authentication: Token'ı doğrula, ClaimsPrincipal oluştur
 app.UseAuthentication();
 

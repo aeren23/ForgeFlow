@@ -186,6 +186,20 @@ services:
     networks:
       - forgeflow-net
 
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+      args:
+        - VITE_API_URL=http://localhost:8090
+    container_name: forgeflow-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - gateway
+    networks:
+      - forgeflow-net
+
 networks:
   forgeflow-net:
     name: forgeflow-net

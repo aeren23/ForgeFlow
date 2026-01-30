@@ -1,4 +1,5 @@
 using ForgeFlow.Identity.Application.Auth.Commands;
+using ForgeFlow.Identity.Application.Auth.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -91,6 +92,32 @@ public class AuthController : ControllerBase
             refreshToken = result.RefreshToken,
             expiresAt = result.ExpiresAt
         });
+    }
+
+    /// <summary>
+    /// Mevcut kullanıcının profil bilgilerini getirir
+    /// </summary>
+    [Authorize]
+    [HttpGet("profile")]
+    public async Task<IActionResult> GetProfile()
+    {
+        // JWT'den UserId'yi al (sub claim)
+        var userId = User.FindFirst("sub")?.Value;
+
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Unauthorized();
+        }
+
+        try
+        {
+            var result = await _mediator.Send(new GetProfileQuery(UserId: userId));
+            return Ok(result);
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound(new { error = "User not found" });
+        }
     }
 }
 
