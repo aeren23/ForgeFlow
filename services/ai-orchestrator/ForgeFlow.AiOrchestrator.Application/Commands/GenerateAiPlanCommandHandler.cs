@@ -68,7 +68,7 @@ public class GenerateAiPlanCommandHandler : IRequestHandler<GenerateAiPlanComman
             RequestId = request.RequestId,
             SystemPrompt = systemPrompt,
             UserPrompt = userPrompt,
-            MaxTokens = 4096,
+            MaxTokens = 8192, // Increased from 4096 to prevent JSON truncation
             Temperature = 0.7,
             PreferredProvider = preferredProvider
         };
@@ -115,7 +115,9 @@ public class GenerateAiPlanCommandHandler : IRequestHandler<GenerateAiPlanComman
         - Projenin ana teknolojileri: {techStack}
         - Eğer mevcutsa, projenin klasör yapısını ve kod stilini analiz et.
         - Çözümlerin mutlaka projenin kullandığı teknoloji yığınına ({techStack}) uygun olmalı.
-        - Yanıtını her zaman geçerli bir JSON formatında ver.
+        - YANITIN SADECE VE SADECE GEÇERLİ RAW JSON OLMALI.
+        - Asla Markdown blokları (```json ... ```) kullanma.
+        - JSON içindeki tüm stringlerdeki satır sonlarını escape et (\n).
         - Gereksiz açıklamalardan kaçın, doğrudan teknik implementasyona ve dosya bazlı değişikliklere odaklan.
         """;
 
@@ -139,14 +141,12 @@ public class GenerateAiPlanCommandHandler : IRequestHandler<GenerateAiPlanComman
         {codeContextSection}
 
         ### 📝 BEKLENTİLER (JSON FORMATI)
-        - summary: İşin genel teknik özeti
+        - summary: İşin genel teknik özeti (Max 2 cümle)
         - implementation_plan: 
             - summary: Implementasyonun kısa özeti
-            - list_of_changes: Yapılacak genel adımların listesi
-            - file_by_file_changes: 
-                - layer: Değişikliğin yapıldığı katman (örn: API, Application)
-                - purpose: Değişikliğin amacı
-                - files: (filename, description, code_example)
+            - list_of_changes: Yapılacak EN ÖNEMLİ 5-7 maddenin listesi.
+                - title: Task başlığı (Max 50 karakter)
+                - description: İşin teknik özeti (Max 1 cümle, çok kısa)
         """;
 
         return (systemPrompt, userPrompt);

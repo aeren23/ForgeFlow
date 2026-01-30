@@ -1,5 +1,7 @@
 namespace ForgeFlow.Work.Domain.Entities;
 
+using ForgeFlow.Work.Domain.Enums;
+
 /// <summary>
 /// A user assigned to a project with a specific role.
 /// </summary>
@@ -11,7 +13,7 @@ public class ProjectMember
     /// <summary>
     /// Role within the project: "Owner", "Admin", "Member", "Viewer"
     /// </summary>
-    public string Role { get; private set; } = "Member";
+    public ProjectRole Role { get; private set; } = ProjectRole.Member;
 
     public DateTime JoinedAtUtc { get; private set; } = DateTime.UtcNow;
 
@@ -20,7 +22,7 @@ public class ProjectMember
 
     private ProjectMember() { } // EF Core
 
-    public ProjectMember(Guid projectId, string userId, string role)
+    public ProjectMember(Guid projectId, string userId, ProjectRole role)
     {
         ProjectId = projectId;
         UserId = userId;

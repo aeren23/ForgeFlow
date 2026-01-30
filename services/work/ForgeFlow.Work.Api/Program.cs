@@ -23,6 +23,9 @@ builder.Services.AddMassTransit(x =>
 {
     x.SetKebabCaseEndpointNameFormatter();
 
+    // Consumers
+    x.AddConsumer<ForgeFlow.Work.Api.Consumers.AiPlanGeneratedConsumer>();
+
     x.UsingRabbitMq((context, cfg) =>
     {
         var host = builder.Configuration["RabbitMq:Host"] ?? "rabbitmq";
@@ -34,6 +37,8 @@ builder.Services.AddMassTransit(x =>
             h.Username(username);
             h.Password(password);
         });
+
+        cfg.ConfigureEndpoints(context);
     });
 });
 

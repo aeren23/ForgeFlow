@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ForgeFlow.Identity.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d0e9f3a562848d1243b87684c614477114867b09")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+20c3de379aa550f6fd9ad1eccf752830cdd74601")]
 [assembly: System.Reflection.AssemblyProductAttribute("ForgeFlow.Identity.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ForgeFlow.Identity.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

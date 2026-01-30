@@ -82,7 +82,7 @@ public class Project
     /// </summary>
     public ICollection<ProjectMember> Members { get; private set; } = new List<ProjectMember>();
 
-    public void AddMember(string userId, string role)
+    public void AddMember(string userId, ProjectRole role)
     {
         if (Members.Any(m => m.UserId == userId))
             return;

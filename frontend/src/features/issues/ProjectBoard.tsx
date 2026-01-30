@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Layers, Layout, ChevronDown, ChevronRight, Plus } from 'lucide-react';
 import {
     DndContext,
     DragOverlay,
@@ -14,10 +14,11 @@ import {
 } from '@dnd-kit/core';
 import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 
-import { getIssues, updateIssueStatus, IssueStatus, type Issue } from '../../services/api';
+import { getIssues, updateIssueStatus, IssueStatus, IssueType, type Issue } from '../../services/api';
 import { KanbanColumn } from './KanbanColumn';
 import { IssueCard } from './IssueCard';
 import { CreateIssueModal } from './CreateIssueModal';
+import { IssueDetailModal } from './IssueDetailModal';
 import { toast } from '../../store/uiStore';
 import { useAuthStore } from '../../store/authStore';
 
@@ -26,7 +27,11 @@ export function ProjectBoard() {
     const [issues, setIssues] = useState<Issue[]>([]);
     const [loading, setLoading] = useState(true);
     const [isCreateOpen, setCreateOpen] = useState(false);
+    const [selectedIssue, setSelectedIssue] = useState<Issue | null>(null);
     const [activeIssue, setActiveIssue] = useState<Issue | null>(null);
+    const [viewMode, setViewMode] = useState<'kanban' | 'swimlanes'>('kanban');
+    const [collapsedEpics, setCollapsedEpics] = useState<Record<string, boolean>>({});
+
     const currentUser = useAuthStore(state => state.user);
 
     const sensors = useSensors(
@@ -54,6 +59,10 @@ export function ProjectBoard() {
         fetchIssues();
     };
 
+    const toggleEpicCollapse = (epicId: string) => {
+        setCollapsedEpics(prev => ({ ...prev, [epicId]: !prev[epicId] }));
+    };
+
     const handleDragStart = (event: DragStartEvent) => {
         const { active } = event;
         const issue = issues.find(i => i.id === active.id);
@@ -72,23 +81,21 @@ export function ProjectBoard() {
         if (!issue) return;
 
         // Determine new status based on drop target (Column ID)
-        // Ensure the over.id is one of our column IDs (which we'll set as status strings/numbers)
+        // Ensure the ID of the container includes the status
+        // e.g. "todo-epic1", "inprogress-epic1"
+        const containerId = over.id as string;
         let newStatus: IssueStatus | undefined;
 
-        // Check if dropped on a column container
-        if (over.data.current?.type === 'Column') {
-            newStatus = over.data.current.status as IssueStatus;
-        }
-        // Or dropped on another issue in that column
-        else if (over.data.current?.type === 'Issue') {
+        if (containerId.includes('todo')) newStatus = IssueStatus.Open;
+        else if (containerId.includes('inprogress')) newStatus = IssueStatus.InProgress;
+        else if (containerId.includes('done')) newStatus = IssueStatus.Done;
+
+        // If dropped on an issue card (Sortable), we check that issue's status
+        // But for simplicity in this MVP, we rely on Column/Container IDs primarily.
+        // If dropped on an item, dnd-kit reports over.id as that item's ID.
+        if (newStatus === undefined) {
             const overIssue = issues.find(i => i.id === over.id);
             if (overIssue) {
-                // Map issue status to column status logic
-                // (Open -> Open, InProcess/InReview -> InProgress, Done/Closed -> Done)
-                // For simplicity, we assume the column's main status is what we want
-                // But wait, "In Progress" column contains both InProgress and InReview.
-                // So we should probably keep the target issue's status, or default to the column's main status.
-                // Let's stick to the column logic.
                 if (overIssue.status === IssueStatus.Open) newStatus = IssueStatus.Open;
                 else if (overIssue.status === IssueStatus.Done || overIssue.status === IssueStatus.Closed) newStatus = IssueStatus.Done;
                 else newStatus = IssueStatus.InProgress;
@@ -98,30 +105,10 @@ export function ProjectBoard() {
         if (newStatus === undefined || newStatus === issue.status) return;
 
         // --- Smart Validation Logic ---
-
-        // 1. Auto-Assign if moving to In Progress and Unassigned
         let shouldAutoAssign = false;
         if ((newStatus === IssueStatus.InProgress || newStatus === IssueStatus.InReview) && !issue.assigneeId) {
             shouldAutoAssign = true;
             toast.success('Issue automatically assigned to you.');
-        }
-
-        // 2. Done Restriction (Only Assignee or Admin can move to Done)
-        // Currently we don't have robust Role check on frontend, but we can check Assignee
-        if ((newStatus === IssueStatus.Done || newStatus === IssueStatus.Closed) &&
-            issue.assigneeId &&
-            issue.assigneeId !== currentUser?.id) {
-
-            // Allow if user is not the assignee? maybe restrict it?
-            // "Only Assignee or Owner can move to Done"
-            // For MVP let's just warn but allow, or block if strict.
-            // The prompt said: "Sadece Assignee veya Admin Done'a çekebilir"
-
-            // We assume currentUser.id is available.
-            // If we don't have Admin flag easily, we enforce Assignee check strictly.
-            // But what if I am the Creator (Owner) but not assignee?
-            // We'll skip strict check for now to avoid locking out Owners, but ideally backend should enforce this.
-            // Let's just implement the Auto-Assign strictly for now.
         }
 
         // Optimistic Update
@@ -139,39 +126,214 @@ export function ProjectBoard() {
 
         try {
             await updateIssueStatus(issue.key, newStatus!);
-            // If auto-assign needed, we would need another API call to assign.
-            // Current updateIssueStatus only changes status.
-            // We might need to implement assignIssue API or just let status update happen.
-            // For now, let's just update status. The auto-assign visual is optimistic.
-            // TODO: Call assign API if shouldAutoAssign is true.
         } catch (error) {
             toast.error('Failed to update status');
-            // Revert
             setIssues(prev => prev.map(i => i.id === issueId ? { ...i, status: oldStatus } : i));
         }
     };
 
-    const filterIssues = (status: IssueStatus) => {
-        // Backend Status: Open(0), InProgress(1), InReview(2), Done(3), Closed(4)
-        // Mapping to 3 Columns:
-        // To Do -> Open
-        // In Progress -> InProgress + InReview
-        // Done -> Done + Closed
-
+    const getColumnIssues = (status: IssueStatus, subset: Issue[]) => {
         if (status === IssueStatus.Open)
-            return issues.filter(i => i.status === IssueStatus.Open);
+            return subset.filter(i => i.status === IssueStatus.Open);
         if (status === IssueStatus.InProgress)
-            return issues.filter(i => i.status === IssueStatus.InProgress || i.status === IssueStatus.InReview);
+            return subset.filter(i => i.status === IssueStatus.InProgress || i.status === IssueStatus.InReview);
         if (status === IssueStatus.Done)
-            return issues.filter(i => i.status === IssueStatus.Done || i.status === IssueStatus.Closed);
-
+            return subset.filter(i => i.status === IssueStatus.Done || i.status === IssueStatus.Closed);
         return [];
+    };
+
+    // Separate Epics from regular tasks
+    const epics = issues.filter(i => i.type === IssueType.Epic);
+    // Tasks should not include Epics themselves in the columns
+    const tasks = issues.filter(i => i.type !== IssueType.Epic);
+
+    const renderKanbanBoard = () => (
+        <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-6 min-h-0 bg-muted/5 p-4 rounded-xl border border-muted/10 overflow-hidden">
+            <KanbanColumn
+                id="column-todo-main"
+                title="To Do"
+                status={IssueStatus.Open}
+                issues={getColumnIssues(IssueStatus.Open, tasks)}
+                colorClass="bg-red-500/5 text-red-600"
+                onAddClick={() => setCreateOpen(true)}
+                onIssueClick={setSelectedIssue}
+            />
+            <KanbanColumn
+                id="column-inprogress-main"
+                title="In Progress"
+                status={IssueStatus.InProgress}
+                issues={getColumnIssues(IssueStatus.InProgress, tasks)}
+                colorClass="bg-blue-500/5 text-blue-600"
+                onIssueClick={setSelectedIssue}
+            />
+            <KanbanColumn
+                id="column-done-main"
+                title="Done"
+                status={IssueStatus.Done}
+                issues={getColumnIssues(IssueStatus.Done, tasks)}
+                colorClass="bg-green-500/5 text-green-600"
+                onIssueClick={setSelectedIssue}
+            />
+        </div>
+    );
+
+    const renderSwimlanes = () => {
+        // Group tasks by ParentIssueId
+        const orphanTasks = tasks.filter(t => !t.parentIssueId);
+
+        return (
+            <div className="flex-1 overflow-y-auto min-h-0 space-y-6 pr-2">
+                {/* Orphan Tasks (No Epic) */}
+                {orphanTasks.length > 0 && (
+                    <div className="bg-muted/5 border border-muted/10 rounded-xl overflow-hidden">
+                        <div
+                            className="p-3 bg-muted/10 flex items-center justify-between cursor-pointer hover:bg-muted/20 transition-colors"
+                            onClick={() => toggleEpicCollapse('orphans')}
+                        >
+                            <div className="flex items-center gap-2">
+                                {collapsedEpics['orphans'] ? <ChevronRight className="w-4 h-4 text-muted" /> : <ChevronDown className="w-4 h-4 text-muted" />}
+                                <h3 className="font-medium text-text text-sm">Issues without Epic</h3>
+                                <span className="bg-muted/20 text-text/60 px-2 py-0.5 rounded text-xs font-mono">{orphanTasks.length}</span>
+                            </div>
+                        </div>
+
+                        {!collapsedEpics['orphans'] && (
+                            <div className="p-4 grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <KanbanColumn
+                                    id="column-todo-orphans"
+                                    title="To Do"
+                                    status={IssueStatus.Open}
+                                    issues={getColumnIssues(IssueStatus.Open, orphanTasks)}
+                                    colorClass="bg-red-500/5 text-red-600"
+                                    onAddClick={() => setCreateOpen(true)}
+                                    onIssueClick={setSelectedIssue}
+                                />
+                                <KanbanColumn
+                                    id="column-inprogress-orphans"
+                                    title="In Progress"
+                                    status={IssueStatus.InProgress}
+                                    issues={getColumnIssues(IssueStatus.InProgress, orphanTasks)}
+                                    colorClass="bg-blue-500/5 text-blue-600"
+                                    onIssueClick={setSelectedIssue}
+                                />
+                                <KanbanColumn
+                                    id="column-done-orphans"
+                                    title="Done"
+                                    status={IssueStatus.Done}
+                                    issues={getColumnIssues(IssueStatus.Done, orphanTasks)}
+                                    colorClass="bg-green-500/5 text-green-600"
+                                    onIssueClick={setSelectedIssue}
+                                />
+                            </div>
+                        )}
+                    </div>
+                )}
+
+                {/* Epic Swimlanes */}
+                {epics.map(epic => {
+                    const epicTasks = tasks.filter(t => t.parentIssueId === epic.id);
+                    const isCollapsed = collapsedEpics[epic.id];
+
+                    return (
+                        <div key={epic.id} className="bg-surface border border-muted/20 rounded-xl overflow-hidden shadow-sm">
+                            <div
+                                className="p-3 bg-gradient-to-r from-purple-500/5 to-transparent border-b border-muted/10 flex items-center justify-between cursor-pointer hover:bg-muted/5 transition-colors"
+                                onClick={() => toggleEpicCollapse(epic.id)}
+                            >
+                                <div className="flex items-center gap-2">
+                                    {isCollapsed ? <ChevronRight className="w-4 h-4 text-muted" /> : <ChevronDown className="w-4 h-4 text-muted" />}
+                                    <span className="px-2 py-0.5 rounded bg-purple-500/10 text-purple-600 text-xs font-bold uppercase tracking-wider">Epic</span>
+                                    <h3 className="font-medium text-text">{epic.title}</h3>
+                                    <span className="text-muted text-sm ml-2">({epicTasks.length} issues)</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    {/* Progress Bar could go here */}
+                                    <div className="text-xs text-muted font-mono">
+                                        {epicTasks.filter(t => t.status === IssueStatus.Done || t.status === IssueStatus.Closed).length} / {epicTasks.length} Done
+                                    </div>
+                                </div>
+                            </div>
+
+                            {!isCollapsed && (
+                                <div className="p-4 grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    <KanbanColumn
+                                        id={`column-todo-${epic.id}`}
+                                        title="To Do"
+                                        status={IssueStatus.Open}
+                                        issues={getColumnIssues(IssueStatus.Open, epicTasks)}
+                                        colorClass="bg-red-500/5 text-red-600"
+                                        onAddClick={() => setCreateOpen(true)} // Maybe pass epicId to create in this epic?
+                                        onIssueClick={setSelectedIssue}
+                                    />
+                                    <KanbanColumn
+                                        id={`column-inprogress-${epic.id}`}
+                                        title="In Progress"
+                                        status={IssueStatus.InProgress}
+                                        issues={getColumnIssues(IssueStatus.InProgress, epicTasks)}
+                                        colorClass="bg-blue-500/5 text-blue-600"
+                                        onIssueClick={setSelectedIssue}
+                                    />
+                                    <KanbanColumn
+                                        id={`column-done-${epic.id}`}
+                                        title="Done"
+                                        status={IssueStatus.Done}
+                                        issues={getColumnIssues(IssueStatus.Done, epicTasks)}
+                                        colorClass="bg-green-500/5 text-green-600"
+                                        onIssueClick={setSelectedIssue}
+                                    />
+                                </div>
+                            )}
+                        </div>
+                    );
+                })}
+
+                {epics.length === 0 && orphanTasks.length === 0 && (
+                    <div className="text-center py-12 text-muted bg-muted/5 rounded-xl border border-dashed border-muted/20">
+                        <Layers className="w-12 h-12 mx-auto mb-4 text-muted/50" />
+                        <p>No issues found. Create one to get started.</p>
+                        <button
+                            onClick={() => setCreateOpen(true)}
+                            className="mt-4 px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary/90"
+                        >
+                            Create First Issue
+                        </button>
+                    </div>
+                )}
+            </div>
+        );
     };
 
     return (
         <div className="space-y-4 h-full flex flex-col">
-            <div className="flex items-center justify-between">
-                <h2 className="text-lg font-semibold text-text">Board</h2>
+            <div className="flex items-center justify-between shrink-0">
+                <div className="flex items-center gap-4">
+                    <h2 className="text-lg font-semibold text-text">Board</h2>
+                    <div className="flex bg-muted/10 p-1 rounded-lg border border-muted/10">
+                        <button
+                            onClick={() => setViewMode('kanban')}
+                            className={`p-1.5 rounded-md transition-all flex items-center gap-2 px-3 text-xs font-medium ${viewMode === 'kanban' ? 'bg-surface shadow-sm text-primary' : 'text-muted hover:text-text'}`}
+                            title="Kanban View"
+                        >
+                            <Layout className="w-4 h-4" />
+                            Kanban
+                        </button>
+                        <button
+                            onClick={() => setViewMode('swimlanes')}
+                            className={`p-1.5 rounded-md transition-all flex items-center gap-2 px-3 text-xs font-medium ${viewMode === 'swimlanes' ? 'bg-surface shadow-sm text-primary' : 'text-muted hover:text-text'}`}
+                            title="Swimlanes View (Group by Epic)"
+                        >
+                            <Layers className="w-4 h-4" />
+                            Swimlanes
+                        </button>
+                    </div>
+                </div>
+                <button
+                    onClick={() => setCreateOpen(true)}
+                    className="flex items-center gap-2 px-4 py-2 bg-primary hover:bg-primary/90 text-white rounded-lg text-sm font-medium transition-colors shadow-sm shadow-primary/20"
+                >
+                    <Plus className="w-4 h-4" />
+                    Create Issue
+                </button>
             </div>
 
             {loading ? (
@@ -185,30 +347,7 @@ export function ProjectBoard() {
                     onDragStart={handleDragStart}
                     onDragEnd={handleDragEnd}
                 >
-                    <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-6 min-h-0">
-                        <KanbanColumn
-                            id="column-todo"
-                            title="To Do"
-                            status={IssueStatus.Open}
-                            issues={filterIssues(IssueStatus.Open)}
-                            colorClass="bg-red-500/5 text-red-600"
-                            onAddClick={() => setCreateOpen(true)}
-                        />
-                        <KanbanColumn
-                            id="column-inprogress"
-                            title="In Progress"
-                            status={IssueStatus.InProgress}
-                            issues={filterIssues(IssueStatus.InProgress)}
-                            colorClass="bg-blue-500/5 text-blue-600"
-                        />
-                        <KanbanColumn
-                            id="column-done"
-                            title="Done"
-                            status={IssueStatus.Done}
-                            issues={filterIssues(IssueStatus.Done)}
-                            colorClass="bg-green-500/5 text-green-600"
-                        />
-                    </div>
+                    {viewMode === 'kanban' ? renderKanbanBoard() : renderSwimlanes()}
 
                     <DragOverlay>
                         {activeIssue ? <IssueCard issue={activeIssue} /> : null}
@@ -221,6 +360,12 @@ export function ProjectBoard() {
                 onClose={() => setCreateOpen(false)}
                 onSuccess={handleCreateSuccess}
                 projectKey={key!}
+            />
+
+            <IssueDetailModal
+                isOpen={!!selectedIssue}
+                onClose={() => setSelectedIssue(null)}
+                issue={selectedIssue}
             />
         </div>
     );

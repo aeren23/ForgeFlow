@@ -44,11 +44,20 @@ public class IssuesController : ControllerBase
         [FromQuery] IssuePriority? priority = null,
         [FromQuery] IssueType? type = null,
         [FromQuery] string? assigneeId = null,
+        [FromQuery] Guid? parentIssueId = null,
         [FromQuery] int page = 1,
         [FromQuery] int pageSize = 20)
     {
         var result = await _mediator.Send(new ListIssuesQuery(
-            projectKey, status, priority, type, assigneeId, null, page, pageSize));
+            ProjectKey: projectKey,
+            Status: status,
+            Priority: priority,
+            Type: type,
+            AssigneeId: assigneeId,
+            ReporterId: null,
+            ParentIssueId: parentIssueId,
+            Page: page,
+            PageSize: pageSize));
         return Ok(result);
     }
 
@@ -136,6 +145,7 @@ public class IssuesController : ControllerBase
     {
         request ??= new GeneratePlanRequest();
 
+        // Get issue to find project ID
         // Get issue to find project ID
         var issue = await _mediator.Send(new GetIssueQuery(issueKey));
         if (issue == null)

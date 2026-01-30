@@ -80,8 +80,11 @@ export function IssueCard({ issue, onClick }: IssueCardProps) {
                     {getTypeIcon(issue.type)}
                 </div>
 
-                <div className="w-6 h-6 rounded-full bg-muted/20 flex items-center justify-center text-xs text-muted" title={issue.assigneeId || 'Unassigned'}>
-                    <User className="w-3 h-3" />
+                <div
+                    className={`w-6 h-6 rounded-full flex items-center justify-center text-xs text-white border border-surface shadow-sm ${issue.assigneeId ? 'bg-gradient-to-br from-blue-500 to-indigo-600' : 'bg-muted/20 text-muted'}`}
+                    title={issue.assigneeId || 'Unassigned'}
+                >
+                    {issue.assigneeId ? issue.assigneeId.substring(0, 1).toUpperCase() : <User className="w-3 h-3" />}
                 </div>
             </div>
         </div>

@@ -102,6 +102,42 @@ public class ProjectsController : ControllerBase
         if (!result) return NotFound();
         return Ok();
     }
+
+    /// <summary>
+    /// Yapay zeka ile plan oluştur (Epic + AI Trigger)
+    /// </summary>
+    [HttpPost("{key}/generate-plan")]
+    public async Task<ActionResult> GenerateAiPlan(string key, [FromBody] GenerateAiPlanRequest request)
+    {
+        // 1. Önce Epic oluştur (Plan Konteyneri)
+        var createEpicCommand = new ForgeFlow.Work.Application.Issues.Commands.CreateIssueCommand(
+            ProjectKey: key,
+            Title: request.PlanName,
+            Description: request.Description,
+            Type: IssueType.Epic,
+            Priority: IssuePriority.High,
+            ParentIssueKey: null,
+            AssigneeId: _currentUser.UserId,
+            DueDate: DateTime.UtcNow.AddDays(7),
+            EstimatedHours: null,
+            ReporterId: _currentUser.UserId!
+        );
+
+        var epicResult = await _mediator.Send(createEpicCommand);
+
+        // 2. AI Plan Command'i tetikle (Bu command Orchestrator'a gidecek)
+        // Not: Bu command Work servisinde tanımlı olmayabilir, Orchestrator'a HTTP veya Masstransit ile gitmeliyiz.
+        // Ancak HttpWorkContextProvider kullandığımız için AI servisimiz Work servisini biliyor.
+        // Ama buradan AI servisine nasıl ulaşacağız?
+        // Çözüm: Work servisi bir "Event" fırlatabilir (AiPlanRequested) veya direkt AI servisine istek atabilir.
+        // Mevcut mimaride: Gateway -> Orchestrator(GenerateAiPlanCommand) -> AI -> Event -> Consumer
+        // Yani bizim buradan AI servisine ulaşmamız lazım.
+        // Kestirme yol: Biz burada sadece Epic oluşturduk. Frontend'e Epic Key dönelim.
+        // Frontend, mevcut "generateAiPlan" metodunu bu Epic Key ile çağırsın.
+        // Bu sayede Orchestrator'a giden yol değişmez.
+
+        return Ok(new { EpicKey = epicResult.Key, EpicId = epicResult.Id });
+    }
 }
 
 public record AddMemberRequest(string UserId, string? Role);
@@ -125,4 +161,10 @@ public record UpdateProjectRequest(
     string? DefaultBranch,
     string[]? TechStack,
     ProjectType ProjectType
+);
+
+public record GenerateAiPlanRequest(
+    string PlanName,
+    string Description,
+    string BundleType = "FullStack"
 );

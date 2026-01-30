@@ -24,5 +24,11 @@ public record ProjectDto(
     string CreatorId,
     int IssueCount,
     DateTime CreatedAtUtc,
-    DateTime UpdatedAtUtc
+    DateTime UpdatedAtUtc,
+    ICollection<ProjectMemberDto> Members
+);
+public record ProjectMemberDto(
+    string UserId,
+    string Role,
+    DateTime JoinedAtUtc
 );

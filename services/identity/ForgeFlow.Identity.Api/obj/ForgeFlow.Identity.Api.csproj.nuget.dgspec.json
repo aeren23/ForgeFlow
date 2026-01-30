@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Api\\ForgeFlow.Identity.Api.csproj": {}
+    "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Api\\ForgeFlow.Identity.Api.csproj": {}
   },
   "projects": {
-    "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\contracts\\ForgeFlow.Contracts\\ForgeFlow.Contracts.csproj": {
+    "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\contracts\\ForgeFlow.Contracts\\ForgeFlow.Contracts.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\contracts\\ForgeFlow.Contracts\\ForgeFlow.Contracts.csproj",
+        "projectUniqueName": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\contracts\\ForgeFlow.Contracts\\ForgeFlow.Contracts.csproj",
         "projectName": "ForgeFlow.Contracts",
-        "projectPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\contracts\\ForgeFlow.Contracts\\ForgeFlow.Contracts.csproj",
+        "projectPath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\contracts\\ForgeFlow.Contracts\\ForgeFlow.Contracts.csproj",
         "packagesPath": "C:\\Users\\alihe\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\contracts\\ForgeFlow.Contracts\\obj\\",
+        "outputPath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\contracts\\ForgeFlow.Contracts\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -69,14 +69,14 @@
         }
       }
     },
-    "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Api\\ForgeFlow.Identity.Api.csproj": {
+    "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Api\\ForgeFlow.Identity.Api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Api\\ForgeFlow.Identity.Api.csproj",
+        "projectUniqueName": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Api\\ForgeFlow.Identity.Api.csproj",
         "projectName": "ForgeFlow.Identity.Api",
-        "projectPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Api\\ForgeFlow.Identity.Api.csproj",
+        "projectPath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Api\\ForgeFlow.Identity.Api.csproj",
         "packagesPath": "C:\\Users\\alihe\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Api\\obj\\",
+        "outputPath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Api\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -97,14 +97,14 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\contracts\\ForgeFlow.Contracts\\ForgeFlow.Contracts.csproj": {
-                "projectPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\contracts\\ForgeFlow.Contracts\\ForgeFlow.Contracts.csproj"
+              "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\contracts\\ForgeFlow.Contracts\\ForgeFlow.Contracts.csproj": {
+                "projectPath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\contracts\\ForgeFlow.Contracts\\ForgeFlow.Contracts.csproj"
               },
-              "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Application\\ForgeFlow.Identity.Application.csproj": {
-                "projectPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Application\\ForgeFlow.Identity.Application.csproj"
+              "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Application\\ForgeFlow.Identity.Application.csproj": {
+                "projectPath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Application\\ForgeFlow.Identity.Application.csproj"
               },
-              "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Infrastructure\\ForgeFlow.Identity.Infrastructure.csproj": {
-                "projectPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Infrastructure\\ForgeFlow.Identity.Infrastructure.csproj"
+              "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Infrastructure\\ForgeFlow.Identity.Infrastructure.csproj": {
+                "projectPath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Infrastructure\\ForgeFlow.Identity.Infrastructure.csproj"
               }
             }
           }
@@ -179,14 +179,14 @@
         }
       }
     },
-    "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Application\\ForgeFlow.Identity.Application.csproj": {
+    "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Application\\ForgeFlow.Identity.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Application\\ForgeFlow.Identity.Application.csproj",
+        "projectUniqueName": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Application\\ForgeFlow.Identity.Application.csproj",
         "projectName": "ForgeFlow.Identity.Application",
-        "projectPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Application\\ForgeFlow.Identity.Application.csproj",
+        "projectPath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Application\\ForgeFlow.Identity.Application.csproj",
         "packagesPath": "C:\\Users\\alihe\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Application\\obj\\",
+        "outputPath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Application\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -207,8 +207,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Domain\\ForgeFlow.Identity.Domain.csproj": {
-                "projectPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Domain\\ForgeFlow.Identity.Domain.csproj"
+              "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Domain\\ForgeFlow.Identity.Domain.csproj": {
+                "projectPath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Domain\\ForgeFlow.Identity.Domain.csproj"
               }
             }
           }
@@ -262,14 +262,14 @@
         }
       }
     },
-    "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Domain\\ForgeFlow.Identity.Domain.csproj": {
+    "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Domain\\ForgeFlow.Identity.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Domain\\ForgeFlow.Identity.Domain.csproj",
+        "projectUniqueName": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Domain\\ForgeFlow.Identity.Domain.csproj",
         "projectName": "ForgeFlow.Identity.Domain",
-        "projectPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Domain\\ForgeFlow.Identity.Domain.csproj",
+        "projectPath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Domain\\ForgeFlow.Identity.Domain.csproj",
         "packagesPath": "C:\\Users\\alihe\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Domain\\obj\\",
+        "outputPath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -333,14 +333,14 @@
         }
       }
     },
-    "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Infrastructure\\ForgeFlow.Identity.Infrastructure.csproj": {
+    "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Infrastructure\\ForgeFlow.Identity.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Infrastructure\\ForgeFlow.Identity.Infrastructure.csproj",
+        "projectUniqueName": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Infrastructure\\ForgeFlow.Identity.Infrastructure.csproj",
         "projectName": "ForgeFlow.Identity.Infrastructure",
-        "projectPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Infrastructure\\ForgeFlow.Identity.Infrastructure.csproj",
+        "projectPath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Infrastructure\\ForgeFlow.Identity.Infrastructure.csproj",
         "packagesPath": "C:\\Users\\alihe\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Infrastructure\\obj\\",
+        "outputPath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -361,8 +361,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Application\\ForgeFlow.Identity.Application.csproj": {
-                "projectPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Application\\ForgeFlow.Identity.Application.csproj"
+              "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Application\\ForgeFlow.Identity.Application.csproj": {
+                "projectPath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Application\\ForgeFlow.Identity.Application.csproj"
               }
             }
           }

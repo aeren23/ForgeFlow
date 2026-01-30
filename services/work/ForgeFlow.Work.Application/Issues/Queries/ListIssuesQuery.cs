@@ -13,6 +13,7 @@ public record ListIssuesQuery(
     IssueType? Type = null,
     string? AssigneeId = null,
     string? ReporterId = null,
+    Guid? ParentIssueId = null,
     int Page = 1,
     int PageSize = 20
 ) : IRequest<ListIssuesResult>;
@@ -28,11 +29,13 @@ public record IssueListItemDto(
     Guid Id,
     string Key,
     string Title,
+    string? Description,
     IssueStatus Status,
     IssuePriority Priority,
     IssueType Type,
     string ProjectKey,
     string? AssigneeId,
     DateTime? DueDate,
-    DateTime CreatedAtUtc
+    DateTime CreatedAtUtc,
+    Guid? ParentIssueId
 );

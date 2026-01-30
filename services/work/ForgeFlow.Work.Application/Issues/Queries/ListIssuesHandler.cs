@@ -53,6 +53,11 @@ public class ListIssuesHandler : IRequestHandler<ListIssuesQuery, ListIssuesResu
             query = query.Where(i => i.ReporterId == request.ReporterId);
         }
 
+        if (request.ParentIssueId.HasValue)
+        {
+            query = query.Where(i => i.ParentIssueId == request.ParentIssueId.Value);
+        }
+
         // Total count
         var totalCount = await query.CountAsync(cancellationToken);
 
@@ -65,13 +70,15 @@ public class ListIssuesHandler : IRequestHandler<ListIssuesQuery, ListIssuesResu
                 i.Id,
                 i.Key,
                 i.Title,
+                i.Description,
                 i.Status,
                 i.Priority,
                 i.Type,
                 i.Project.Key,
                 i.AssigneeId,
                 i.DueDate,
-                i.CreatedAtUtc
+                i.CreatedAtUtc,
+                i.ParentIssueId
             ))
             .ToListAsync(cancellationToken);
 

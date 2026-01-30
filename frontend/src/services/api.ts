@@ -106,6 +106,7 @@ export interface Issue {
     type: IssueType;
     projectId: string;
     assigneeId?: string;
+    parentIssueId?: string;
     createdAtUtc: string;
 }
 
@@ -120,8 +121,11 @@ export interface CreateIssueRequest {
     estimatedHours?: number;
 }
 
-export const getIssues = async (projectKey: string) => {
-    return api.get(`/api/issues?projectKey=${projectKey}&pageSize=100`);
+export const getIssues = async (projectKey: string, parentIssueId?: string) => {
+    const url = parentIssueId
+        ? `/api/issues?projectKey=${projectKey}&parentIssueId=${parentIssueId}&pageSize=100`
+        : `/api/issues?projectKey=${projectKey}&pageSize=100`;
+    return api.get(url);
 };
 
 export const createIssue = async (data: CreateIssueRequest) => {
@@ -132,8 +136,18 @@ export const updateIssueStatus = async (key: string, status: IssueStatus) => {
     return api.post(`/api/issues/${key}/status`, { status });
 };
 
+export interface GenerateAiPlanRequest {
+    planName: string;
+    description: string;
+    bundleType?: string;
+}
+
 export const generateAiPlan = async (issueKey: string) => {
     return api.post(`/api/issues/${issueKey}/generate`);
+};
+
+export const generateProjectAiPlan = async (projectKey: string, data: GenerateAiPlanRequest) => {
+    return api.post(`/api/projects/${projectKey}/generate-plan`, data);
 };
 
 // Flag to prevent multiple refresh attempts
@@ -224,5 +238,48 @@ api.interceptors.response.use(
         return Promise.reject(error);
     }
 );
+
+export interface ProjectMember {
+    userId: string;
+    role: string;
+    joinedAtUtc: string;
+}
+
+export interface ProjectDto {
+    id: string;
+    key: string;
+    name: string;
+    description?: string;
+    repositoryUrl?: string;
+    repositoryProvider?: number;
+    defaultBranch: string;
+    techStack: string[];
+    projectType: number;
+    creatorId: string;
+    issueCount: number;
+    createdAtUtc: string;
+    updatedAtUtc: string;
+    members: ProjectMember[];
+}
+
+export interface UserDto {
+    id: string;
+    userName: string;
+    email: string;
+    fullName: string;
+}
+
+export interface SearchUsersResponse {
+    items: UserDto[];
+    totalCount: number;
+}
+
+export const searchUsers = async (term: string, page = 1, pageSize = 10) => {
+    return api.get<SearchUsersResponse>(`/api/users?term=${term}&page=${page}&pageSize=${pageSize}`);
+};
+
+export const addProjectMember = async (projectKey: string, userId: string, role = 'Member') => {
+    return api.post(`/api/projects/${projectKey}/members`, { userId, role });
+};
 
 export default api;

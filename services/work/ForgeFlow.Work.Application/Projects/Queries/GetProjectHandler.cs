@@ -1,4 +1,5 @@
 using ForgeFlow.Work.Application.Abstractions;
+using ForgeFlow.Work.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,9 +19,18 @@ public class GetProjectHandler : IRequestHandler<GetProjectQuery, ProjectDto?>
 
     public async Task<ProjectDto?> Handle(GetProjectQuery request, CancellationToken cancellationToken)
     {
+        Guid? projectId = null;
+        if (Guid.TryParse(request.Key, out var parsedId))
+        {
+            projectId = parsedId;
+        }
+
         var project = await _context.Projects
             .Include(p => p.Issues)
-            .FirstOrDefaultAsync(p => p.Key == request.Key.ToUpperInvariant(), cancellationToken);
+            .Include(p => p.Members)
+            .FirstOrDefaultAsync(p =>
+                (projectId.HasValue && p.Id == projectId.Value) ||
+                p.Key == request.Key.ToUpperInvariant(), cancellationToken);
 
         if (project == null)
             return null;
@@ -38,7 +48,8 @@ public class GetProjectHandler : IRequestHandler<GetProjectQuery, ProjectDto?>
             project.CreatorId,
             project.Issues.Count,
             project.CreatedAtUtc,
-            project.UpdatedAtUtc
+            project.UpdatedAtUtc,
+            project.Members.Select(m => new ProjectMemberDto(m.UserId, m.Role.ToString(), m.JoinedAtUtc)).ToList()
         );
     }
 }

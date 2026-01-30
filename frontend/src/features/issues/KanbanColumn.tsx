@@ -11,9 +11,10 @@ interface KanbanColumnProps {
     issues: Issue[];
     colorClass: string;
     onAddClick?: () => void;
+    onIssueClick?: (issue: Issue) => void;
 }
 
-export function KanbanColumn({ id, title, status, issues, colorClass, onAddClick }: KanbanColumnProps) {
+export function KanbanColumn({ id, title, status, issues, colorClass, onAddClick, onIssueClick }: KanbanColumnProps) {
     const { setNodeRef } = useDroppable({
         id: id,
         data: {
@@ -40,7 +41,11 @@ export function KanbanColumn({ id, title, status, issues, colorClass, onAddClick
                     strategy={verticalListSortingStrategy}
                 >
                     {issues.map(issue => (
-                        <IssueCard key={issue.id} issue={issue} />
+                        <IssueCard
+                            key={issue.id}
+                            issue={issue}
+                            onClick={() => onIssueClick?.(issue)}
+                        />
                     ))}
                 </SortableContext>
 
