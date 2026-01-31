@@ -25,5 +25,8 @@ public record ProjectListItemDto(
     string? Description,
     string[] TechStack,
     int IssueCount,
-    DateTime CreatedAtUtc
+    DateTime CreatedAtUtc,
+    IReadOnlyList<ProjectMemberDto> Members
 );
+
+

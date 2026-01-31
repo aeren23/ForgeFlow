@@ -49,6 +49,7 @@ public class JwtTokenService : ITokenService
         var claims = new List<Claim>
         {
             new Claim(JwtRegisteredClaimNames.Sub, user.Id),
+            new Claim(ClaimTypes.NameIdentifier, user.Id), // Required for UserManager.GetUserAsync
             new Claim(JwtRegisteredClaimNames.Email, user.Email ?? ""),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new Claim("fullName", user.FullName ?? ""),

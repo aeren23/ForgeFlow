@@ -20,5 +20,6 @@ public record LoginResult(
     DateTime? ExpiresAt,
     string? UserId,
     string? Email,
-    string? Error
+    string? Error,
+    bool IsSystemAdmin = false
 );

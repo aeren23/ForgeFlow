@@ -267,11 +267,20 @@ export interface UserDto {
     userName: string;
     email: string;
     fullName: string;
+    isSystemAdmin?: boolean;
+    isActive?: boolean;
+    createdAtUtc?: string;
 }
 
 export interface SearchUsersResponse {
     items: UserDto[];
     totalCount: number;
+}
+
+export interface AdminStats {
+    totalUsers: number;
+    activeUsers: number;
+    bannedUsers: number;
 }
 
 export const searchUsers = async (term: string, page = 1, pageSize = 10) => {
@@ -280,6 +289,20 @@ export const searchUsers = async (term: string, page = 1, pageSize = 10) => {
 
 export const addProjectMember = async (projectKey: string, userId: string, role = 'Member') => {
     return api.post(`/api/projects/${projectKey}/members`, { userId, role });
+};
+
+// --- Admin ---
+
+export const getAdminStats = async () => {
+    return api.get<AdminStats>('/api/admin/stats');
+};
+
+export const getAllUsers = async (page = 1, pageSize = 20, search = '') => {
+    return api.get<{ items: UserDto[], totalCount: number, page: number, pageSize: number }>(`/api/admin/users?page=${page}&pageSize=${pageSize}&search=${search}`);
+};
+
+export const toggleUserBan = async (userId: string) => {
+    return api.put<{ message: string, isActive: boolean }>(`/api/admin/users/${userId}/ban`);
 };
 
 export default api;

@@ -1,4 +1,4 @@
-import { Flame, LogOut } from 'lucide-react';
+import { Flame, LogOut, ShieldCheck } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 import { toast } from '../../store/uiStore';
 
@@ -23,6 +23,15 @@ export function TopHeader() {
                 </div>
 
                 <div className="flex items-center gap-4">
+                    {user?.isSystemAdmin && (
+                        <a
+                            href="/admin"
+                            className="hidden md:flex items-center gap-2 px-3 py-2 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-500 hover:text-red-600 transition-all border border-red-500/20"
+                        >
+                            <ShieldCheck className="w-4 h-4" />
+                            <span className="text-sm font-medium">System Admin</span>
+                        </a>
+                    )}
                     <span className="text-sm text-muted hidden md:inline">{user?.email}</span>
 
                     <div className="flex items-center gap-2">

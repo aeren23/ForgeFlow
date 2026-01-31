@@ -23,4 +23,14 @@ public class ApplicationUser : IdentityUser
     /// İleride email doğrulama entegrasyonu için hazır
     /// </summary>
     public DateTime? EmailVerifiedAt { get; set; }
+
+    /// <summary>
+    /// Sistem yöneticisi mi? (Tüm projelere/kullanıcılara erişebilir)
+    /// </summary>
+    public bool IsSystemAdmin { get; set; } = false;
+
+    /// <summary>
+    /// Kullanıcı hesabı aktif mi? (Banlama için)
+    /// </summary>
+    public bool IsActive { get; set; } = true;
 }

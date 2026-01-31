@@ -9,6 +9,10 @@ import { DashboardPage } from './features/dashboard/DashboardPage';
 import { ProjectLayout } from './layouts/ProjectLayout';
 import { ProjectDetailPage } from './features/projects/ProjectDetailPage';
 import { ProjectSettingsPage } from './features/projects/ProjectSettingsPage';
+import { AdminLayout } from './layouts/AdminLayout';
+import { AdminDashboard } from './pages/admin/AdminDashboard';
+import { UserManagement } from './pages/admin/UserManagement';
+import { AdminProjectsPage } from './pages/admin/AdminProjectsPage';
 
 function App() {
   return (
@@ -32,6 +36,13 @@ function App() {
             <Route index element={<Navigate to="board" replace />} />
             <Route path="board" element={<ProjectDetailPage />} />
             <Route path="settings" element={<ProjectSettingsPage />} />
+          </Route>
+
+          {/* Admin Routes */}
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<AdminDashboard />} />
+            <Route path="projects" element={<AdminProjectsPage />} />
+            <Route path="users" element={<UserManagement />} />
           </Route>
         </Route>
 

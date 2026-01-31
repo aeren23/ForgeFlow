@@ -67,5 +67,36 @@ public static class IdentitySeeder
                     string.Join(", ", result.Errors.Select(e => e.Description)));
             }
         }
+        else
+        {
+            // Ensure password is correct even if user exists
+            var token = await userManager.GeneratePasswordResetTokenAsync(adminUser);
+            var result = await userManager.ResetPasswordAsync(adminUser, token, "Admin123!");
+            if (result.Succeeded)
+            {
+                logger.LogInformation("Reset password for default admin user: {Email}", adminEmail);
+            }
+
+            // Ensure properties are correct
+            if (!adminUser.IsSystemAdmin || !adminUser.IsActive)
+            {
+                adminUser.IsSystemAdmin = true;
+                adminUser.IsActive = true;
+                await userManager.UpdateAsync(adminUser);
+            }
+        }
+
+        // Fix for existing users: Set IsActive = true if false (migration-like step)
+        var inactiveUsers = await userManager.Users.Where(u => !u.IsActive).ToListAsync();
+        if (inactiveUsers.Any())
+        {
+            logger.LogInformation("Found {Count} inactive users. Activating them...", inactiveUsers.Count);
+            foreach (var user in inactiveUsers)
+            {
+                user.IsActive = true;
+                await userManager.UpdateAsync(user);
+            }
+            logger.LogInformation("Activated {Count} users.", inactiveUsers.Count);
+        }
     }
 }

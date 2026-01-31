@@ -4,6 +4,7 @@ interface User {
     id: string;
     email: string;
     fullName?: string;
+    isSystemAdmin?: boolean;
 }
 
 interface AuthState {

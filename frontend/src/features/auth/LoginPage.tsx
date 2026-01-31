@@ -19,9 +19,9 @@ export function LoginPage() {
 
         try {
             const response = await api.post('/api/auth/login', { email, password });
-            const { accessToken, refreshToken, userId, email: userEmail } = response.data;
+            const { accessToken, refreshToken, userId, email: userEmail, isSystemAdmin } = response.data;
 
-            login(accessToken, refreshToken, { id: userId, email: userEmail });
+            login(accessToken, refreshToken, { id: userId, email: userEmail, isSystemAdmin });
             toast.success('Login successful! Welcome back.');
             navigate('/dashboard');
         } catch (error: any) {

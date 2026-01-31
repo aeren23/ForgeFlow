@@ -115,6 +115,13 @@ app.Use(async (context, next) =>
         var userId = context.User.FindFirst("sub")?.Value;
         var email = context.User.FindFirst("email")?.Value;
 
+        // Rolleri al (ClaimTypes.Role veya "role")
+        var roles = context.User.FindAll(System.Security.Claims.ClaimTypes.Role)
+            .Select(c => c.Value)
+            .Union(context.User.FindAll("role").Select(c => c.Value))
+            .Distinct()
+            .ToList();
+
         if (!string.IsNullOrEmpty(userId))
         {
             context.Request.Headers["X-User-Id"] = userId;
@@ -123,6 +130,11 @@ app.Use(async (context, next) =>
         if (!string.IsNullOrEmpty(email))
         {
             context.Request.Headers["X-User-Email"] = email;
+        }
+
+        if (roles.Any())
+        {
+            context.Request.Headers["X-User-Roles"] = string.Join(",", roles);
         }
     }
 

@@ -67,7 +67,8 @@ public class AuthController : ControllerBase
             refreshToken = result.RefreshToken,
             expiresAt = result.ExpiresAt,
             userId = result.UserId,
-            email = result.Email
+            email = result.Email,
+            isSystemAdmin = result.IsSystemAdmin
         });
     }
 

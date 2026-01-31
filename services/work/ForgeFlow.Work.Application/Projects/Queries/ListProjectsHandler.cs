@@ -54,7 +54,8 @@ public class ListProjectsHandler : IRequestHandler<ListProjectsQuery, ListProjec
                 p.Description,
                 p.TechStack,
                 p.Issues.Count,
-                p.CreatedAtUtc
+                p.CreatedAtUtc,
+                p.Members.Select(m => new ProjectMemberDto(m.UserId, m.Role.ToString(), m.JoinedAtUtc)).ToList()
             ))
             .ToListAsync(cancellationToken);
 

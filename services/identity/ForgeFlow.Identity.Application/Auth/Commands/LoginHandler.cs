@@ -42,6 +42,13 @@ public class LoginHandler : IRequestHandler<LoginCommand, LoginResult>
             return new LoginResult(false, null, null, null, null, null, "Email veya şifre hatalı.");
         }
 
+        // Ban kontrolü
+        if (!user.IsActive)
+        {
+            _logger.LogWarning("Login failed: User is banned {Email}", request.Email);
+            return new LoginResult(false, null, null, null, null, null, "Hesabınız askıya alınmıştır. Lütfen yönetici ile iletişime geçin.");
+        }
+
         // Kullanıcının rollerini al
         var roles = await _userManager.GetRolesAsync(user);
 
@@ -62,7 +69,8 @@ public class LoginHandler : IRequestHandler<LoginCommand, LoginResult>
             ExpiresAt: expiresAt,
             UserId: user.Id,
             Email: user.Email,
-            Error: null
+            Error: null,
+            IsSystemAdmin: user.IsSystemAdmin
         );
     }
 }

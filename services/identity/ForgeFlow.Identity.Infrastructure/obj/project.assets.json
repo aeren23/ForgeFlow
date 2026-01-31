@@ -4004,11 +4004,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Infrastructure\\ForgeFlow.Identity.Infrastructure.csproj",
+      "projectUniqueName": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Infrastructure\\ForgeFlow.Identity.Infrastructure.csproj",
       "projectName": "ForgeFlow.Identity.Infrastructure",
-      "projectPath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Infrastructure\\ForgeFlow.Identity.Infrastructure.csproj",
+      "projectPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Infrastructure\\ForgeFlow.Identity.Infrastructure.csproj",
       "packagesPath": "C:\\Users\\alihe\\.nuget\\packages\\",
-      "outputPath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Infrastructure\\obj\\",
+      "outputPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Infrastructure\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -4029,8 +4029,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Application\\ForgeFlow.Identity.Application.csproj": {
-              "projectPath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Application\\ForgeFlow.Identity.Application.csproj"
+            "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Application\\ForgeFlow.Identity.Application.csproj": {
+              "projectPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\identity\\ForgeFlow.Identity.Application\\ForgeFlow.Identity.Application.csproj"
             }
           }
         }
@@ -4045,7 +4045,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.300"
+      "SdkAnalysisLevel": "10.0.100"
     },
     "frameworks": {
       "net8.0": {
@@ -4082,7 +4082,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.309/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.102/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
