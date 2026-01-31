@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { Loader2, Layers, Layout, ChevronDown, ChevronRight, Plus } from 'lucide-react';
 import {
     DndContext,
@@ -14,16 +13,21 @@ import {
 } from '@dnd-kit/core';
 import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 
-import { getIssues, updateIssueStatus, IssueStatus, IssueType, type Issue } from '../../services/api';
+import { getIssues, updateIssueStatus, IssueStatus, IssueType, type Issue, type ProjectDto } from '../../services/api';
 import { KanbanColumn } from './KanbanColumn';
 import { IssueCard } from './IssueCard';
 import { CreateIssueModal } from './CreateIssueModal';
 import { IssueDetailModal } from './IssueDetailModal';
 import { toast } from '../../store/uiStore';
 import { useAuthStore } from '../../store/authStore';
+import { useProjectPermissions } from '../../hooks/useProjectPermissions';
 
-export function ProjectBoard() {
-    const { key } = useParams();
+interface ProjectBoardProps {
+    project: ProjectDto;
+}
+
+export function ProjectBoard({ project }: ProjectBoardProps) {
+    const key = project.key;
     const [issues, setIssues] = useState<Issue[]>([]);
     const [loading, setLoading] = useState(true);
     const [isCreateOpen, setCreateOpen] = useState(false);
@@ -33,10 +37,21 @@ export function ProjectBoard() {
     const [collapsedEpics, setCollapsedEpics] = useState<Record<string, boolean>>({});
 
     const currentUser = useAuthStore(state => state.user);
+    const permissions = useProjectPermissions(project);
+
+    // Disable DND sensors if user cannot assign/move issues
+    // We use canAssignIssue as proxy for "can move card"
+    const canMove = permissions.canAssignIssue;
 
     const sensors = useSensors(
-        useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
-        useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
+        useSensor(PointerSensor, {
+            activationConstraint: { distance: 5 },
+            disabled: !canMove
+        }),
+        useSensor(KeyboardSensor, {
+            coordinateGetter: sortableKeyboardCoordinates,
+            disabled: !canMove
+        })
     );
 
     useEffect(() => {
@@ -366,6 +381,8 @@ export function ProjectBoard() {
                 isOpen={!!selectedIssue}
                 onClose={() => setSelectedIssue(null)}
                 issue={selectedIssue}
+                permissions={permissions}
+                onDeleteSuccess={fetchIssues}
             />
         </div>
     );

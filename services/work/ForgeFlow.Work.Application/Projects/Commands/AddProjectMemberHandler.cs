@@ -1,4 +1,5 @@
 using ForgeFlow.Work.Application.Abstractions;
+using ForgeFlow.Work.Application.Services;
 using ForgeFlow.Work.Domain.Entities;
 using ForgeFlow.Work.Domain.Enums;
 using MediatR;
@@ -10,11 +11,13 @@ public class AddProjectMemberHandler : IRequestHandler<AddProjectMemberCommand, 
 {
     private readonly IWorkDbContext _context;
     private readonly ICurrentUserService _currentUser;
+    private readonly IProjectPermissionService _permissionService;
 
-    public AddProjectMemberHandler(IWorkDbContext context, ICurrentUserService currentUser)
+    public AddProjectMemberHandler(IWorkDbContext context, ICurrentUserService currentUser, IProjectPermissionService permissionService)
     {
         _context = context;
         _currentUser = currentUser;
+        _permissionService = permissionService;
     }
 
     public async Task<bool> Handle(AddProjectMemberCommand request, CancellationToken cancellationToken)
@@ -25,13 +28,15 @@ public class AddProjectMemberHandler : IRequestHandler<AddProjectMemberCommand, 
 
         if (project == null) return false;
 
-        // AUTHORIZATION: Only Admin, Project Creator, or Project Owner/Admin can add members
+        // Yetki Hizmetini Kullan
         var currentUserId = _currentUser.UserId;
-        var isAdmin = _currentUser.IsInRole("Admin");
-        var isCreator = project.CreatorId == currentUserId;
-        var isProjectAdmin = project.Members.Any(m => m.UserId == currentUserId && (m.Role == ProjectRole.Owner || m.Role == ProjectRole.Admin));
+        var member = project.Members.FirstOrDefault(m => m.UserId == currentUserId);
 
-        if (!isAdmin && !isCreator && !isProjectAdmin)
+        // System Admin override
+        var isSystemAdmin = _currentUser.IsInRole("Admin");
+        var role = isSystemAdmin ? ProjectRole.Owner : (member?.Role ?? ProjectRole.Viewer);
+
+        if (!_permissionService.CanManageMembers(role))
         {
             throw new UnauthorizedAccessException("You are not authorized to add members to this project.");
         }

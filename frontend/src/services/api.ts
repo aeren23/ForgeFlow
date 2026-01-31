@@ -136,6 +136,21 @@ export const updateIssueStatus = async (key: string, status: IssueStatus) => {
     return api.post(`/api/issues/${key}/status`, { status });
 };
 
+export const deleteIssue = async (key: string) => {
+    return api.delete(`/api/issues/${key}`);
+};
+
+export interface UpdateIssueRequest {
+    title?: string;
+    description?: string;
+    priority?: IssuePriority;
+    assigneeId?: string | null;
+}
+
+export const updateIssue = async (key: string, data: UpdateIssueRequest) => {
+    return api.put(`/api/issues/${key}`, data);
+};
+
 export interface GenerateAiPlanRequest {
     planName: string;
     description: string;
@@ -260,6 +275,7 @@ export interface ProjectDto {
     createdAtUtc: string;
     updatedAtUtc: string;
     members: ProjectMember[];
+    currentUserRole?: string;
 }
 
 export interface UserDto {
@@ -289,6 +305,14 @@ export const searchUsers = async (term: string, page = 1, pageSize = 10) => {
 
 export const addProjectMember = async (projectKey: string, userId: string, role = 'Member') => {
     return api.post(`/api/projects/${projectKey}/members`, { userId, role });
+};
+
+export const updateProjectMemberRole = async (projectKey: string, userId: string, role: string) => {
+    return api.put(`/api/projects/${projectKey}/members/${userId}`, { role });
+};
+
+export const removeProjectMember = async (projectKey: string, userId: string) => {
+    return api.delete(`/api/projects/${projectKey}/members/${userId}`);
 };
 
 // --- Admin ---

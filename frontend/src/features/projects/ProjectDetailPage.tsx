@@ -1,27 +1,21 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { Wand2, Loader2, AlertCircle } from 'lucide-react';
-import { getProject } from '../../services/api';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { Wand2, Loader2, AlertCircle, Trash2, Settings } from 'lucide-react';
+import { getProject, deleteProject, type ProjectDto } from '../../services/api';
 import { toast } from '../../store/uiStore';
 import { ProjectBoard } from '../../features/issues/ProjectBoard';
 import { AiPlanModal } from './AiPlanModal';
-
-// Temporary Project interface (should ideally be shared)
-interface Project {
-    id: string;
-    key: string;
-    name: string;
-    description?: string;
-    techStack: string[];
-    repositoryUrl?: string;
-    projectType: number;
-}
+import { useProjectPermissions } from '../../hooks/useProjectPermissions';
+import { confirmAction, showSuccess, showError } from '../../utils/sweetAlert';
 
 export function ProjectDetailPage() {
     const { key } = useParams();
-    const [project, setProject] = useState<Project | null>(null);
+    const navigate = useNavigate();
+    const [project, setProject] = useState<ProjectDto | null>(null);
     const [loading, setLoading] = useState(true);
     const [isAiModalOpen, setAiModalOpen] = useState(false);
+
+    const permissions = useProjectPermissions(project);
 
     useEffect(() => {
         if (key) loadProject(key);
@@ -39,16 +33,26 @@ export function ProjectDetailPage() {
     };
 
     const handleAiSuccess = () => {
-        // Force refresh board? 
-        // ProjectBoard uses its own effect based on key. 
-        // Ideally we might pass a refreshTrigger or context.
-        // For now, auto-refresh might not happen instantly unless we signal Board.
-        // But user can refresh page.
-        // Or we can add a simple key-based refresh to ProjectBoard if we lift state.
-        // Let's keep it simple: ProjectBoard handles itself, maybe we just wait.
-        // Or we can modify key slightly? No. 
-        // Let's trust optimistic updates or user manually refreshing for now, or use window.location.reload() for MVP.
         setTimeout(() => window.location.reload(), 2000); // Dirty but effective for ensuring Epic shows up
+    };
+
+    const handleDeleteProject = async () => {
+        const confirmed = await confirmAction({
+            title: 'Delete Project?',
+            text: 'Are you sure you want to delete this project? This action cannot be undone.',
+            confirmButtonText: 'Yes, Delete Project',
+            icon: 'warning'
+        });
+
+        if (confirmed) {
+            try {
+                await deleteProject(key!);
+                showSuccess('Project deleted.');
+                navigate('/dashboard');
+            } catch (error) {
+                showError('Failed to delete project.');
+            }
+        }
     };
 
     if (loading) return (
@@ -72,18 +76,42 @@ export function ProjectDetailPage() {
                     <h1 className="text-2xl font-bold text-text">{project.name}</h1>
                     <p className="text-muted mt-1">{project.description || 'No description provided.'}</p>
                 </div>
-                <button
-                    onClick={() => setAiModalOpen(true)}
-                    className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white rounded-lg font-medium transition-all shadow-lg hover:shadow-primary/25"
-                >
-                    <Wand2 className="w-4 h-4" />
-                    Generate AI Plan
-                </button>
+                <div className="flex items-center gap-3">
+                    {/* Settings Link */}
+                    {permissions.canEditProject && (
+                        <Link
+                            to={`/projects/${project.key}/settings`}
+                            className="p-2 text-muted hover:text-text transition-colors"
+                            title="Project Settings"
+                        >
+                            <Settings className="w-5 h-5" />
+                        </Link>
+                    )}
+
+                    {/* Delete Button */}
+                    {permissions.canDeleteProject && (
+                        <button
+                            onClick={handleDeleteProject}
+                            className="p-2 text-red-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                            title="Delete Project"
+                        >
+                            <Trash2 className="w-5 h-5" />
+                        </button>
+                    )}
+
+                    <button
+                        onClick={() => setAiModalOpen(true)}
+                        className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white rounded-lg font-medium transition-all shadow-lg hover:shadow-primary/25"
+                    >
+                        <Wand2 className="w-4 h-4" />
+                        Generate AI Plan
+                    </button>
+                </div>
             </div>
 
             {/* Board */}
             <div className="flex-1 h-[calc(100vh-14rem)]">
-                <ProjectBoard />
+                <ProjectBoard project={project} />
             </div>
 
             <AiPlanModal

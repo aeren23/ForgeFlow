@@ -11,10 +11,12 @@ namespace ForgeFlow.Work.Application.Projects.Queries;
 public class GetProjectHandler : IRequestHandler<GetProjectQuery, ProjectDto?>
 {
     private readonly IWorkDbContext _context;
+    private readonly ICurrentUserService _currentUserService;
 
-    public GetProjectHandler(IWorkDbContext context)
+    public GetProjectHandler(IWorkDbContext context, ICurrentUserService currentUserService)
     {
         _context = context;
+        _currentUserService = currentUserService;
     }
 
     public async Task<ProjectDto?> Handle(GetProjectQuery request, CancellationToken cancellationToken)
@@ -35,6 +37,10 @@ public class GetProjectHandler : IRequestHandler<GetProjectQuery, ProjectDto?>
         if (project == null)
             return null;
 
+        var currentUserId = _currentUserService.UserId;
+        var currentUserMember = project.Members.FirstOrDefault(m => m.UserId == currentUserId);
+        var currentUserRole = currentUserMember?.Role.ToString();
+
         return new ProjectDto(
             project.Id,
             project.Key,
@@ -49,6 +55,7 @@ public class GetProjectHandler : IRequestHandler<GetProjectQuery, ProjectDto?>
             project.Issues.Count,
             project.CreatedAtUtc,
             project.UpdatedAtUtc,
+            currentUserRole,
             project.Members.Select(m => new ProjectMemberDto(m.UserId, m.Role.ToString(), m.JoinedAtUtc)).ToList()
         );
     }

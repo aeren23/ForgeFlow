@@ -25,6 +25,7 @@ public record ProjectDto(
     int IssueCount,
     DateTime CreatedAtUtc,
     DateTime UpdatedAtUtc,
+    string? CurrentUserRole, // The role of the requesting user in this project
     ICollection<ProjectMemberDto> Members
 );
 public record ProjectMemberDto(

@@ -29,4 +29,8 @@ public class ProjectMember
         Role = role;
         JoinedAtUtc = DateTime.UtcNow;
     }
+    internal void UpdateRole(ProjectRole newRole)
+    {
+        Role = newRole;
+    }
 }

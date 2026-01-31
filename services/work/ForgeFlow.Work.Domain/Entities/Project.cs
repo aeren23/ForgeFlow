@@ -89,4 +89,32 @@ public class Project
 
         Members.Add(new ProjectMember(Id, userId, role));
     }
+
+    public void UpdateMemberRole(string userId, ProjectRole newRole)
+    {
+        var member = Members.FirstOrDefault(m => m.UserId == userId);
+        if (member == null)
+        {
+            throw new InvalidOperationException($"User {userId} is not a member of this project.");
+        }
+
+        member.UpdateRole(newRole);
+        UpdatedAtUtc = DateTime.UtcNow;
+    }
+
+    public void RemoveMember(string userId)
+    {
+        var member = Members.FirstOrDefault(m => m.UserId == userId);
+        if (member == null)
+        {
+            return;
+        }
+
+        Members.Remove(member);
+        UpdatedAtUtc = DateTime.UtcNow;
+    }
+
+
+
+
 }

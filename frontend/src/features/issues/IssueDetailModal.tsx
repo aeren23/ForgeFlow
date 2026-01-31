@@ -1,15 +1,19 @@
 import { useState, useEffect } from 'react';
-import { X, CheckSquare, User, Clock, ArrowUp, ArrowRight, AlertOctagon, FileCode } from 'lucide-react';
-import { getIssues, IssueType, IssuePriority, IssueStatus, IssueStatusLabels, type Issue } from '../../services/api';
+import { X, CheckSquare, User, Clock, ArrowUp, ArrowRight, AlertOctagon, FileCode, Trash2 } from 'lucide-react';
+import { getIssues, deleteIssue, IssueType, IssuePriority, IssueStatus, IssueStatusLabels, type Issue } from '../../services/api';
 import { toast } from '../../store/uiStore';
+import type { ProjectPermissions } from '../../hooks/useProjectPermissions';
+import { confirmAction, showSuccess, showError } from '../../utils/sweetAlert';
 
 interface IssueDetailModalProps {
     isOpen: boolean;
     onClose: () => void;
     issue: Issue | null;
+    permissions?: ProjectPermissions;
+    onDeleteSuccess?: () => void;
 }
 
-export function IssueDetailModal({ isOpen, onClose, issue }: IssueDetailModalProps) {
+export function IssueDetailModal({ isOpen, onClose, issue, permissions, onDeleteSuccess }: IssueDetailModalProps) {
     const [subTasks, setSubTasks] = useState<Issue[]>([]);
     const [loadingSubTasks, setLoadingSubTasks] = useState(false);
 
@@ -25,24 +29,36 @@ export function IssueDetailModal({ isOpen, onClose, issue }: IssueDetailModalPro
         if (!issue) return;
         setLoadingSubTasks(true);
         try {
-            // Fetch issues with parentIssueId = currentIssue.id
-            // Note: Our backend filter uses ParentIssueId (Guid) which matches issue.id
-            // We need to pass projectId/Key as well because our generic list requires it or it filters by it?
-            // Actually generic list works with just ParentIssueId too if we want, but usually scoped to project.
-            // Let's pass projectKey just in case, though we might need to look it up.
-            // Issue object has projectId, but api requires projectKey (string).
-            // Actually getIssues API takes projectKey.
-            // We assume the subtasks are in the same project. 
-            // Issue object has "key" like "PRJ-123". Project Key is split by '-'.
             const projectKey = issue.key.split('-')[0];
-
             const response = await getIssues(projectKey, issue.id);
             setSubTasks(response.data.items || []);
         } catch (error) {
-            console.error(error);
+            // console.error(error);
             toast.error('Failed to load sub-tasks.');
         } finally {
             setLoadingSubTasks(false);
+        }
+    };
+
+    const handleDelete = async () => {
+        if (!issue) return;
+
+        const confirmed = await confirmAction({
+            title: 'Delete Issue?',
+            text: 'Are you sure you want to delete this issue? This action cannot be undone.',
+            confirmButtonText: 'Yes, Delete Issue',
+            icon: 'warning'
+        });
+
+        if (confirmed) {
+            try {
+                await deleteIssue(issue.key);
+                showSuccess('Issue deleted successfully.');
+                onClose();
+                if (onDeleteSuccess) onDeleteSuccess();
+            } catch (error) {
+                showError('Failed to delete issue.');
+            }
         }
     };
 
@@ -51,7 +67,7 @@ export function IssueDetailModal({ isOpen, onClose, issue }: IssueDetailModalPro
     const getTypeIcon = (type: IssueType) => {
         switch (type) {
             case IssueType.Bug: return <AlertOctagon className="w-5 h-5 text-red-500" />;
-            case IssueType.Feature: return <CheckSquare className="w-5 h-5 text-green-500" />; // Replace with better icon if needed
+            case IssueType.Feature: return <CheckSquare className="w-5 h-5 text-green-500" />;
             case IssueType.Story: return <FileCode className="w-5 h-5 text-blue-500" />;
             case IssueType.Epic: return <AlertOctagon className="w-5 h-5 text-purple-500" />;
             default: return <CheckSquare className="w-5 h-5 text-blue-400" />;
@@ -69,6 +85,15 @@ export function IssueDetailModal({ isOpen, onClose, issue }: IssueDetailModalPro
                         <span className="text-sm font-mono text-muted">{issue.key}</span>
                     </div>
                     <div className="flex items-center gap-2">
+                        {permissions?.canDeleteIssue && (
+                            <button
+                                onClick={handleDelete}
+                                className="p-2 hover:bg-red-500/10 rounded-lg transition-colors text-muted hover:text-red-500 mr-2"
+                                title="Delete Issue"
+                            >
+                                <Trash2 className="w-5 h-5" />
+                            </button>
+                        )}
                         <button onClick={onClose} className="p-2 hover:bg-muted/10 rounded-lg transition-colors text-muted hover:text-text">
                             <X className="w-5 h-5" />
                         </button>

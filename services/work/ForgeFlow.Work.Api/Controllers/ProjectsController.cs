@@ -106,6 +106,9 @@ public class ProjectsController : ControllerBase
     /// <summary>
     /// Yapay zeka ile plan oluştur (Epic + AI Trigger)
     /// </summary>
+    /// <summary>
+    /// Yapay zeka ile plan oluştur (Epic + AI Trigger)
+    /// </summary>
     [HttpPost("{key}/generate-plan")]
     public async Task<ActionResult> GenerateAiPlan(string key, [FromBody] GenerateAiPlanRequest request)
     {
@@ -138,9 +141,63 @@ public class ProjectsController : ControllerBase
 
         return Ok(new { EpicKey = epicResult.Key, EpicId = epicResult.Id });
     }
+
+    /// <summary>
+    /// Proje üyesinin rolünü güncelle
+    /// </summary>
+    [HttpPut("{key}/members/{userId}")]
+    public async Task<ActionResult> UpdateMemberRole(string key, string userId, [FromBody] UpdateMemberRoleRequest request)
+    {
+        // Basic validation
+        if (string.IsNullOrEmpty(request.Role))
+        {
+            return BadRequest("Role is required.");
+        }
+
+        var command = new UpdateProjectMemberRoleCommand(key, userId, request.Role);
+
+        try
+        {
+            var result = await _mediator.Send(command);
+            if (!result) return NotFound();
+            return Ok();
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return Unauthorized(new { message = ex.Message });
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+    /// <summary>
+    /// Proje üyesini çıkar
+    /// </summary>
+    [HttpDelete("{key}/members/{userId}")]
+    public async Task<ActionResult> RemoveMember(string key, string userId)
+    {
+        var command = new RemoveProjectMemberCommand(key, userId);
+
+        try
+        {
+            var result = await _mediator.Send(command);
+            if (!result) return NotFound();
+            return Ok();
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return Unauthorized(new { message = ex.Message });
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
 }
 
 public record AddMemberRequest(string UserId, string? Role);
+public record UpdateMemberRoleRequest(string Role);
 
 // Request DTOs
 public record CreateProjectRequest(

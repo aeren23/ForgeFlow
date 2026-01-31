@@ -179,3 +179,4 @@ C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\work\ForgeFlow.Wor
 C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\work\ForgeFlow.Work.Api\bin\Debug\net8.0\tr\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\work\ForgeFlow.Work.Api\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\work\ForgeFlow.Work.Api\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\work\ForgeFlow.Work.Api\obj\Debug\net8.0\swae.build.ex.cache
