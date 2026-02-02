@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ForgeFlow.Gateway")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+20c3de379aa550f6fd9ad1eccf752830cdd74601")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f953435ce0db7818703679410a2e85ce699b5a6b")]
 [assembly: System.Reflection.AssemblyProductAttribute("ForgeFlow.Gateway")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ForgeFlow.Gateway")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

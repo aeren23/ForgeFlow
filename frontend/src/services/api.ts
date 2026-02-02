@@ -165,6 +165,11 @@ export const generateProjectAiPlan = async (projectKey: string, data: GenerateAi
     return api.post(`/api/projects/${projectKey}/generate-plan`, data);
 };
 
+// Issue assignment
+export const assignIssue = async (issueKey: string, assigneeId: string | null) => {
+    return api.post(`/api/issues/${issueKey}/assign`, { assigneeId });
+};
+
 // Flag to prevent multiple refresh attempts
 let isRefreshing = false;
 let failedQueue: Array<{
@@ -301,6 +306,10 @@ export interface AdminStats {
 
 export const searchUsers = async (term: string, page = 1, pageSize = 10) => {
     return api.get<SearchUsersResponse>(`/api/users?term=${term}&page=${page}&pageSize=${pageSize}`);
+};
+
+export const getUsersBatch = async (userIds: string[]) => {
+    return api.post<UserDto[]>('/api/users/batch', userIds);
 };
 
 export const addProjectMember = async (projectKey: string, userId: string, role = 'Member') => {

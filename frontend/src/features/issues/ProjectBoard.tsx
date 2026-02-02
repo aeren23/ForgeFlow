@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Loader2, Layers, Layout, ChevronDown, ChevronRight, Plus } from 'lucide-react';
 import {
     DndContext,
@@ -13,7 +13,7 @@ import {
 } from '@dnd-kit/core';
 import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 
-import { getIssues, updateIssueStatus, IssueStatus, IssueType, type Issue, type ProjectDto } from '../../services/api';
+import { getIssues, updateIssueStatus, IssueStatus, IssueType, getUsersBatch, type Issue, type ProjectDto, type UserDto } from '../../services/api';
 import { KanbanColumn } from './KanbanColumn';
 import { IssueCard } from './IssueCard';
 import { CreateIssueModal } from './CreateIssueModal';
@@ -35,9 +35,48 @@ export function ProjectBoard({ project }: ProjectBoardProps) {
     const [activeIssue, setActiveIssue] = useState<Issue | null>(null);
     const [viewMode, setViewMode] = useState<'kanban' | 'swimlanes'>('kanban');
     const [collapsedEpics, setCollapsedEpics] = useState<Record<string, boolean>>({});
+    const [usersMap, setUsersMap] = useState<Record<string, UserDto>>({});
 
     const currentUser = useAuthStore(state => state.user);
     const permissions = useProjectPermissions(project);
+
+    // Track which user IDs we've already fetched to prevent loops
+    const fetchedUserIds = useRef<Set<string>>(new Set());
+
+    // Batch fetch users for assignees AND project members
+    useEffect(() => {
+        // Collect all user IDs we need: issue assignees + project members
+        const allUserIds: string[] = [];
+
+        // Add issue assignees
+        issues.forEach(i => {
+            if (i.assigneeId) allUserIds.push(i.assigneeId);
+        });
+
+        // Add project members
+        project.members?.forEach(m => {
+            allUserIds.push(m.userId);
+        });
+
+        // Filter out already fetched
+        const missingIds = allUserIds.filter(id => !fetchedUserIds.current.has(id));
+        const uniqueIds = Array.from(new Set(missingIds));
+
+        if (uniqueIds.length > 0) {
+            // Mark as fetched immediately to prevent duplicate requests
+            uniqueIds.forEach(id => fetchedUserIds.current.add(id));
+
+            getUsersBatch(uniqueIds)
+                .then(res => {
+                    setUsersMap(prev => {
+                        const next = { ...prev };
+                        res.data.forEach(u => next[u.id] = u);
+                        return next;
+                    });
+                })
+                .catch(e => console.error("Failed to fetch users", e));
+        }
+    }, [issues, project.members]);
 
     // Disable DND sensors if user cannot assign/move issues
     // We use canAssignIssue as proxy for "can move card"
@@ -94,6 +133,15 @@ export function ProjectBoard({ project }: ProjectBoardProps) {
         const issue = issues.find(i => i.id === issueId);
 
         if (!issue) return;
+
+        // Permission check: Only assignee, Admin, or Owner can move issues
+        const isAssignee = issue.assigneeId === currentUser?.id;
+        const isAdminOrOwner = project.currentUserRole === 'Admin' || project.currentUserRole === 'Owner';
+
+        if (!isAssignee && !isAdminOrOwner) {
+            toast.error('You can only move issues assigned to you, or you need Admin/Owner role.');
+            return;
+        }
 
         // Determine new status based on drop target (Column ID)
         // Ensure the ID of the container includes the status
@@ -170,6 +218,7 @@ export function ProjectBoard({ project }: ProjectBoardProps) {
                 status={IssueStatus.Open}
                 issues={getColumnIssues(IssueStatus.Open, tasks)}
                 colorClass="bg-red-500/5 text-red-600"
+                usersMap={usersMap}
                 onAddClick={() => setCreateOpen(true)}
                 onIssueClick={setSelectedIssue}
             />
@@ -179,6 +228,7 @@ export function ProjectBoard({ project }: ProjectBoardProps) {
                 status={IssueStatus.InProgress}
                 issues={getColumnIssues(IssueStatus.InProgress, tasks)}
                 colorClass="bg-blue-500/5 text-blue-600"
+                usersMap={usersMap}
                 onIssueClick={setSelectedIssue}
             />
             <KanbanColumn
@@ -187,6 +237,7 @@ export function ProjectBoard({ project }: ProjectBoardProps) {
                 status={IssueStatus.Done}
                 issues={getColumnIssues(IssueStatus.Done, tasks)}
                 colorClass="bg-green-500/5 text-green-600"
+                usersMap={usersMap}
                 onIssueClick={setSelectedIssue}
             />
         </div>
@@ -220,6 +271,7 @@ export function ProjectBoard({ project }: ProjectBoardProps) {
                                     status={IssueStatus.Open}
                                     issues={getColumnIssues(IssueStatus.Open, orphanTasks)}
                                     colorClass="bg-red-500/5 text-red-600"
+                                    usersMap={usersMap}
                                     onAddClick={() => setCreateOpen(true)}
                                     onIssueClick={setSelectedIssue}
                                 />
@@ -229,6 +281,7 @@ export function ProjectBoard({ project }: ProjectBoardProps) {
                                     status={IssueStatus.InProgress}
                                     issues={getColumnIssues(IssueStatus.InProgress, orphanTasks)}
                                     colorClass="bg-blue-500/5 text-blue-600"
+                                    usersMap={usersMap}
                                     onIssueClick={setSelectedIssue}
                                 />
                                 <KanbanColumn
@@ -237,6 +290,7 @@ export function ProjectBoard({ project }: ProjectBoardProps) {
                                     status={IssueStatus.Done}
                                     issues={getColumnIssues(IssueStatus.Done, orphanTasks)}
                                     colorClass="bg-green-500/5 text-green-600"
+                                    usersMap={usersMap}
                                     onIssueClick={setSelectedIssue}
                                 />
                             </div>
@@ -277,6 +331,7 @@ export function ProjectBoard({ project }: ProjectBoardProps) {
                                         status={IssueStatus.Open}
                                         issues={getColumnIssues(IssueStatus.Open, epicTasks)}
                                         colorClass="bg-red-500/5 text-red-600"
+                                        usersMap={usersMap}
                                         onAddClick={() => setCreateOpen(true)} // Maybe pass epicId to create in this epic?
                                         onIssueClick={setSelectedIssue}
                                     />
@@ -286,6 +341,7 @@ export function ProjectBoard({ project }: ProjectBoardProps) {
                                         status={IssueStatus.InProgress}
                                         issues={getColumnIssues(IssueStatus.InProgress, epicTasks)}
                                         colorClass="bg-blue-500/5 text-blue-600"
+                                        usersMap={usersMap}
                                         onIssueClick={setSelectedIssue}
                                     />
                                     <KanbanColumn
@@ -294,6 +350,7 @@ export function ProjectBoard({ project }: ProjectBoardProps) {
                                         status={IssueStatus.Done}
                                         issues={getColumnIssues(IssueStatus.Done, epicTasks)}
                                         colorClass="bg-green-500/5 text-green-600"
+                                        usersMap={usersMap}
                                         onIssueClick={setSelectedIssue}
                                     />
                                 </div>
@@ -365,7 +422,7 @@ export function ProjectBoard({ project }: ProjectBoardProps) {
                     {viewMode === 'kanban' ? renderKanbanBoard() : renderSwimlanes()}
 
                     <DragOverlay>
-                        {activeIssue ? <IssueCard issue={activeIssue} /> : null}
+                        {activeIssue ? <IssueCard issue={activeIssue} assigneeName={activeIssue.assigneeId ? usersMap[activeIssue.assigneeId]?.fullName : undefined} /> : null}
                     </DragOverlay>
                 </DndContext>
             )}
@@ -382,7 +439,13 @@ export function ProjectBoard({ project }: ProjectBoardProps) {
                 onClose={() => setSelectedIssue(null)}
                 issue={selectedIssue}
                 permissions={permissions}
+                usersMap={usersMap}
+                projectMembers={project.members}
                 onDeleteSuccess={fetchIssues}
+                onAssignSuccess={() => {
+                    setSelectedIssue(null); // Close modal
+                    fetchIssues(); // Refresh issue list
+                }}
             />
         </div>
     );

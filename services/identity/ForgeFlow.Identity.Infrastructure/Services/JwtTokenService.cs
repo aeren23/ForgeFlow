@@ -53,6 +53,7 @@ public class JwtTokenService : ITokenService
             new Claim(JwtRegisteredClaimNames.Email, user.Email ?? ""),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new Claim("fullName", user.FullName ?? ""),
+            new Claim("isSystemAdmin", user.IsSystemAdmin.ToString().ToLower()), // Lowercase for JSON consistency
         };
 
         // Rolleri token'a ekle

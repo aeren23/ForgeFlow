@@ -1,21 +1,31 @@
 import { useState, useEffect } from 'react';
-import { X, CheckSquare, User, Clock, ArrowUp, ArrowRight, AlertOctagon, FileCode, Trash2 } from 'lucide-react';
-import { getIssues, deleteIssue, IssueType, IssuePriority, IssueStatus, IssueStatusLabels, type Issue } from '../../services/api';
+import { X, CheckSquare, User, Clock, ArrowUp, ArrowRight, AlertOctagon, FileCode, Trash2, ChevronDown, Loader2 } from 'lucide-react';
+import { getIssues, deleteIssue, assignIssue, IssueType, IssuePriority, IssueStatus, IssueStatusLabels, type Issue, type UserDto } from '../../services/api';
 import { toast } from '../../store/uiStore';
 import type { ProjectPermissions } from '../../hooks/useProjectPermissions';
 import { confirmAction, showSuccess, showError } from '../../utils/sweetAlert';
+
+interface ProjectMember {
+    userId: string;
+    role: string;
+}
 
 interface IssueDetailModalProps {
     isOpen: boolean;
     onClose: () => void;
     issue: Issue | null;
     permissions?: ProjectPermissions;
+    usersMap?: Record<string, UserDto>;
+    projectMembers?: ProjectMember[];
     onDeleteSuccess?: () => void;
+    onAssignSuccess?: () => void;
 }
 
-export function IssueDetailModal({ isOpen, onClose, issue, permissions, onDeleteSuccess }: IssueDetailModalProps) {
+export function IssueDetailModal({ isOpen, onClose, issue, permissions, usersMap, projectMembers, onDeleteSuccess, onAssignSuccess }: IssueDetailModalProps) {
     const [subTasks, setSubTasks] = useState<Issue[]>([]);
     const [loadingSubTasks, setLoadingSubTasks] = useState(false);
+    const [showAssigneeDropdown, setShowAssigneeDropdown] = useState(false);
+    const [assigningTo, setAssigningTo] = useState<string | null>(null);
 
     useEffect(() => {
         if (isOpen && issue && issue.type === IssueType.Epic) {
@@ -178,14 +188,98 @@ export function IssueDetailModal({ isOpen, onClose, issue, permissions, onDelete
                                     </div>
                                 </div>
 
-                                <div className="space-y-1">
+                                <div className="space-y-1 relative">
                                     <label className="text-xs font-medium text-muted">Assignee</label>
-                                    <div className="flex items-center gap-2 text-sm text-text">
-                                        <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-xs text-primary">
-                                            <User className="w-3 h-3" />
+                                    {permissions?.canAssignIssue && projectMembers && projectMembers.length > 0 ? (
+                                        <div className="relative">
+                                            <button
+                                                onClick={() => setShowAssigneeDropdown(!showAssigneeDropdown)}
+                                                className="w-full flex items-center justify-between gap-2 px-3 py-2 bg-background border border-muted/20 rounded-lg hover:border-primary/50 transition-colors text-sm text-text"
+                                                disabled={assigningTo !== null}
+                                            >
+                                                <div className="flex items-center gap-2">
+                                                    <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-xs text-primary">
+                                                        {assigningTo !== null ? (
+                                                            <Loader2 className="w-3 h-3 animate-spin" />
+                                                        ) : (
+                                                            <User className="w-3 h-3" />
+                                                        )}
+                                                    </div>
+                                                    <span>
+                                                        {issue.assigneeId
+                                                            ? (usersMap?.[issue.assigneeId]?.fullName || `User ${issue.assigneeId.substring(0, 8)}...`)
+                                                            : 'Unassigned'}
+                                                    </span>
+                                                </div>
+                                                <ChevronDown className={`w-4 h-4 text-muted transition-transform ${showAssigneeDropdown ? 'rotate-180' : ''}`} />
+                                            </button>
+
+                                            {showAssigneeDropdown && (
+                                                <div className="absolute top-full left-0 right-0 mt-1 bg-surface border border-muted/20 rounded-lg shadow-xl z-50 max-h-48 overflow-y-auto">
+                                                    <button
+                                                        onClick={async () => {
+                                                            setAssigningTo('unassign');
+                                                            setShowAssigneeDropdown(false);
+                                                            try {
+                                                                await assignIssue(issue.key, null);
+                                                                toast.success('Issue unassigned successfully');
+                                                                onAssignSuccess?.();
+                                                            } catch (error) {
+                                                                toast.error('Failed to unassign issue');
+                                                            } finally {
+                                                                setAssigningTo(null);
+                                                            }
+                                                        }}
+                                                        className={`w-full text-left px-3 py-2 text-sm hover:bg-muted/10 transition-colors flex items-center gap-2 ${!issue.assigneeId ? 'bg-primary/10 text-primary' : 'text-text'}`}
+                                                    >
+                                                        <div className="w-6 h-6 rounded-full bg-muted/20 flex items-center justify-center text-xs text-muted">
+                                                            <User className="w-3 h-3" />
+                                                        </div>
+                                                        Unassigned
+                                                    </button>
+                                                    {projectMembers.map(member => {
+                                                        const user = usersMap?.[member.userId];
+                                                        const displayName = user?.fullName || `User ${member.userId.substring(0, 8)}...`;
+                                                        const isSelected = issue.assigneeId === member.userId;
+                                                        return (
+                                                            <button
+                                                                key={member.userId}
+                                                                onClick={async () => {
+                                                                    setAssigningTo(member.userId);
+                                                                    setShowAssigneeDropdown(false);
+                                                                    try {
+                                                                        await assignIssue(issue.key, member.userId);
+                                                                        toast.success(`Issue assigned to ${displayName}`);
+                                                                        onAssignSuccess?.();
+                                                                    } catch (error) {
+                                                                        toast.error('Failed to assign issue');
+                                                                    } finally {
+                                                                        setAssigningTo(null);
+                                                                    }
+                                                                }}
+                                                                className={`w-full text-left px-3 py-2 text-sm hover:bg-muted/10 transition-colors flex items-center gap-2 ${isSelected ? 'bg-primary/10 text-primary' : 'text-text'}`}
+                                                            >
+                                                                <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-xs text-primary font-medium">
+                                                                    {displayName.charAt(0).toUpperCase()}
+                                                                </div>
+                                                                <span className="flex-1">{displayName}</span>
+                                                                <span className="text-xs text-muted">{member.role}</span>
+                                                            </button>
+                                                        );
+                                                    })}
+                                                </div>
+                                            )}
                                         </div>
-                                        {issue.assigneeId || 'Unassigned'}
-                                    </div>
+                                    ) : (
+                                        <div className="flex items-center gap-2 text-sm text-text">
+                                            <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-xs text-primary">
+                                                <User className="w-3 h-3" />
+                                            </div>
+                                            {issue.assigneeId
+                                                ? (usersMap?.[issue.assigneeId]?.fullName || `User ${issue.assigneeId.substring(0, 8)}...`)
+                                                : 'Unassigned'}
+                                        </div>
+                                    )}
                                 </div>
 
                                 <div className="pt-4 border-t border-muted/10 space-y-2">

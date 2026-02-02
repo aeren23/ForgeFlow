@@ -59,8 +59,8 @@ public class LoginHandler : IRequestHandler<LoginCommand, LoginResult>
         // Refresh token üret ve kaydet
         var refreshToken = await _tokenService.GenerateRefreshTokenAsync(user, cancellationToken);
 
-        _logger.LogInformation("User logged in successfully: {Email} ({UserId}) Roles: {Roles}",
-            user.Email, user.Id, string.Join(", ", roles));
+        _logger.LogInformation("User logged in successfully: {Email} ({UserId}) Roles: {Roles} IsSystemAdmin: {IsSystemAdmin}",
+            user.Email, user.Id, string.Join(", ", roles), user.IsSystemAdmin);
 
         return new LoginResult(
             Succeeded: true,

@@ -1,7 +1,7 @@
 import { useDroppable } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { Plus } from 'lucide-react';
-import { IssueStatus, type Issue } from '../../services/api';
+import { IssueStatus, type Issue, type UserDto } from '../../services/api';
 import { IssueCard } from './IssueCard';
 
 interface KanbanColumnProps {
@@ -10,11 +10,12 @@ interface KanbanColumnProps {
     status: IssueStatus;
     issues: Issue[];
     colorClass: string;
+    usersMap?: Record<string, UserDto>;
     onAddClick?: () => void;
     onIssueClick?: (issue: Issue) => void;
 }
 
-export function KanbanColumn({ id, title, status, issues, colorClass, onAddClick, onIssueClick }: KanbanColumnProps) {
+export function KanbanColumn({ id, title, status, issues, colorClass, usersMap, onAddClick, onIssueClick }: KanbanColumnProps) {
     const { setNodeRef } = useDroppable({
         id: id,
         data: {
@@ -44,6 +45,7 @@ export function KanbanColumn({ id, title, status, issues, colorClass, onAddClick
                         <IssueCard
                             key={issue.id}
                             issue={issue}
+                            assigneeName={issue.assigneeId ? usersMap?.[issue.assigneeId]?.fullName : undefined}
                             onClick={() => onIssueClick?.(issue)}
                         />
                     ))}

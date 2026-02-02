@@ -29,6 +29,7 @@ public class GetProfileHandler : IRequestHandler<GetProfileQuery, GetProfileResu
             Email: user.Email!,
             FullName: user.FullName,
             Roles: roles,
+            IsSystemAdmin: user.IsSystemAdmin,
             CreatedAt: user.CreatedAtUtc
         );
     }

@@ -8,10 +8,11 @@ import { IssueType, IssuePriority, IssueTypeLabels, type Issue } from '../../ser
 
 interface IssueCardProps {
     issue: Issue;
+    assigneeName?: string;
     onClick?: () => void;
 }
 
-export function IssueCard({ issue, onClick }: IssueCardProps) {
+export function IssueCard({ issue, assigneeName, onClick }: IssueCardProps) {
     const {
         attributes,
         listeners,
@@ -82,9 +83,9 @@ export function IssueCard({ issue, onClick }: IssueCardProps) {
 
                 <div
                     className={`w-6 h-6 rounded-full flex items-center justify-center text-xs text-white border border-surface shadow-sm ${issue.assigneeId ? 'bg-gradient-to-br from-blue-500 to-indigo-600' : 'bg-muted/20 text-muted'}`}
-                    title={issue.assigneeId || 'Unassigned'}
+                    title={assigneeName || issue.assigneeId || 'Unassigned'}
                 >
-                    {issue.assigneeId ? issue.assigneeId.substring(0, 1).toUpperCase() : <User className="w-3 h-3" />}
+                    {assigneeName ? assigneeName.charAt(0).toUpperCase() : (issue.assigneeId ? issue.assigneeId.substring(0, 1).toUpperCase() : <User className="w-3 h-3" />)}
                 </div>
             </div>
         </div>

@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Save, Trash2, Loader2, AlertCircle, Users, UserPlus, Settings as SettingsIcon, X } from 'lucide-react';
-import { getProject, updateProject, deleteProject, updateProjectMemberRole, removeProjectMember, type UpdateProjectRequest, type ProjectDto } from '../../services/api';
+import { getProject, updateProject, deleteProject, updateProjectMemberRole, removeProjectMember, getUsersBatch, type UpdateProjectRequest, type ProjectDto, type UserDto } from '../../services/api';
 import { toast } from '../../store/uiStore';
 import { InviteMemberModal } from './InviteMemberModal';
 import { useProjectPermissions } from '../../hooks/useProjectPermissions';
@@ -25,6 +25,38 @@ export function ProjectSettingsPage() {
         techStack: [],
         projectType: 0
     });
+
+    const [usersMap, setUsersMap] = useState<Record<string, UserDto>>({});
+
+    // Track which user IDs we've already fetched to prevent loops
+    const fetchedUserIds = useRef<Set<string>>(new Set());
+
+    // Batch fetch users when project members change
+    useEffect(() => {
+        if (project?.members) {
+            const missingUserIds = project.members
+                .map(m => m.userId)
+                .filter(id => !fetchedUserIds.current.has(id));
+
+            if (missingUserIds.length > 0) {
+                // De-duplicate IDs
+                const uniqueIds = Array.from(new Set(missingUserIds));
+                // Mark as fetched immediately to prevent duplicate requests
+                uniqueIds.forEach(id => fetchedUserIds.current.add(id));
+
+                getUsersBatch(uniqueIds).then(response => {
+                    const newUsers = response.data;
+                    setUsersMap(prev => {
+                        const next = { ...prev };
+                        newUsers.forEach(u => {
+                            next[u.id] = u;
+                        });
+                        return next;
+                    });
+                }).catch(err => console.error("Failed to fetch user batch", err));
+            }
+        }
+    }, [project?.members]);
 
     useEffect(() => {
         if (key) loadProject(key);
@@ -93,7 +125,8 @@ export function ProjectSettingsPage() {
 
     const handleRoleChange = async (userId: string, newRole: string) => {
         const member = project?.members.find(m => m.userId === userId);
-        const memberName = member ? `User ${member.userId.substring(0, 8)}...` : 'this user';
+        const resolvedName = usersMap[userId]?.fullName;
+        const memberName = resolvedName || (member ? `User ${member.userId.substring(0, 8)}...` : 'this user');
 
         let confirmed = false;
 
@@ -269,10 +302,14 @@ export function ProjectSettingsPage() {
                                 <div key={member.userId} className="p-4 flex items-center justify-between hover:bg-muted/5 transition-colors">
                                     <div className="flex items-center gap-4">
                                         <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
-                                            {member.userId.substring(0, 2).toUpperCase()}
+                                            {usersMap[member.userId]?.fullName
+                                                ? usersMap[member.userId].fullName.charAt(0).toUpperCase()
+                                                : member.userId.substring(0, 2).toUpperCase()}
                                         </div>
                                         <div>
-                                            <div className="font-medium text-text">User {member.userId.substring(0, 8)}...</div>
+                                            <div className="font-medium text-text">
+                                                {usersMap[member.userId]?.fullName || `User ${member.userId.substring(0, 8)}...`}
+                                            </div>
                                             <div className="text-xs text-muted">Joined {new Date(member.joinedAtUtc).toLocaleDateString()}</div>
                                         </div>
                                     </div>

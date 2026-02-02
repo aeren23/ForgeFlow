@@ -1,4 +1,5 @@
 using ForgeFlow.Work.Application.Abstractions;
+using ForgeFlow.Work.Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,6 +26,12 @@ public class AssignIssueHandler : IRequestHandler<AssignIssueCommand, AssignIssu
         var oldAssigneeId = issue.AssigneeId;
         issue.AssigneeId = request.AssigneeId;
         issue.UpdatedAtUtc = DateTime.UtcNow;
+
+        // Auto-transition: If issue is Open and we're assigning someone, move to InProgress
+        if (request.AssigneeId != null && issue.Status == IssueStatus.Open)
+        {
+            issue.Status = IssueStatus.InProgress;
+        }
 
         await _context.SaveChangesAsync(cancellationToken);
 

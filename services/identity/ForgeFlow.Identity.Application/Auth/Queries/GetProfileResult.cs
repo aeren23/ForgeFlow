@@ -5,5 +5,6 @@ public record GetProfileResult(
     string Email,
     string? FullName,
     IList<string> Roles,
+    bool IsSystemAdmin,
     DateTime CreatedAt
 );

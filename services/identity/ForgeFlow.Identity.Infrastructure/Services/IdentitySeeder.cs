@@ -98,5 +98,7 @@ public static class IdentitySeeder
             }
             logger.LogInformation("Activated {Count} users.", inactiveUsers.Count);
         }
+
+
     }
 }
