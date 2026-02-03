@@ -2,9 +2,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ForgeFlow.AiOrchestrator.Domain\ForgeFlow.AiOrchestrator.Domain.csproj" />
+    <ProjectReference Include="..\..\..\contracts\ForgeFlow.Contracts\ForgeFlow.Contracts.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="MassTransit.Abstractions" Version="8.3.0" />
     <PackageReference Include="MediatR" Version="12.2.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
   </ItemGroup>

@@ -9,11 +9,21 @@
       "ForgeFlow.AiOrchestrator.Application/1.0.0": {
         "dependencies": {
           "ForgeFlow.AiOrchestrator.Domain": "1.0.0",
+          "ForgeFlow.Contracts": "1.0.0",
+          "MassTransit.Abstractions": "8.4.1",
           "MediatR": "12.2.0",
           "Microsoft.Extensions.Logging.Abstractions": "8.0.0"
         },
         "runtime": {
           "ForgeFlow.AiOrchestrator.Application.dll": {}
+        }
+      },
+      "MassTransit.Abstractions/8.4.1": {
+        "runtime": {
+          "lib/net8.0/MassTransit.Abstractions.dll": {
+            "assemblyVersion": "8.4.1.0",
+            "fileVersion": "8.4.1.0"
+          }
         }
       },
       "MediatR/12.2.0": {
@@ -62,6 +72,14 @@
             "fileVersion": "1.0.0.0"
           }
         }
+      },
+      "ForgeFlow.Contracts/1.0.0": {
+        "runtime": {
+          "ForgeFlow.Contracts.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
       }
     }
   },
@@ -70,6 +88,13 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "MassTransit.Abstractions/8.4.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-sf0f0Mj3B8lJFt5As2rSFiszOx4YhMDdQmV0CIzQG6PcWGO1ozped+YMJRdBqqTgvtHTjjWJOEMfgYtfXrPu2A==",
+      "path": "masstransit.abstractions/8.4.1",
+      "hashPath": "masstransit.abstractions.8.4.1.nupkg.sha512"
     },
     "MediatR/12.2.0": {
       "type": "package",
@@ -100,6 +125,11 @@
       "hashPath": "microsoft.extensions.logging.abstractions.8.0.0.nupkg.sha512"
     },
     "ForgeFlow.AiOrchestrator.Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "ForgeFlow.Contracts/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

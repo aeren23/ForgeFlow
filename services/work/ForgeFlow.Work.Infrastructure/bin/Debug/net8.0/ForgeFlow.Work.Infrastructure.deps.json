@@ -51,6 +51,14 @@
           }
         }
       },
+      "MassTransit.Abstractions/8.4.1": {
+        "runtime": {
+          "lib/net8.0/MassTransit.Abstractions.dll": {
+            "assemblyVersion": "8.4.1.0",
+            "fileVersion": "8.4.1.0"
+          }
+        }
+      },
       "MediatR/12.2.0": {
         "dependencies": {
           "MediatR.Contracts": "2.0.1",
@@ -836,9 +844,19 @@
           }
         }
       },
+      "ForgeFlow.Contracts/1.0.0": {
+        "runtime": {
+          "ForgeFlow.Contracts.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
       "ForgeFlow.Work.Application/1.0.0": {
         "dependencies": {
+          "ForgeFlow.Contracts": "1.0.0",
           "ForgeFlow.Work.Domain": "1.0.0",
+          "MassTransit.Abstractions": "8.4.1",
           "MediatR": "12.2.0",
           "Microsoft.EntityFrameworkCore": "8.0.0"
         },
@@ -885,6 +903,13 @@
       "sha512": "sha512-lQKvtaTDOXnoVJ20ibTuSIOf2i0uO0MPbDhd1jm238I+U/2ZnRENj0cktKZhtchBMtCUSRQ5v4xBCUbKNmyVMw==",
       "path": "humanizer.core/2.14.1",
       "hashPath": "humanizer.core.2.14.1.nupkg.sha512"
+    },
+    "MassTransit.Abstractions/8.4.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-sf0f0Mj3B8lJFt5As2rSFiszOx4YhMDdQmV0CIzQG6PcWGO1ozped+YMJRdBqqTgvtHTjjWJOEMfgYtfXrPu2A==",
+      "path": "masstransit.abstractions/8.4.1",
+      "hashPath": "masstransit.abstractions.8.4.1.nupkg.sha512"
     },
     "MediatR/12.2.0": {
       "type": "package",
@@ -1242,6 +1267,11 @@
       "sha512": "sha512-IXoJOXIqc39AIe+CIR7koBtRGMiCt/LPM3lI+PELtDIy9XdyeSrwXFdWV9dzJ2Awl0paLWUaknLxFQ5HpHZUog==",
       "path": "system.windows.extensions/6.0.0",
       "hashPath": "system.windows.extensions.6.0.0.nupkg.sha512"
+    },
+    "ForgeFlow.Contracts/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
     },
     "ForgeFlow.Work.Application/1.0.0": {
       "type": "project",

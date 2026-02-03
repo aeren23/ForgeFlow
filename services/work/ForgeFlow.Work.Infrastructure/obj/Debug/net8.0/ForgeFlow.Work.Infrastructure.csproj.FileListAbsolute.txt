@@ -18,3 +18,5 @@ C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\work\ForgeFlow.Wor
 C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\work\ForgeFlow.Work.Infrastructure\obj\Debug\net8.0\ForgeFlow.Work.Infrastructure.genruntimeconfig.cache
 C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\work\ForgeFlow.Work.Infrastructure\bin\Debug\net8.0\ForgeFlow.Work.Application.dll
 C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\work\ForgeFlow.Work.Infrastructure\bin\Debug\net8.0\ForgeFlow.Work.Application.pdb
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\work\ForgeFlow.Work.Infrastructure\bin\Debug\net8.0\ForgeFlow.Contracts.dll
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\work\ForgeFlow.Work.Infrastructure\bin\Debug\net8.0\ForgeFlow.Contracts.pdb

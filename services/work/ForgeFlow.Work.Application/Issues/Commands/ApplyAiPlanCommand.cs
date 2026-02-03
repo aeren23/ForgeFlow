@@ -6,5 +6,6 @@ public record ApplyAiPlanCommand(
     string ProjectId,
     string ParentIssueKey,
     string PlanJson,
-    string UserId
+    string UserId,
+    Guid RequestId
 ) : IRequest<bool>;

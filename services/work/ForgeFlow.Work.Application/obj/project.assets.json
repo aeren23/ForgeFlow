@@ -2,6 +2,19 @@
   "version": 3,
   "targets": {
     "net8.0": {
+      "MassTransit.Abstractions/8.3.0": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/MassTransit.Abstractions.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/MassTransit.Abstractions.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "MediatR/12.2.0": {
         "type": "package",
         "dependencies": {
@@ -229,6 +242,16 @@
           "buildTransitive/net6.0/_._": {}
         }
       },
+      "ForgeFlow.Contracts/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/ForgeFlow.Contracts.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ForgeFlow.Contracts.dll": {}
+        }
+      },
       "ForgeFlow.Work.Domain/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
@@ -242,6 +265,27 @@
     }
   },
   "libraries": {
+    "MassTransit.Abstractions/8.3.0": {
+      "sha512": "smYAGbCnHXl927Xvr2nzxtQAhfJfRSnVZAcIHGMI3QQq/aK3KvsCqgail1bw7acw0NkEhw8yv7cnKBGYKKFXPQ==",
+      "type": "package",
+      "path": "masstransit.abstractions/8.3.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "NuGet.README.md",
+        "lib/net472/MassTransit.Abstractions.dll",
+        "lib/net472/MassTransit.Abstractions.xml",
+        "lib/net6.0/MassTransit.Abstractions.dll",
+        "lib/net6.0/MassTransit.Abstractions.xml",
+        "lib/net8.0/MassTransit.Abstractions.dll",
+        "lib/net8.0/MassTransit.Abstractions.xml",
+        "lib/netstandard2.0/MassTransit.Abstractions.dll",
+        "lib/netstandard2.0/MassTransit.Abstractions.xml",
+        "masstransit.abstractions.8.3.0.nupkg.sha512",
+        "masstransit.abstractions.nuspec",
+        "mt-logo-small.png"
+      ]
+    },
     "MediatR/12.2.0": {
       "sha512": "8TUFrHapKi6D74PhnSNEguRsH91HNGyP3R4ZQdgDorJgl9Wac5Prh0vA33QfrniAaS6L2xNNhc6vxzg+5AIbwA==",
       "type": "package",
@@ -621,6 +665,11 @@
         "useSharedDesignerContext.txt"
       ]
     },
+    "ForgeFlow.Contracts/1.0.0": {
+      "type": "project",
+      "path": "../../../contracts/ForgeFlow.Contracts/ForgeFlow.Contracts.csproj",
+      "msbuildProject": "../../../contracts/ForgeFlow.Contracts/ForgeFlow.Contracts.csproj"
+    },
     "ForgeFlow.Work.Domain/1.0.0": {
       "type": "project",
       "path": "../ForgeFlow.Work.Domain/ForgeFlow.Work.Domain.csproj",
@@ -629,7 +678,9 @@
   },
   "projectFileDependencyGroups": {
     "net8.0": [
+      "ForgeFlow.Contracts >= 1.0.0",
       "ForgeFlow.Work.Domain >= 1.0.0",
+      "MassTransit.Abstractions >= 8.3.0",
       "MediatR >= 12.2.0",
       "Microsoft.EntityFrameworkCore >= 8.0.0"
     ]
@@ -641,11 +692,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\work\\ForgeFlow.Work.Application\\ForgeFlow.Work.Application.csproj",
+      "projectUniqueName": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\work\\ForgeFlow.Work.Application\\ForgeFlow.Work.Application.csproj",
       "projectName": "ForgeFlow.Work.Application",
-      "projectPath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\work\\ForgeFlow.Work.Application\\ForgeFlow.Work.Application.csproj",
+      "projectPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\work\\ForgeFlow.Work.Application\\ForgeFlow.Work.Application.csproj",
       "packagesPath": "C:\\Users\\alihe\\.nuget\\packages\\",
-      "outputPath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\work\\ForgeFlow.Work.Application\\obj\\",
+      "outputPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\work\\ForgeFlow.Work.Application\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -666,8 +717,11 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\work\\ForgeFlow.Work.Domain\\ForgeFlow.Work.Domain.csproj": {
-              "projectPath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\work\\ForgeFlow.Work.Domain\\ForgeFlow.Work.Domain.csproj"
+            "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\contracts\\ForgeFlow.Contracts\\ForgeFlow.Contracts.csproj": {
+              "projectPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\contracts\\ForgeFlow.Contracts\\ForgeFlow.Contracts.csproj"
+            },
+            "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\work\\ForgeFlow.Work.Domain\\ForgeFlow.Work.Domain.csproj": {
+              "projectPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\work\\ForgeFlow.Work.Domain\\ForgeFlow.Work.Domain.csproj"
             }
           }
         }
@@ -688,6 +742,10 @@
       "net8.0": {
         "targetAlias": "net8.0",
         "dependencies": {
+          "MassTransit.Abstractions": {
+            "target": "Package",
+            "version": "[8.3.0, )"
+          },
           "MediatR": {
             "target": "Package",
             "version": "[12.2.0, )"

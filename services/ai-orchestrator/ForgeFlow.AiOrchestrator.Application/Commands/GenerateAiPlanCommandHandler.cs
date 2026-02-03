@@ -1,6 +1,8 @@
 using ForgeFlow.AiOrchestrator.Domain.Abstractions;
 using ForgeFlow.AiOrchestrator.Domain.Enums;
 using ForgeFlow.AiOrchestrator.Domain.Models;
+using ForgeFlow.Contracts.Events;
+using MassTransit;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -14,15 +16,18 @@ public class GenerateAiPlanCommandHandler : IRequestHandler<GenerateAiPlanComman
 {
     private readonly IAiServiceFactory _aiServiceFactory;
     private readonly IContextProvider _contextProvider;
+    private readonly IPublishEndpoint _publishEndpoint;
     private readonly ILogger<GenerateAiPlanCommandHandler> _logger;
 
     public GenerateAiPlanCommandHandler(
         IAiServiceFactory aiServiceFactory,
         IContextProvider contextProvider,
+        IPublishEndpoint publishEndpoint,
         ILogger<GenerateAiPlanCommandHandler> logger)
     {
         _aiServiceFactory = aiServiceFactory;
         _contextProvider = contextProvider;
+        _publishEndpoint = publishEndpoint;
         _logger = logger;
     }
 
@@ -33,11 +38,18 @@ public class GenerateAiPlanCommandHandler : IRequestHandler<GenerateAiPlanComman
             "Generating AI plan for Issue={IssueKey}, Project={ProjectId}, Provider={Provider}",
             request.IssueKey, request.ProjectId, request.PreferredProvider?.ToString() ?? "Default");
 
+        // Progress: Starting
+        await PublishProgressAsync(request, "AI plan üretimi başlatılıyor...", 5);
+
         // 1. Gather context from Work Service
+        await PublishProgressAsync(request, "Proje ve issue bilgileri alınıyor...", 15);
         var context = await _contextProvider.GetContextAsync(
             request.ProjectId,
             request.IssueKey,
             cancellationToken);
+
+        // Progress: Context gathered
+        await PublishProgressAsync(request, "Context toplandı, prompt hazırlanıyor...", 30);
 
         // 2. Build prompts
         var (systemPrompt, userPrompt) = BuildPrompts(request, context);
@@ -62,6 +74,9 @@ public class GenerateAiPlanCommandHandler : IRequestHandler<GenerateAiPlanComman
         _logger.LogInformation("Using AI provider: {Provider}, Model: {Model}",
             aiService.ProviderType, aiService.ModelName);
 
+        // Progress: AI call starting
+        await PublishProgressAsync(request, $"AI modeline ({aiService.ModelName}) gönderiliyor...", 50);
+
         // 5. Generate content
         var aiRequest = new AiRequest
         {
@@ -75,12 +90,18 @@ public class GenerateAiPlanCommandHandler : IRequestHandler<GenerateAiPlanComman
 
         var response = await aiService.GenerateContentAsync(aiRequest, cancellationToken);
 
-        // 5. Return result
+        // Progress: Response received
+        await PublishProgressAsync(request, "AI yanıtı alındı, işleniyor...", 85);
+
+        // 6. Return result
         if (response.IsSuccess)
         {
             _logger.LogInformation(
                 "AI plan generated successfully. Tokens: {Prompt}+{Completion}, Duration: {Duration}ms",
                 response.PromptTokens, response.CompletionTokens, response.DurationMs);
+
+            // Progress: Orchestrator Complete (Step 1/2)
+            await PublishProgressAsync(request, "AI plan başarıyla oluşturuldu! Issue'lar oluşturulacak...", 90);
 
             return GenerateAiPlanResult.Success(response);
         }
@@ -90,10 +111,40 @@ public class GenerateAiPlanCommandHandler : IRequestHandler<GenerateAiPlanComman
                 "AI plan generation failed: {ErrorCode} - {ErrorMessage}",
                 response.ErrorCode, response.ErrorMessage);
 
+            // Progress: Failed
+            await PublishProgressAsync(request, $"Hata: {response.ErrorMessage}", 100);
+
             return GenerateAiPlanResult.Failure(
                 response.ErrorMessage ?? "Unknown error",
                 response.ErrorCode ?? "UNKNOWN",
                 response.Provider);
+        }
+    }
+
+    /// <summary>
+    /// Publishes AI processing progress event for real-time updates via SignalR
+    /// </summary>
+    private async Task PublishProgressAsync(GenerateAiPlanCommand request, string message, int progressPercentage)
+    {
+        try
+        {
+            var progressEvent = new AiProcessingProgress(
+                RequestId: request.RequestId,
+                ProjectId: request.ProjectId,
+                UserId: request.UserId,
+                Message: message,
+                ProgressPercentage: progressPercentage,
+                Timestamp: DateTime.UtcNow
+            );
+
+            await _publishEndpoint.Publish(progressEvent);
+
+            _logger.LogDebug("Published progress: {Progress}% - {Message}", progressPercentage, message);
+        }
+        catch (Exception ex)
+        {
+            // Don't fail the main flow if progress publishing fails
+            _logger.LogWarning(ex, "Failed to publish progress event: {Message}", message);
         }
     }
 

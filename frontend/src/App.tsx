@@ -1,6 +1,9 @@
+import { useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ToastContainer } from './components/ui/ToastContainer';
+import { LiveLog } from './components/ui/LiveLog';
 import { AuthProvider } from './components/AuthProvider';
+import { useNotificationStore } from './store/notificationStore';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { AdminRoute } from './components/AdminRoute';
 import { LoginPage } from './features/auth/LoginPage';
@@ -17,11 +20,22 @@ import { UserManagement } from './pages/admin/UserManagement';
 import { AdminProjectsPage } from './pages/admin/AdminProjectsPage';
 
 function App() {
+  const { isLiveLogOpen, setLiveLogOpen } = useNotificationStore();
+  const [isLiveLogMinimized, setLiveLogMinimized] = useState(false);
+
   return (
     <BrowserRouter>
       <AuthProvider>
         {/* Global Toast Container */}
         <ToastContainer />
+
+        {/* Global Live Log Console */}
+        <LiveLog
+          isOpen={isLiveLogOpen}
+          onClose={() => setLiveLogOpen(false)}
+          isMinimized={isLiveLogMinimized}
+          onToggleMinimize={() => setLiveLogMinimized(!isLiveLogMinimized)}
+        />
 
         <Routes>
           {/* Public Routes */}

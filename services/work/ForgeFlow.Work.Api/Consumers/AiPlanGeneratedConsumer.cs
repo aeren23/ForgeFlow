@@ -27,7 +27,8 @@ public class AiPlanGeneratedConsumer : IConsumer<EventEnvelope<AiPlanGenerated>>
             ProjectId: msg.Data.ProjectId,
             ParentIssueKey: msg.Data.IssueId,
             PlanJson: msg.Data.GeneratedContent,
-            UserId: msg.UserId
+            UserId: msg.UserId,
+            RequestId: Guid.TryParse(msg.CorrelationId, out var requestId) ? requestId : Guid.NewGuid()
         );
 
         var result = await _mediator.Send(command, context.CancellationToken);

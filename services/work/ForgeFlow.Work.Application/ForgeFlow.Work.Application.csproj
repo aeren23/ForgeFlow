@@ -7,12 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MassTransit.Abstractions" Version="8.3.0" />
     <PackageReference Include="MediatR" Version="12.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ForgeFlow.Work.Domain\ForgeFlow.Work.Domain.csproj" />
+    <ProjectReference Include="..\..\..\contracts\ForgeFlow.Contracts\ForgeFlow.Contracts.csproj" />
   </ItemGroup>
 
 </Project>

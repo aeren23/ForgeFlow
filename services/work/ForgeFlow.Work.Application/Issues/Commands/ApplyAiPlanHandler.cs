@@ -1,8 +1,10 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using ForgeFlow.Contracts.Events;
 using ForgeFlow.Work.Application.Abstractions;
 using ForgeFlow.Work.Domain.Entities;
 using ForgeFlow.Work.Domain.Enums;
+using MassTransit;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -12,11 +14,13 @@ namespace ForgeFlow.Work.Application.Issues.Commands;
 public class ApplyAiPlanHandler : IRequestHandler<ApplyAiPlanCommand, bool>
 {
     private readonly IWorkDbContext _dbContext;
+    private readonly IPublishEndpoint _publishEndpoint;
     private readonly ILogger<ApplyAiPlanHandler> _logger;
 
-    public ApplyAiPlanHandler(IWorkDbContext dbContext, ILogger<ApplyAiPlanHandler> logger)
+    public ApplyAiPlanHandler(IWorkDbContext dbContext, IPublishEndpoint publishEndpoint, ILogger<ApplyAiPlanHandler> logger)
     {
         _dbContext = dbContext;
+        _publishEndpoint = publishEndpoint;
         _logger = logger;
     }
 
@@ -102,7 +106,47 @@ public class ApplyAiPlanHandler : IRequestHandler<ApplyAiPlanCommand, bool>
             }
 
             await _dbContext.SaveChangesAsync(cancellationToken);
-            _logger.LogInformation("{Count} stories created for Epic {EpicKey}", plan.ImplementationPlan.ListOfChanges.Count, request.ParentIssueKey);
+
+            var createdCount = plan.ImplementationPlan.ListOfChanges.Count;
+            _logger.LogInformation("{Count} stories created for Epic {EpicKey}", createdCount, request.ParentIssueKey);
+
+            // Publish UserNotification for real-time feedback
+            try
+            {
+                await _publishEndpoint.Publish(new UserNotification(
+                    UserId: request.UserId,
+                    Type: "ai_plan_complete",
+                    Title: "AI Plan Uygulandı! 🎉",
+                    Message: $"{createdCount} issue oluşturuldu ({request.ParentIssueKey})",
+                    Data: new
+                    {
+                        ProjectId = request.ProjectId,
+                        ParentIssueKey = request.ParentIssueKey,
+                        CreatedCount = createdCount
+                    }
+                ), cancellationToken);
+            }
+            catch
+            {
+                // Don't fail if notification fails
+            }
+
+            // Publish Final Progress Log (100%)
+            try
+            {
+                await _publishEndpoint.Publish(new AiProcessingProgress(
+                    RequestId: request.RequestId,
+                    ProjectId: Guid.TryParse(request.ProjectId, out var pid) ? pid : Guid.Empty,
+                    UserId: request.UserId,
+                    Message: $"AI plan başarıyla uygulandı! {createdCount} issue oluşturuldu.",
+                    ProgressPercentage: 100,
+                    Timestamp: DateTime.UtcNow
+                ), cancellationToken);
+            }
+            catch
+            {
+                // Ignore log errors
+            }
 
             return true;
         }

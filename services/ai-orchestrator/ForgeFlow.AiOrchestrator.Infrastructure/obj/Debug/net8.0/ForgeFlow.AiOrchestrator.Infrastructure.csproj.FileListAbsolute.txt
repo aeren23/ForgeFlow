@@ -16,3 +16,5 @@ C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\ai-orchestrator\Fo
 C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\ai-orchestrator\ForgeFlow.AiOrchestrator.Infrastructure\obj\Debug\net8.0\refint\ForgeFlow.AiOrchestrator.Infrastructure.dll
 C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\ai-orchestrator\ForgeFlow.AiOrchestrator.Infrastructure\obj\Debug\net8.0\ForgeFlow.AiOrchestrator.Infrastructure.pdb
 C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\ai-orchestrator\ForgeFlow.AiOrchestrator.Infrastructure\obj\Debug\net8.0\ref\ForgeFlow.AiOrchestrator.Infrastructure.dll
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\ai-orchestrator\ForgeFlow.AiOrchestrator.Infrastructure\bin\Debug\net8.0\ForgeFlow.Contracts.dll
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\ai-orchestrator\ForgeFlow.AiOrchestrator.Infrastructure\bin\Debug\net8.0\ForgeFlow.Contracts.pdb

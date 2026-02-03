@@ -47,6 +47,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForgeFlow.AiOrchestrator.Ap
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForgeFlow.AiOrchestrator.Infrastructure", "services\ai-orchestrator\ForgeFlow.AiOrchestrator.Infrastructure\ForgeFlow.AiOrchestrator.Infrastructure.csproj", "{05FC939F-1393-47BE-94B7-8FE27228BCA6}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "notification", "notification", "{06470F13-D646-4954-ED4A-FA216054436A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForgeFlow.Notification.Service", "services\notification\ForgeFlow.Notification.Service\ForgeFlow.Notification.Service.csproj", "{E1F19E31-87E1-4F93-A31B-B9556923F4BC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -237,6 +241,18 @@ Global
 		{05FC939F-1393-47BE-94B7-8FE27228BCA6}.Release|x64.Build.0 = Release|Any CPU
 		{05FC939F-1393-47BE-94B7-8FE27228BCA6}.Release|x86.ActiveCfg = Release|Any CPU
 		{05FC939F-1393-47BE-94B7-8FE27228BCA6}.Release|x86.Build.0 = Release|Any CPU
+		{E1F19E31-87E1-4F93-A31B-B9556923F4BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1F19E31-87E1-4F93-A31B-B9556923F4BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1F19E31-87E1-4F93-A31B-B9556923F4BC}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E1F19E31-87E1-4F93-A31B-B9556923F4BC}.Debug|x64.Build.0 = Debug|Any CPU
+		{E1F19E31-87E1-4F93-A31B-B9556923F4BC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E1F19E31-87E1-4F93-A31B-B9556923F4BC}.Debug|x86.Build.0 = Debug|Any CPU
+		{E1F19E31-87E1-4F93-A31B-B9556923F4BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1F19E31-87E1-4F93-A31B-B9556923F4BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1F19E31-87E1-4F93-A31B-B9556923F4BC}.Release|x64.ActiveCfg = Release|Any CPU
+		{E1F19E31-87E1-4F93-A31B-B9556923F4BC}.Release|x64.Build.0 = Release|Any CPU
+		{E1F19E31-87E1-4F93-A31B-B9556923F4BC}.Release|x86.ActiveCfg = Release|Any CPU
+		{E1F19E31-87E1-4F93-A31B-B9556923F4BC}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -262,5 +278,7 @@ Global
 		{C77F91E2-3F68-42A4-A6E4-C415EE3A94B0} = {D16E9C91-19C0-6DE5-6DF8-67E1A85CE158}
 		{DB89A111-D071-494B-848B-6921E8EC9CC5} = {D16E9C91-19C0-6DE5-6DF8-67E1A85CE158}
 		{05FC939F-1393-47BE-94B7-8FE27228BCA6} = {D16E9C91-19C0-6DE5-6DF8-67E1A85CE158}
+		{06470F13-D646-4954-ED4A-FA216054436A} = {5854FF58-B8C5-05C6-5BF2-ACE42193F22B}
+		{E1F19E31-87E1-4F93-A31B-B9556923F4BC} = {06470F13-D646-4954-ED4A-FA216054436A}
 	EndGlobalSection
 EndGlobal

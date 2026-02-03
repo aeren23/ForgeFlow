@@ -40,3 +40,4 @@ C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\gateway\ForgeFlow.
 C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\gateway\ForgeFlow.Gateway\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\gateway\ForgeFlow.Gateway\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
 C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\gateway\ForgeFlow.Gateway\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\gateway\ForgeFlow.Gateway\obj\Debug\net8.0\swae.build.ex.cache

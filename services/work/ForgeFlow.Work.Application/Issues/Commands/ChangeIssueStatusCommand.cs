@@ -8,7 +8,8 @@ namespace ForgeFlow.Work.Application.Issues.Commands;
 /// </summary>
 public record ChangeIssueStatusCommand(
     string Key,
-    IssueStatus NewStatus
+    IssueStatus NewStatus,
+    string? UserId = null
 ) : IRequest<ChangeIssueStatusResult>;
 
 public record ChangeIssueStatusResult(

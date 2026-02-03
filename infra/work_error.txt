@@ -1,0 +1,96 @@
+﻿docker : Unhandled exception. System.TypeIn
+itializationException: The type initializer
+ for 'MassTransit.Serialization.SystemTextJ
+sonMessageSerializer' threw an exception.
+At line:1 char:1
++ docker logs forgeflow-work 2>&1 | Out-Fil
+e -FilePath work_error.txt - ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified 
+   : (Unhandled excep...w an exception.:S  
+  tring) [], RemoteException
+    + FullyQualifiedErrorId : NativeComman 
+   dError
+ 
+ ---> System.TypeInitializationException: T
+he type initializer for 'MassTransit.Serial
+ization.JsonConverters.SystemTextJsonConver
+terFactory' threw an exception.
+ ---> System.TypeLoadException: Method 'get
+_JobProperties' in type 'MassTransit.JobSer
+vice.Messages.JobCompletedEvent`1' from ass
+embly 'MassTransit, Version=8.3.0.0, Cultur
+e=neutral, PublicKeyToken=b8e0e9f2f1e657fa'
+ does not have an implementation.
+   --- End of inner exception stack trace -
+--
+   at MassTransit.Serialization.JsonConvert
+ers.SystemTextJsonConverterFactory..ctor()
+   at MassTransit.Serialization.SystemTextJ
+sonMessageSerializer..cctor() in /_/src/Mas
+sTransit/Serialization/SystemTextJsonMessag
+eSerializer.cs:line 54
+   --- End of inner exception stack trace -
+--
+   at MassTransit.Configuration.SystemTextJ
+sonMessageSerializerFactory.get_ContentType
+() in /_/src/MassTransit/Configuration/Conf
+iguration/SystemTextJsonMessageSerializerFa
+ctory.cs:line 18
+   at MassTransit.Configuration.Serializati
+onConfiguration.AddSerializer(ISerializerFa
+ctory factory, Boolean isSerializer) in /_/
+src/MassTransit/Configuration/Configuration
+/SerializationConfiguration.cs:line 78
+   at MassTransit.Configuration.Serializati
+onConfiguration.AddSystemTextJson() in /_/s
+rc/MassTransit/Configuration/Configuration/
+SerializationConfiguration.cs:line 191
+   at MassTransit.Configuration.Serializati
+onConfiguration..ctor() in /_/src/MassTrans
+it/Configuration/Configuration/Serializatio
+nConfiguration.cs:line 28
+   at MassTransit.Configuration.EndpointCon
+figuration..ctor(ITopologyConfiguration top
+ology) in /_/src/MassTransit/Configuration/
+Configuration/EndpointConfiguration.cs:line
+ 21
+   at MassTransit.RabbitMqTransport.Configu
+ration.RabbitMqEndpointConfiguration..ctor(
+IRabbitMqTopologyConfiguration topologyConf
+iguration) in /_/src/Transports/MassTransit
+.RabbitMqTransport/RabbitMqTransport/Config
+uration/RabbitMqEndpointConfiguration.cs:li
+ne 11
+   at MassTransit.RabbitMqTransport.Configu
+ration.RabbitMqBusConfiguration..ctor(IRabb
+itMqTopologyConfiguration topologyConfigura
+tion) in /_/src/Transports/MassTransit.Rabb
+itMqTransport/RabbitMqTransport/Configurati
+on/RabbitMqBusConfiguration.cs:line 14
+   at MassTransit.RabbitMqTransport.Configu
+ration.RabbitMqRegistrationBusFactory..ctor
+(Action`2 configure) in /_/src/Transports/M
+assTransit.RabbitMqTransport/RabbitMqTransp
+ort/Configuration/RabbitMqRegistrationBusFa
+ctory.cs:line 19
+   at MassTransit.RabbitMqBusFactoryConfigu
+ratorExtensions.UsingRabbitMq(IBusRegistrat
+ionConfigurator configurator, Action`2 conf
+igure) in /_/src/Transports/MassTransit.Rab
+bitMqTransport/Configuration/RabbitMqBusFac
+toryConfiguratorExtensions.cs:line 25
+   at Program.<>c__DisplayClass0_0.<<Main>$
+>b__1(IBusRegistrationConfigurator x) in /s
+rc/services/work/ForgeFlow.Work.Api/Program
+.cs:line 29
+   at MassTransit.DependencyInjectionRegist
+rationExtensions.AddMassTransit(IServiceCol
+lection collection, Action`1 configure) in 
+/_/src/MassTransit/Configuration/Dependency
+Injection/DependencyInjectionRegistrationEx
+tensions.cs:line 41
+   at Program.<Main>$(String[] args) in /sr
+c/services/work/ForgeFlow.Work.Api/Program.
+cs:line 22
+   at Program.<Main>(String[] args)

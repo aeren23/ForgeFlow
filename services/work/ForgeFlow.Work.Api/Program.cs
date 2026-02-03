@@ -15,10 +15,7 @@ builder.Host.UseSerilog((ctx, lc) => lc
     .WriteTo.Console()
     .WriteTo.Seq(ctx.Configuration["Seq:ServerUrl"] ?? "http://seq"));
 
-// Add Work layers
-builder.Services.AddWorkApplication();
-builder.Services.AddWorkInfrastructure(builder.Configuration);
-
+// MassTransit MUST be registered BEFORE MediatR handlers (they depend on IPublishEndpoint)
 builder.Services.AddMassTransit(x =>
 {
     x.SetKebabCaseEndpointNameFormatter();
@@ -41,6 +38,10 @@ builder.Services.AddMassTransit(x =>
         cfg.ConfigureEndpoints(context);
     });
 });
+
+// Add Work layers (MediatR handlers need IPublishEndpoint from MassTransit above)
+builder.Services.AddWorkApplication();
+builder.Services.AddWorkInfrastructure(builder.Configuration);
 
 // Add services
 builder.Services.AddHttpContextAccessor();

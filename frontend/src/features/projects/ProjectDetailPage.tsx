@@ -33,7 +33,7 @@ export function ProjectDetailPage() {
     };
 
     const handleAiSuccess = () => {
-        setTimeout(() => window.location.reload(), 2000); // Dirty but effective for ensuring Epic shows up
+        // Board logic will handle the update via real-time events
     };
 
     const handleDeleteProject = async () => {

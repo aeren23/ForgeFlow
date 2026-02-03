@@ -99,6 +99,9 @@ var app = builder.Build();
 // 0. CORS: Preflight (OPTIONS) isteklerini karşıla - EN BAŞTA olmalı!
 app.UseCors();
 
+// 0.5. WebSockets: SignalR için WebSocket protokolü desteği
+app.UseWebSockets();
+
 // 1. Authentication: Token'ı doğrula, ClaimsPrincipal oluştur
 app.UseAuthentication();
 

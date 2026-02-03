@@ -80,7 +80,7 @@
           }
         }
       },
-      "MassTransit.Abstractions/8.3.0": {
+      "MassTransit.Abstractions/8.4.1": {
         "type": "package",
         "compile": {
           "lib/net8.0/MassTransit.Abstractions.dll": {
@@ -2275,6 +2275,8 @@
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
           "ForgeFlow.AiOrchestrator.Domain": "1.0.0",
+          "ForgeFlow.Contracts": "1.0.0",
+          "MassTransit.Abstractions": "8.4.1",
           "MediatR": "12.2.0",
           "Microsoft.Extensions.Logging.Abstractions": "8.0.0"
         },
@@ -2401,23 +2403,23 @@
         "mt-logo-small.png"
       ]
     },
-    "MassTransit.Abstractions/8.3.0": {
-      "sha512": "smYAGbCnHXl927Xvr2nzxtQAhfJfRSnVZAcIHGMI3QQq/aK3KvsCqgail1bw7acw0NkEhw8yv7cnKBGYKKFXPQ==",
+    "MassTransit.Abstractions/8.4.1": {
+      "sha512": "sf0f0Mj3B8lJFt5As2rSFiszOx4YhMDdQmV0CIzQG6PcWGO1ozped+YMJRdBqqTgvtHTjjWJOEMfgYtfXrPu2A==",
       "type": "package",
-      "path": "masstransit.abstractions/8.3.0",
+      "path": "masstransit.abstractions/8.4.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "NuGet.README.md",
         "lib/net472/MassTransit.Abstractions.dll",
         "lib/net472/MassTransit.Abstractions.xml",
-        "lib/net6.0/MassTransit.Abstractions.dll",
-        "lib/net6.0/MassTransit.Abstractions.xml",
         "lib/net8.0/MassTransit.Abstractions.dll",
         "lib/net8.0/MassTransit.Abstractions.xml",
+        "lib/net9.0/MassTransit.Abstractions.dll",
+        "lib/net9.0/MassTransit.Abstractions.xml",
         "lib/netstandard2.0/MassTransit.Abstractions.dll",
         "lib/netstandard2.0/MassTransit.Abstractions.xml",
-        "masstransit.abstractions.8.3.0.nupkg.sha512",
+        "masstransit.abstractions.8.4.1.nupkg.sha512",
         "masstransit.abstractions.nuspec",
         "mt-logo-small.png"
       ]
@@ -5939,11 +5941,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\ai-orchestrator\\ForgeFlow.AiOrchestrator.Worker\\ForgeFlow.AiOrchestrator.Worker.csproj",
+      "projectUniqueName": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\ai-orchestrator\\ForgeFlow.AiOrchestrator.Worker\\ForgeFlow.AiOrchestrator.Worker.csproj",
       "projectName": "ForgeFlow.AiOrchestrator.Worker",
-      "projectPath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\ai-orchestrator\\ForgeFlow.AiOrchestrator.Worker\\ForgeFlow.AiOrchestrator.Worker.csproj",
+      "projectPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\ai-orchestrator\\ForgeFlow.AiOrchestrator.Worker\\ForgeFlow.AiOrchestrator.Worker.csproj",
       "packagesPath": "C:\\Users\\alihe\\.nuget\\packages\\",
-      "outputPath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\ai-orchestrator\\ForgeFlow.AiOrchestrator.Worker\\obj\\",
+      "outputPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\ai-orchestrator\\ForgeFlow.AiOrchestrator.Worker\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -5964,14 +5966,14 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\contracts\\ForgeFlow.Contracts\\ForgeFlow.Contracts.csproj": {
-              "projectPath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\contracts\\ForgeFlow.Contracts\\ForgeFlow.Contracts.csproj"
+            "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\contracts\\ForgeFlow.Contracts\\ForgeFlow.Contracts.csproj": {
+              "projectPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\contracts\\ForgeFlow.Contracts\\ForgeFlow.Contracts.csproj"
             },
-            "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\ai-orchestrator\\ForgeFlow.AiOrchestrator.Application\\ForgeFlow.AiOrchestrator.Application.csproj": {
-              "projectPath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\ai-orchestrator\\ForgeFlow.AiOrchestrator.Application\\ForgeFlow.AiOrchestrator.Application.csproj"
+            "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\ai-orchestrator\\ForgeFlow.AiOrchestrator.Application\\ForgeFlow.AiOrchestrator.Application.csproj": {
+              "projectPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\ai-orchestrator\\ForgeFlow.AiOrchestrator.Application\\ForgeFlow.AiOrchestrator.Application.csproj"
             },
-            "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\ai-orchestrator\\ForgeFlow.AiOrchestrator.Infrastructure\\ForgeFlow.AiOrchestrator.Infrastructure.csproj": {
-              "projectPath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\ai-orchestrator\\ForgeFlow.AiOrchestrator.Infrastructure\\ForgeFlow.AiOrchestrator.Infrastructure.csproj"
+            "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\ai-orchestrator\\ForgeFlow.AiOrchestrator.Infrastructure\\ForgeFlow.AiOrchestrator.Infrastructure.csproj": {
+              "projectPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\ai-orchestrator\\ForgeFlow.AiOrchestrator.Infrastructure\\ForgeFlow.AiOrchestrator.Infrastructure.csproj"
             }
           }
         }

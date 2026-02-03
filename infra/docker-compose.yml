@@ -22,6 +22,19 @@ services:
     networks:
       - forgeflow-net
 
+  redis:
+    image: redis:7-alpine
+    container_name: forgeflow-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - forgeflow-net
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
   mssql:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: forgeflow-mssql
@@ -183,6 +196,32 @@ services:
         condition: service_started
       db-init:
         condition: service_completed_successfully
+    networks:
+      - forgeflow-net
+
+  notification:
+    build:
+      context: ..
+      dockerfile: services/notification/ForgeFlow.Notification.Service/Dockerfile
+    container_name: forgeflow-notification
+    ports:
+      - "8085:8080"
+    environment:
+      ASPNETCORE_URLS: http://+:8080
+      ASPNETCORE_ENVIRONMENT: Development
+      RabbitMq__Host: rabbitmq
+      RabbitMq__Username: forgeflow
+      RabbitMq__Password: forgeflow
+      Redis__ConnectionString: redis:6379
+      Seq__ServerUrl: http://seq:5341
+      JWT_SECRET: "ForgeFlow-Super-Secret-Key-Min-32-Chars-2026!"
+      JWT_ISSUER: "ForgeFlow.Identity"
+      JWT_AUDIENCE: "ForgeFlow.Services"
+    depends_on:
+      rabbitmq:
+        condition: service_started
+      redis:
+        condition: service_healthy
     networks:
       - forgeflow-net
 

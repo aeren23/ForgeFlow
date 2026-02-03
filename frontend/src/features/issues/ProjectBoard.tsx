@@ -14,6 +14,7 @@ import {
 import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 
 import { getIssues, updateIssueStatus, IssueStatus, IssueType, getUsersBatch, type Issue, type ProjectDto, type UserDto } from '../../services/api';
+import { signalRService } from '../../services/signalRService';
 import { KanbanColumn } from './KanbanColumn';
 import { IssueCard } from './IssueCard';
 import { CreateIssueModal } from './CreateIssueModal';
@@ -96,6 +97,40 @@ export function ProjectBoard({ project }: ProjectBoardProps) {
     useEffect(() => {
         if (key) fetchIssues();
     }, [key]);
+
+    // Real-time updates subscription
+    useEffect(() => {
+        if (!project.id) return;
+
+        // Join the project group for real-time messages
+        signalRService.joinProject(project.id);
+
+        const handleBoardUpdate = (msg: any) => {
+            // Refresh board if update is for this project
+            // We could be more granular, but refreshing the list is safest
+            if (msg.projectId === project.id || msg.projectId === key) {
+                fetchIssues();
+            }
+        };
+
+        const handleNotification = (msg: any) => {
+            // If AI plan applied, refresh the board
+            if (msg.type === 'ai_plan_complete') {
+                // Check data if possible, or just refresh
+                fetchIssues();
+                toast.success('AI Plan tasks created! Board updated.');
+            }
+        };
+
+        const unsubscribeBoard = signalRService.onBoardUpdate(handleBoardUpdate);
+        const unsubscribeNotify = signalRService.onNotification(handleNotification);
+
+        return () => {
+            unsubscribeBoard();
+            unsubscribeNotify();
+            signalRService.leaveProject(project.id);
+        };
+    }, [project.id]);
 
     const fetchIssues = async () => {
         setLoading(true);

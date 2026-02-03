@@ -1,8 +1,10 @@
 C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\work\ForgeFlow.Work.Application\bin\Debug\net8.0\ForgeFlow.Work.Application.deps.json
 C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\work\ForgeFlow.Work.Application\bin\Debug\net8.0\ForgeFlow.Work.Application.dll
 C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\work\ForgeFlow.Work.Application\bin\Debug\net8.0\ForgeFlow.Work.Application.pdb
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\work\ForgeFlow.Work.Application\bin\Debug\net8.0\ForgeFlow.Contracts.dll
 C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\work\ForgeFlow.Work.Application\bin\Debug\net8.0\ForgeFlow.Work.Domain.dll
 C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\work\ForgeFlow.Work.Application\bin\Debug\net8.0\ForgeFlow.Work.Domain.pdb
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\work\ForgeFlow.Work.Application\bin\Debug\net8.0\ForgeFlow.Contracts.pdb
 C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\work\ForgeFlow.Work.Application\obj\Debug\net8.0\ForgeFlow.Work.Application.csproj.AssemblyReference.cache
 C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\work\ForgeFlow.Work.Application\obj\Debug\net8.0\ForgeFlow.Work.Application.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\work\ForgeFlow.Work.Application\obj\Debug\net8.0\ForgeFlow.Work.Application.AssemblyInfoInputs.cache
