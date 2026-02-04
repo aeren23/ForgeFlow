@@ -62,5 +62,10 @@ public class IssueConfiguration : IEntityTypeConfiguration<Issue>
         builder.HasIndex(i => i.AssigneeId);
         builder.HasIndex(i => i.ReporterId);
         builder.HasIndex(i => new { i.ProjectId, i.Status });
+
+        // GitHub Integration
+        builder.Property(i => i.BranchName)
+            .HasMaxLength(200);
+        builder.HasIndex(i => i.BranchName);
     }
 }

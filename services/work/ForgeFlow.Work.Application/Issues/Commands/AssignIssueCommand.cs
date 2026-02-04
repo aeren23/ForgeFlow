@@ -3,11 +3,12 @@ using MediatR;
 namespace ForgeFlow.Work.Application.Issues.Commands;
 
 /// <summary>
-/// Issue atama komutu
+/// Issue atama komutu - Only Admin/Owner/TechLead can use
 /// </summary>
 public record AssignIssueCommand(
     string Key,
-    string? AssigneeId
+    string? AssigneeId,
+    string? UserId
 ) : IRequest<AssignIssueResult>;
 
 public record AssignIssueResult(

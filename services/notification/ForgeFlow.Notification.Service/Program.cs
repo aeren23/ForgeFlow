@@ -46,7 +46,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             {
                 var accessToken = context.Request.Query["access_token"];
                 var path = context.HttpContext.Request.Path;
-                
+
                 if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs"))
                 {
                     context.Token = accessToken;
@@ -73,6 +73,7 @@ builder.Services.AddMassTransit(x =>
     x.AddConsumer<IssueChangedConsumer>();
     x.AddConsumer<NotificationConsumer>();
     x.AddConsumer<AiPlanCompletedConsumer>();
+    x.AddConsumer<IssueAssignedConsumer>();
 
     x.UsingRabbitMq((context, cfg) =>
     {

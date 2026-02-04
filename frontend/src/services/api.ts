@@ -108,6 +108,8 @@ export interface Issue {
     assigneeId?: string;
     parentIssueId?: string;
     createdAtUtc: string;
+    startedAtUtc?: string;
+    branchName?: string;
 }
 
 export interface CreateIssueRequest {

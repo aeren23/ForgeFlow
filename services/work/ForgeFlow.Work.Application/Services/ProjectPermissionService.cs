@@ -47,48 +47,51 @@ public class ProjectPermissionService : IProjectPermissionService
 
     public bool CanAssignUser(ProjectRole role, string targetUserId, string currentUserId)
     {
-        // Owner/Admin can assign anyone
-        if (role == ProjectRole.Owner || role == ProjectRole.Admin || role == ProjectRole.TechLead)
+        // ONLY Owner/Admin/TechLead can assign users to issues
+        // Members cannot assign anyone (including themselves)
+        if (role is ProjectRole.Owner or ProjectRole.Admin or ProjectRole.TechLead)
         {
             return true;
         }
 
-        // Member: Can ONLY assign themselves ("Self-Assignment")
-        if (role == ProjectRole.Member)
-        {
-            return targetUserId == currentUserId;
-        }
-
-        // Viewer: Cannot assign
+        // Member and Viewer: Cannot assign
         return false;
     }
 
-    public bool CanTransitionIssue(ProjectRole role, IssueStatus currentStatus, IssueStatus newStatus)
+    public bool CanTransitionIssue(ProjectRole role, IssueStatus currentStatus, IssueStatus newStatus, string? issueAssigneeId, string currentUserId)
     {
-        // Viewer: No transitions
+        // Viewer: No transitions allowed
         if (role == ProjectRole.Viewer) return false;
 
-        // Owner/Admin: Can do anything
-        if (role == ProjectRole.Owner || role == ProjectRole.Admin || role == ProjectRole.TechLead)
+        // Owner/Admin/TechLead: Can do anything
+        if (role is ProjectRole.Owner or ProjectRole.Admin or ProjectRole.TechLead)
         {
             return true;
         }
 
-        // Member Logic
+        // === MEMBER RULES ===
         if (role == ProjectRole.Member)
         {
-            // Cannot mark as Done (Must go to InReview)
-            if (newStatus == IssueStatus.Done)
+            // 1. Cannot move to Done or Closed
+            if (newStatus is IssueStatus.Done or IssueStatus.Closed)
             {
                 return false;
             }
 
-            // Cannot Close
-            if (newStatus == IssueStatus.Closed)
+            // 2. Cannot move from Open (must be assigned first via AssignIssue)
+            if (currentStatus == IssueStatus.Open)
             {
                 return false;
             }
 
+            // 3. Can only move issues assigned to themselves
+            if (issueAssigneeId != currentUserId)
+            {
+                return false;
+            }
+
+            // 4. InProgress → InReview: OK
+            // 5. InReview → InProgress: OK (revision)
             return true;
         }
 

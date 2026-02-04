@@ -123,18 +123,32 @@ public class IssuesController : ControllerBase
     [HttpPost("{key}/status")]
     public async Task<ActionResult<ChangeIssueStatusResult>> ChangeStatus(string key, [FromBody] ChangeStatusRequest request)
     {
-        var result = await _mediator.Send(new ChangeIssueStatusCommand(key, request.Status));
-        return Ok(result);
+        try
+        {
+            var result = await _mediator.Send(new ChangeIssueStatusCommand(key, request.Status, _currentUser.UserId));
+            return Ok(result);
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return StatusCode(403, new { error = ex.Message });
+        }
     }
 
     /// <summary>
-    /// Issue ata
+    /// Issue ata - Only Admin/Owner/TechLead can assign
     /// </summary>
     [HttpPost("{key}/assign")]
     public async Task<ActionResult<AssignIssueResult>> Assign(string key, [FromBody] AssignIssueRequest request)
     {
-        var result = await _mediator.Send(new AssignIssueCommand(key, request.AssigneeId));
-        return Ok(result);
+        try
+        {
+            var result = await _mediator.Send(new AssignIssueCommand(key, request.AssigneeId, _currentUser.UserId));
+            return Ok(result);
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return StatusCode(403, new { error = ex.Message });
+        }
     }
 
     /// <summary>

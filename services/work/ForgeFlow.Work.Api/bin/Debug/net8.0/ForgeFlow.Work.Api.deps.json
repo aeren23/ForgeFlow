@@ -64,7 +64,7 @@
       },
       "MassTransit/8.3.0": {
         "dependencies": {
-          "MassTransit.Abstractions": "8.4.1",
+          "MassTransit.Abstractions": "8.3.0",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.0",
           "Microsoft.Extensions.Hosting.Abstractions": "10.0.0",
           "Microsoft.Extensions.Logging.Abstractions": "10.0.0",
@@ -77,11 +77,11 @@
           }
         }
       },
-      "MassTransit.Abstractions/8.4.1": {
+      "MassTransit.Abstractions/8.3.0": {
         "runtime": {
           "lib/net8.0/MassTransit.Abstractions.dll": {
-            "assemblyVersion": "8.4.1.0",
-            "fileVersion": "8.4.1.0"
+            "assemblyVersion": "8.3.0.0",
+            "fileVersion": "8.3.0.0"
           }
         }
       },
@@ -1166,7 +1166,7 @@
         "dependencies": {
           "ForgeFlow.Contracts": "1.0.0",
           "ForgeFlow.Work.Domain": "1.0.0",
-          "MassTransit.Abstractions": "8.4.1",
+          "MassTransit.Abstractions": "8.3.0",
           "MediatR": "12.2.0",
           "Microsoft.EntityFrameworkCore": "8.0.0"
         },
@@ -1234,12 +1234,12 @@
       "path": "masstransit/8.3.0",
       "hashPath": "masstransit.8.3.0.nupkg.sha512"
     },
-    "MassTransit.Abstractions/8.4.1": {
+    "MassTransit.Abstractions/8.3.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-sf0f0Mj3B8lJFt5As2rSFiszOx4YhMDdQmV0CIzQG6PcWGO1ozped+YMJRdBqqTgvtHTjjWJOEMfgYtfXrPu2A==",
-      "path": "masstransit.abstractions/8.4.1",
-      "hashPath": "masstransit.abstractions.8.4.1.nupkg.sha512"
+      "sha512": "sha512-smYAGbCnHXl927Xvr2nzxtQAhfJfRSnVZAcIHGMI3QQq/aK3KvsCqgail1bw7acw0NkEhw8yv7cnKBGYKKFXPQ==",
+      "path": "masstransit.abstractions/8.3.0",
+      "hashPath": "masstransit.abstractions.8.3.0.nupkg.sha512"
     },
     "MassTransit.RabbitMQ/8.3.0": {
       "type": "package",

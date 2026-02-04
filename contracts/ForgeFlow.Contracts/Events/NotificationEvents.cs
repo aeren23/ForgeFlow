@@ -37,3 +37,18 @@ public record UserNotification(
     string Message,
     object? Data = null
 );
+
+/// <summary>
+/// Event published when an issue is assigned to a user.
+/// GitHub Service will consume this to create feature branch.
+/// </summary>
+public record IssueAssigned(
+    string IssueKey,
+    string IssueTitle,
+    Guid ProjectId,
+    string? OldAssigneeId,
+    string? NewAssigneeId,
+    string? RepositoryUrl,
+    string DefaultBranch,
+    DateTime Timestamp
+);

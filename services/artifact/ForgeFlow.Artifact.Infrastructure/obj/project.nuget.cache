@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Xzx/6dwBbKQ=",
+  "dgSpecHash": "//ZtsRpQHrk=",
   "success": true,
-  "projectFilePath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\artifact\\ForgeFlow.Artifact.Infrastructure\\ForgeFlow.Artifact.Infrastructure.csproj",
+  "projectFilePath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\artifact\\ForgeFlow.Artifact.Infrastructure\\ForgeFlow.Artifact.Infrastructure.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\alihe\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\alihe\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",
@@ -88,9 +88,9 @@
       "code": "NU1608",
       "level": "Warning",
       "message": "Bağımlılık kısıtlaması dışında algılanan paket sürümü: MediatR.Extensions.Microsoft.DependencyInjection 11.1.0, MediatR (>= 11.0.0 && < 12.0.0) gerektiriyor ancak sürüm MediatR 12.2.0 çözümlenmiş.",
-      "projectPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\artifact\\ForgeFlow.Artifact.Infrastructure\\ForgeFlow.Artifact.Infrastructure.csproj",
+      "projectPath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\artifact\\ForgeFlow.Artifact.Infrastructure\\ForgeFlow.Artifact.Infrastructure.csproj",
       "warningLevel": 1,
-      "filePath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\artifact\\ForgeFlow.Artifact.Infrastructure\\ForgeFlow.Artifact.Infrastructure.csproj",
+      "filePath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\artifact\\ForgeFlow.Artifact.Infrastructure\\ForgeFlow.Artifact.Infrastructure.csproj",
       "libraryId": "MediatR",
       "targetGraphs": [
         "net8.0"

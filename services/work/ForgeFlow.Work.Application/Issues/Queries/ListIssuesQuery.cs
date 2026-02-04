@@ -37,5 +37,7 @@ public record IssueListItemDto(
     string? AssigneeId,
     DateTime? DueDate,
     DateTime CreatedAtUtc,
-    Guid? ParentIssueId
+    Guid? ParentIssueId,
+    string? BranchName,
+    DateTime? StartedAtUtc
 );

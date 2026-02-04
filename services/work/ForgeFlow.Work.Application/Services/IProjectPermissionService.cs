@@ -10,7 +10,7 @@ public interface IProjectPermissionService
     bool CanEditIssue(ProjectRole role, string creatorId, string currentUserId);
     bool CanDeleteIssue(ProjectRole role, string creatorId, string currentUserId);
     bool CanAssignUser(ProjectRole role, string targetUserId, string currentUserId);
-    bool CanTransitionIssue(ProjectRole role, IssueStatus currentStatus, IssueStatus newStatus);
+    bool CanTransitionIssue(ProjectRole role, IssueStatus currentStatus, IssueStatus newStatus, string? issueAssigneeId, string currentUserId);
 
     // Project Permissions
     bool CanUpdateProjectConfig(ProjectRole role);

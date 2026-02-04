@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "Rl7fHUlFV2g=",
+  "dgSpecHash": "YE4Fhjk4+B8=",
   "success": true,
   "projectFilePath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\work\\ForgeFlow.Work.Api\\ForgeFlow.Work.Api.csproj",
   "expectedPackageFiles": [
@@ -8,7 +8,7 @@
     "C:\\Users\\alihe\\.nuget\\packages\\azure.identity\\1.7.0\\azure.identity.1.7.0.nupkg.sha512",
     "C:\\Users\\alihe\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\alihe\\.nuget\\packages\\masstransit\\8.3.0\\masstransit.8.3.0.nupkg.sha512",
-    "C:\\Users\\alihe\\.nuget\\packages\\masstransit.abstractions\\8.4.1\\masstransit.abstractions.8.4.1.nupkg.sha512",
+    "C:\\Users\\alihe\\.nuget\\packages\\masstransit.abstractions\\8.3.0\\masstransit.abstractions.8.3.0.nupkg.sha512",
     "C:\\Users\\alihe\\.nuget\\packages\\masstransit.rabbitmq\\8.3.0\\masstransit.rabbitmq.8.3.0.nupkg.sha512",
     "C:\\Users\\alihe\\.nuget\\packages\\mediatr\\12.2.0\\mediatr.12.2.0.nupkg.sha512",
     "C:\\Users\\alihe\\.nuget\\packages\\mediatr.contracts\\2.0.1\\mediatr.contracts.2.0.1.nupkg.sha512",

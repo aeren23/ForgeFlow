@@ -2,7 +2,7 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import {
     Bug, FileCode, CheckSquare, Bookmark, AlertOctagon,
-    ArrowUp, ArrowRight, ArrowDown, User
+    ArrowUp, ArrowRight, ArrowDown, User, GitBranch, Clock
 } from 'lucide-react';
 import { IssueType, IssuePriority, IssueTypeLabels, type Issue } from '../../services/api';
 
@@ -54,6 +54,17 @@ export function IssueCard({ issue, assigneeName, onClick }: IssueCardProps) {
         }
     };
 
+    const getTimeElapsed = (date: string) => {
+        const start = new Date(date);
+        const now = new Date();
+        const diffMs = now.getTime() - start.getTime();
+        const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+        const diffHours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        if (diffDays > 0) return `${diffDays}d`;
+        if (diffHours > 0) return `${diffHours}h`;
+        return '<1h';
+    };
+
     return (
         <div
             ref={setNodeRef}
@@ -77,8 +88,27 @@ export function IssueCard({ issue, assigneeName, onClick }: IssueCardProps) {
             </h4>
 
             <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2" title={IssueTypeLabels[issue.type]}>
-                    {getTypeIcon(issue.type)}
+                <div className="flex items-center gap-2">
+                    <div title={IssueTypeLabels[issue.type]}>
+                        {getTypeIcon(issue.type)}
+                    </div>
+                    {issue.branchName && (
+                        <div
+                            className="flex items-center gap-1 text-xs text-muted hover:text-primary cursor-pointer transition-colors"
+                            title={`Branch: ${issue.branchName}`}
+                        >
+                            <GitBranch className="w-3.5 h-3.5" />
+                        </div>
+                    )}
+                    {issue.startedAtUtc && (
+                        <div
+                            className="flex items-center gap-1 text-xs text-muted"
+                            title={`Started: ${new Date(issue.startedAtUtc).toLocaleString()}`}
+                        >
+                            <Clock className="w-3 h-3" />
+                            <span>{getTimeElapsed(issue.startedAtUtc)}</span>
+                        </div>
+                    )}
                 </div>
 
                 <div

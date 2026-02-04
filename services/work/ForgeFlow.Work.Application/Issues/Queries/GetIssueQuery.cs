@@ -29,5 +29,7 @@ public record IssueDto(
     DateTime CreatedAtUtc,
     DateTime UpdatedAtUtc,
     DateTime? ClosedAtUtc,
+    DateTime? StartedAtUtc,
+    string? BranchName,
     int ChildIssueCount
 );

@@ -45,6 +45,8 @@ public class GetIssueHandler : IRequestHandler<GetIssueQuery, IssueDto?>
             issue.CreatedAtUtc,
             issue.UpdatedAtUtc,
             issue.ClosedAtUtc,
+            issue.StartedAtUtc,
+            issue.BranchName,
             issue.ChildIssues.Count
         );
     }

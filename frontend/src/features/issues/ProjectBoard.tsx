@@ -100,15 +100,15 @@ export function ProjectBoard({ project }: ProjectBoardProps) {
 
     // Real-time updates subscription
     useEffect(() => {
-        if (!project.id) return;
+        if (!key) return;
 
-        // Join the project group for real-time messages
-        signalRService.joinProject(project.id);
+        // Join the project group for real-time messages (using project KEY, not ID)
+        signalRService.joinProject(key);
 
         const handleBoardUpdate = (msg: any) => {
             // Refresh board if update is for this project
-            // We could be more granular, but refreshing the list is safest
-            if (msg.projectId === project.id || msg.projectId === key) {
+            // Consumer sends projectId as projectKey (e.g., "PROJ")
+            if (msg.projectId === key) {
                 fetchIssues();
             }
         };
@@ -128,9 +128,9 @@ export function ProjectBoard({ project }: ProjectBoardProps) {
         return () => {
             unsubscribeBoard();
             unsubscribeNotify();
-            signalRService.leaveProject(project.id);
+            signalRService.leaveProject(key);
         };
-    }, [project.id]);
+    }, [key]);
 
     const fetchIssues = async () => {
         setLoading(true);
@@ -185,6 +185,7 @@ export function ProjectBoard({ project }: ProjectBoardProps) {
         let newStatus: IssueStatus | undefined;
 
         if (containerId.includes('todo')) newStatus = IssueStatus.Open;
+        else if (containerId.includes('inreview')) newStatus = IssueStatus.InReview;
         else if (containerId.includes('inprogress')) newStatus = IssueStatus.InProgress;
         else if (containerId.includes('done')) newStatus = IssueStatus.Done;
 
@@ -195,6 +196,7 @@ export function ProjectBoard({ project }: ProjectBoardProps) {
             const overIssue = issues.find(i => i.id === over.id);
             if (overIssue) {
                 if (overIssue.status === IssueStatus.Open) newStatus = IssueStatus.Open;
+                else if (overIssue.status === IssueStatus.InReview) newStatus = IssueStatus.InReview;
                 else if (overIssue.status === IssueStatus.Done || overIssue.status === IssueStatus.Closed) newStatus = IssueStatus.Done;
                 else newStatus = IssueStatus.InProgress;
             }
@@ -234,7 +236,9 @@ export function ProjectBoard({ project }: ProjectBoardProps) {
         if (status === IssueStatus.Open)
             return subset.filter(i => i.status === IssueStatus.Open);
         if (status === IssueStatus.InProgress)
-            return subset.filter(i => i.status === IssueStatus.InProgress || i.status === IssueStatus.InReview);
+            return subset.filter(i => i.status === IssueStatus.InProgress);
+        if (status === IssueStatus.InReview)
+            return subset.filter(i => i.status === IssueStatus.InReview);
         if (status === IssueStatus.Done)
             return subset.filter(i => i.status === IssueStatus.Done || i.status === IssueStatus.Closed);
         return [];
@@ -246,13 +250,13 @@ export function ProjectBoard({ project }: ProjectBoardProps) {
     const tasks = issues.filter(i => i.type !== IssueType.Epic);
 
     const renderKanbanBoard = () => (
-        <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-6 min-h-0 bg-muted/5 p-4 rounded-xl border border-muted/10 overflow-hidden">
+        <div className="flex-1 grid grid-cols-1 md:grid-cols-4 gap-4 min-h-0 bg-muted/5 p-4 rounded-xl border border-muted/10 overflow-hidden">
             <KanbanColumn
                 id="column-todo-main"
                 title="To Do"
                 status={IssueStatus.Open}
                 issues={getColumnIssues(IssueStatus.Open, tasks)}
-                colorClass="bg-red-500/5 text-red-600"
+                colorClass="bg-slate-500/5 text-slate-600"
                 usersMap={usersMap}
                 onAddClick={() => setCreateOpen(true)}
                 onIssueClick={setSelectedIssue}
@@ -263,6 +267,15 @@ export function ProjectBoard({ project }: ProjectBoardProps) {
                 status={IssueStatus.InProgress}
                 issues={getColumnIssues(IssueStatus.InProgress, tasks)}
                 colorClass="bg-blue-500/5 text-blue-600"
+                usersMap={usersMap}
+                onIssueClick={setSelectedIssue}
+            />
+            <KanbanColumn
+                id="column-inreview-main"
+                title="In Review"
+                status={IssueStatus.InReview}
+                issues={getColumnIssues(IssueStatus.InReview, tasks)}
+                colorClass="bg-amber-500/5 text-amber-600"
                 usersMap={usersMap}
                 onIssueClick={setSelectedIssue}
             />
@@ -299,13 +312,13 @@ export function ProjectBoard({ project }: ProjectBoardProps) {
                         </div>
 
                         {!collapsedEpics['orphans'] && (
-                            <div className="p-4 grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div className="p-4 grid grid-cols-1 md:grid-cols-4 gap-4">
                                 <KanbanColumn
                                     id="column-todo-orphans"
                                     title="To Do"
                                     status={IssueStatus.Open}
                                     issues={getColumnIssues(IssueStatus.Open, orphanTasks)}
-                                    colorClass="bg-red-500/5 text-red-600"
+                                    colorClass="bg-slate-500/5 text-slate-600"
                                     usersMap={usersMap}
                                     onAddClick={() => setCreateOpen(true)}
                                     onIssueClick={setSelectedIssue}
@@ -316,6 +329,15 @@ export function ProjectBoard({ project }: ProjectBoardProps) {
                                     status={IssueStatus.InProgress}
                                     issues={getColumnIssues(IssueStatus.InProgress, orphanTasks)}
                                     colorClass="bg-blue-500/5 text-blue-600"
+                                    usersMap={usersMap}
+                                    onIssueClick={setSelectedIssue}
+                                />
+                                <KanbanColumn
+                                    id="column-inreview-orphans"
+                                    title="In Review"
+                                    status={IssueStatus.InReview}
+                                    issues={getColumnIssues(IssueStatus.InReview, orphanTasks)}
+                                    colorClass="bg-amber-500/5 text-amber-600"
                                     usersMap={usersMap}
                                     onIssueClick={setSelectedIssue}
                                 />
@@ -359,15 +381,15 @@ export function ProjectBoard({ project }: ProjectBoardProps) {
                             </div>
 
                             {!isCollapsed && (
-                                <div className="p-4 grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div className="p-4 grid grid-cols-1 md:grid-cols-4 gap-4">
                                     <KanbanColumn
                                         id={`column-todo-${epic.id}`}
                                         title="To Do"
                                         status={IssueStatus.Open}
                                         issues={getColumnIssues(IssueStatus.Open, epicTasks)}
-                                        colorClass="bg-red-500/5 text-red-600"
+                                        colorClass="bg-slate-500/5 text-slate-600"
                                         usersMap={usersMap}
-                                        onAddClick={() => setCreateOpen(true)} // Maybe pass epicId to create in this epic?
+                                        onAddClick={() => setCreateOpen(true)}
                                         onIssueClick={setSelectedIssue}
                                     />
                                     <KanbanColumn
@@ -376,6 +398,15 @@ export function ProjectBoard({ project }: ProjectBoardProps) {
                                         status={IssueStatus.InProgress}
                                         issues={getColumnIssues(IssueStatus.InProgress, epicTasks)}
                                         colorClass="bg-blue-500/5 text-blue-600"
+                                        usersMap={usersMap}
+                                        onIssueClick={setSelectedIssue}
+                                    />
+                                    <KanbanColumn
+                                        id={`column-inreview-${epic.id}`}
+                                        title="In Review"
+                                        status={IssueStatus.InReview}
+                                        issues={getColumnIssues(IssueStatus.InReview, epicTasks)}
+                                        colorClass="bg-amber-500/5 text-amber-600"
                                         usersMap={usersMap}
                                         onIssueClick={setSelectedIssue}
                                     />
