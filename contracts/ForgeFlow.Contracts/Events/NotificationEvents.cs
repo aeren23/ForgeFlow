@@ -52,3 +52,37 @@ public record IssueAssigned(
     string DefaultBranch,
     DateTime Timestamp
 );
+
+/// <summary>
+/// GitHub Service → Notification Service
+/// Branch oluşturulduğunda kullanıcıya bildirim gönderilir.
+/// </summary>
+public record BranchCreated(
+    Guid ProjectId,
+    string IssueKey,
+    string BranchName,
+    string AssigneeId,
+    DateTime Timestamp
+);
+
+/// <summary>
+/// GitHub Webhook → Work Service
+/// PR merge edildiğinde issue durumu Done olarak güncellenir.
+/// </summary>
+public record GitHubPullRequestMerged(
+    long RepositoryId,
+    int PullNumber,
+    string IssueKey
+);
+
+/// <summary>
+/// GitHub Webhook → Work Service veya AI Orchestrator
+/// Push event - commit aktivitesi takibi için.
+/// </summary>
+public record GitHubPushReceived(
+    long RepositoryId,
+    string Ref,
+    string HeadCommitSha,
+    string[] ModifiedFiles,
+    DateTime Timestamp
+);

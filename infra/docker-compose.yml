@@ -225,6 +225,34 @@ services:
     networks:
       - forgeflow-net
 
+  github:
+    build:
+      context: ..
+      dockerfile: services/github/ForgeFlow.GitHub.Api/Dockerfile
+    container_name: forgeflow-github
+    ports:
+      - "8086:8080"
+    environment:
+      ASPNETCORE_URLS: http://+:8080
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__GitHubDb: "Server=mssql,1433;Database=ForgeFlow_GitHub;User Id=sa;Password=YourStrong(!)Password123;TrustServerCertificate=True;Encrypt=False"
+      GitHub__AppId: "${GITHUB_APP_ID}"
+      GitHub__PrivateKeyBase64: "${GITHUB_PRIVATE_KEY_BASE64}"
+      GitHub__WebhookSecret: "${GITHUB_WEBHOOK_SECRET}"
+      RabbitMq__Host: rabbitmq
+      RabbitMq__Username: forgeflow
+      RabbitMq__Password: forgeflow
+      Seq__ServerUrl: http://seq
+    depends_on:
+      mssql:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
+      db-init:
+        condition: service_completed_successfully
+    networks:
+      - forgeflow-net
+
   frontend:
     build:
       context: ../frontend

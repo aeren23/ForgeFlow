@@ -1,0 +1,413 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Api\\ForgeFlow.GitHub.Api.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\contracts\\ForgeFlow.Contracts\\ForgeFlow.Contracts.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\contracts\\ForgeFlow.Contracts\\ForgeFlow.Contracts.csproj",
+        "projectName": "ForgeFlow.Contracts",
+        "projectPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\contracts\\ForgeFlow.Contracts\\ForgeFlow.Contracts.csproj",
+        "packagesPath": "C:\\Users\\alihe\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\contracts\\ForgeFlow.Contracts\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\alihe\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "10.0.100"
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.102/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Api\\ForgeFlow.GitHub.Api.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Api\\ForgeFlow.GitHub.Api.csproj",
+        "projectName": "ForgeFlow.GitHub.Api",
+        "projectPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Api\\ForgeFlow.GitHub.Api.csproj",
+        "packagesPath": "C:\\Users\\alihe\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Api\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\alihe\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Application\\ForgeFlow.GitHub.Application.csproj": {
+                "projectPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Application\\ForgeFlow.GitHub.Application.csproj"
+              },
+              "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Infrastructure\\ForgeFlow.GitHub.Infrastructure.csproj": {
+                "projectPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Infrastructure\\ForgeFlow.GitHub.Infrastructure.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "10.0.100"
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "MassTransit.RabbitMQ": {
+              "target": "Package",
+              "version": "[8.4.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.11, )"
+            },
+            "Serilog.AspNetCore": {
+              "target": "Package",
+              "version": "[8.0.3, )"
+            },
+            "Serilog.Sinks.Seq": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[6.5.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.102/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Application\\ForgeFlow.GitHub.Application.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Application\\ForgeFlow.GitHub.Application.csproj",
+        "projectName": "ForgeFlow.GitHub.Application",
+        "projectPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Application\\ForgeFlow.GitHub.Application.csproj",
+        "packagesPath": "C:\\Users\\alihe\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Application\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\alihe\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\contracts\\ForgeFlow.Contracts\\ForgeFlow.Contracts.csproj": {
+                "projectPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\contracts\\ForgeFlow.Contracts\\ForgeFlow.Contracts.csproj"
+              },
+              "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Domain\\ForgeFlow.GitHub.Domain.csproj": {
+                "projectPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Domain\\ForgeFlow.GitHub.Domain.csproj"
+              },
+              "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Infrastructure\\ForgeFlow.GitHub.Infrastructure.csproj": {
+                "projectPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Infrastructure\\ForgeFlow.GitHub.Infrastructure.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "10.0.100"
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "MassTransit": {
+              "target": "Package",
+              "version": "[8.4.0, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.11, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.102/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Domain\\ForgeFlow.GitHub.Domain.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Domain\\ForgeFlow.GitHub.Domain.csproj",
+        "projectName": "ForgeFlow.GitHub.Domain",
+        "projectPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Domain\\ForgeFlow.GitHub.Domain.csproj",
+        "packagesPath": "C:\\Users\\alihe\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Domain\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\alihe\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "10.0.100"
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.102/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Infrastructure\\ForgeFlow.GitHub.Infrastructure.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Infrastructure\\ForgeFlow.GitHub.Infrastructure.csproj",
+        "projectName": "ForgeFlow.GitHub.Infrastructure",
+        "projectPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Infrastructure\\ForgeFlow.GitHub.Infrastructure.csproj",
+        "packagesPath": "C:\\Users\\alihe\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Infrastructure\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\alihe\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Domain\\ForgeFlow.GitHub.Domain.csproj": {
+                "projectPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Domain\\ForgeFlow.GitHub.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "10.0.100"
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "GitHubJwt": {
+              "target": "Package",
+              "version": "[0.0.6, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.11, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[8.0.11, )"
+            },
+            "Octokit": {
+              "target": "Package",
+              "version": "[14.0.0, )"
+            },
+            "Polly": {
+              "target": "Package",
+              "version": "[8.5.2, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.102/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

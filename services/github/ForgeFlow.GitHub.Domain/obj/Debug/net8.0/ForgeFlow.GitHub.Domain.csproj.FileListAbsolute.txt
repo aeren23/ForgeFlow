@@ -1,0 +1,12 @@
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\github\ForgeFlow.GitHub.Domain\bin\Debug\net8.0\ForgeFlow.GitHub.Domain.deps.json
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\github\ForgeFlow.GitHub.Domain\bin\Debug\net8.0\ForgeFlow.GitHub.Domain.dll
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\github\ForgeFlow.GitHub.Domain\bin\Debug\net8.0\ForgeFlow.GitHub.Domain.pdb
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\github\ForgeFlow.GitHub.Domain\obj\Debug\net8.0\ForgeFlow.GitHub.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\github\ForgeFlow.GitHub.Domain\obj\Debug\net8.0\ForgeFlow.GitHub.Domain.AssemblyInfoInputs.cache
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\github\ForgeFlow.GitHub.Domain\obj\Debug\net8.0\ForgeFlow.GitHub.Domain.AssemblyInfo.cs
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\github\ForgeFlow.GitHub.Domain\obj\Debug\net8.0\ForgeFlow.GitHub.Domain.csproj.CoreCompileInputs.cache
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\github\ForgeFlow.GitHub.Domain\obj\Debug\net8.0\ForgeFlow.GitHub.Domain.sourcelink.json
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\github\ForgeFlow.GitHub.Domain\obj\Debug\net8.0\ForgeFlow.GitHub.Domain.dll
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\github\ForgeFlow.GitHub.Domain\obj\Debug\net8.0\refint\ForgeFlow.GitHub.Domain.dll
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\github\ForgeFlow.GitHub.Domain\obj\Debug\net8.0\ForgeFlow.GitHub.Domain.pdb
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\github\ForgeFlow.GitHub.Domain\obj\Debug\net8.0\ref\ForgeFlow.GitHub.Domain.dll

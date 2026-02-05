@@ -1,0 +1,16 @@
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\github\ForgeFlow.GitHub.Infrastructure\bin\Debug\net8.0\ForgeFlow.GitHub.Infrastructure.deps.json
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\github\ForgeFlow.GitHub.Infrastructure\bin\Debug\net8.0\ForgeFlow.GitHub.Infrastructure.dll
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\github\ForgeFlow.GitHub.Infrastructure\bin\Debug\net8.0\ForgeFlow.GitHub.Infrastructure.pdb
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\github\ForgeFlow.GitHub.Infrastructure\bin\Debug\net8.0\ForgeFlow.GitHub.Domain.dll
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\github\ForgeFlow.GitHub.Infrastructure\bin\Debug\net8.0\ForgeFlow.GitHub.Domain.pdb
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\github\ForgeFlow.GitHub.Infrastructure\obj\Debug\net8.0\ForgeFlow.GitHub.Infrastructure.csproj.AssemblyReference.cache
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\github\ForgeFlow.GitHub.Infrastructure\obj\Debug\net8.0\ForgeFlow.GitHub.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\github\ForgeFlow.GitHub.Infrastructure\obj\Debug\net8.0\ForgeFlow.GitHub.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\github\ForgeFlow.GitHub.Infrastructure\obj\Debug\net8.0\ForgeFlow.GitHub.Infrastructure.AssemblyInfo.cs
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\github\ForgeFlow.GitHub.Infrastructure\obj\Debug\net8.0\ForgeFlow.GitHub.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\github\ForgeFlow.GitHub.Infrastructure\obj\Debug\net8.0\ForgeFlow.GitHub.Infrastructure.sourcelink.json
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\github\ForgeFlow.GitHub.Infrastructure\obj\Debug\net8.0\ForgeFlo.0B236E82.Up2Date
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\github\ForgeFlow.GitHub.Infrastructure\obj\Debug\net8.0\ForgeFlow.GitHub.Infrastructure.dll
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\github\ForgeFlow.GitHub.Infrastructure\obj\Debug\net8.0\refint\ForgeFlow.GitHub.Infrastructure.dll
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\github\ForgeFlow.GitHub.Infrastructure\obj\Debug\net8.0\ForgeFlow.GitHub.Infrastructure.pdb
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\github\ForgeFlow.GitHub.Infrastructure\obj\Debug\net8.0\ref\ForgeFlow.GitHub.Infrastructure.dll

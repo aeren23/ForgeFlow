@@ -5,6 +5,7 @@ using ForgeFlow.Work.Domain.Enums;
 using MassTransit;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace ForgeFlow.Work.Application.Issues.Commands;
 
@@ -17,15 +18,18 @@ public class AssignIssueHandler : IRequestHandler<AssignIssueCommand, AssignIssu
     private readonly IWorkDbContext _context;
     private readonly IPublishEndpoint _publishEndpoint;
     private readonly IProjectPermissionService _permissionService;
+    private readonly Microsoft.Extensions.Logging.ILogger<AssignIssueHandler> _logger;
 
     public AssignIssueHandler(
         IWorkDbContext context,
         IPublishEndpoint publishEndpoint,
-        IProjectPermissionService permissionService)
+        IProjectPermissionService permissionService,
+        Microsoft.Extensions.Logging.ILogger<AssignIssueHandler> logger)
     {
         _context = context;
         _publishEndpoint = publishEndpoint;
         _permissionService = permissionService;
+        _logger = logger;
     }
 
     public async Task<AssignIssueResult> Handle(AssignIssueCommand request, CancellationToken cancellationToken)
@@ -64,6 +68,7 @@ public class AssignIssueHandler : IRequestHandler<AssignIssueCommand, AssignIssu
         {
             try
             {
+                _logger.LogInformation("Publishing IssueAssigned event for issue {IssueKey}", issue.Key);
                 await _publishEndpoint.Publish(new IssueAssigned(
                     IssueKey: issue.Key,
                     IssueTitle: issue.Title,
@@ -74,9 +79,13 @@ public class AssignIssueHandler : IRequestHandler<AssignIssueCommand, AssignIssu
                     DefaultBranch: issue.Project.DefaultBranch,
                     Timestamp: DateTime.UtcNow
                 ), cancellationToken);
+
+                _logger.LogInformation("Successfully published IssueAssigned event for issue {IssueKey} (Repo: {RepositoryUrl})",
+                    issue.Key, issue.Project.RepositoryUrl ?? "N/A");
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Failed to publish IssueAssigned event for {IssueKey}", issue.Key);
                 // Don't fail the assignment if event publishing fails
             }
         }
