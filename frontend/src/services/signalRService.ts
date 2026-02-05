@@ -34,10 +34,12 @@ const eventHandlers: {
     aiProgress: EventCallback<AiProgressMessage>[];
     boardUpdate: EventCallback<BoardUpdateMessage>[];
     notification: EventCallback<NotificationMessage>[];
+    installationListUpdated: EventCallback<{ installationId: number; accountLogin: string }>[];
 } = {
     aiProgress: [],
     boardUpdate: [],
     notification: [],
+    installationListUpdated: [],
 };
 
 export const signalRService = {
@@ -79,6 +81,11 @@ export const signalRService = {
         connection.on('Notification', (msg: NotificationMessage) => {
             console.log('[SignalR] Notification:', msg);
             eventHandlers.notification.forEach(cb => cb(msg));
+        });
+
+        connection.on('InstallationListUpdated', (msg: { installationId: number; accountLogin: string }) => {
+            console.log('[SignalR] InstallationListUpdated:', msg);
+            eventHandlers.installationListUpdated.forEach(cb => cb(msg));
         });
 
         // Connection state change handlers
@@ -164,6 +171,17 @@ export const signalRService = {
         return () => {
             const idx = eventHandlers.notification.indexOf(callback);
             if (idx > -1) eventHandlers.notification.splice(idx, 1);
+        };
+    },
+
+    /**
+     * Subscribe to installation list updates.
+     */
+    onInstallationListUpdated(callback: EventCallback<{ installationId: number; accountLogin: string }>): () => void {
+        eventHandlers.installationListUpdated.push(callback);
+        return () => {
+            const idx = eventHandlers.installationListUpdated.indexOf(callback);
+            if (idx > -1) eventHandlers.installationListUpdated.splice(idx, 1);
         };
     },
 

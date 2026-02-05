@@ -80,7 +80,7 @@ export function ProjectDetailPage() {
                     {/* Settings Link */}
                     {permissions.canEditProject && (
                         <Link
-                            to={`/projects/${project.key}/settings`}
+                            to={`/project/${project.key}/settings`}
                             className="p-2 text-muted hover:text-text transition-colors"
                             title="Project Settings"
                         >

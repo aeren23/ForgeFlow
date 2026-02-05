@@ -95,7 +95,7 @@ public class GitHubClientFactory : IGitHubClientFactory
         var payload = new JwtPayload
         {
             { "iat", now.AddSeconds(-60).ToUnixTimeSeconds() }, // Clock skew
-            { "exp", now.AddMinutes(10).ToUnixTimeSeconds() },
+            { "exp", now.AddMinutes(5).ToUnixTimeSeconds() },
             { "iss", appId } // String olarak
         };
 

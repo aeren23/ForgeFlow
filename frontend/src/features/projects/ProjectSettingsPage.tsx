@@ -1,20 +1,49 @@
 import { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Save, Trash2, Loader2, AlertCircle, Users, UserPlus, Settings as SettingsIcon, X } from 'lucide-react';
-import { getProject, updateProject, deleteProject, updateProjectMemberRole, removeProjectMember, getUsersBatch, type UpdateProjectRequest, type ProjectDto, type UserDto } from '../../services/api';
+import { Save, Trash2, Loader2, AlertCircle, Users, UserPlus, Settings as SettingsIcon, X, Github, Link as LinkIcon, ExternalLink } from 'lucide-react';
+import {
+    getProject, updateProject, deleteProject, updateProjectMemberRole, removeProjectMember, getUsersBatch,
+    listGitHubInstallations, listGitHubRepositories, linkProjectToRepository, getProjectRepositoryConnection, unlinkProjectRepository,
+    type UpdateProjectRequest, type ProjectDto, type UserDto, type GitHubInstallation, type GitHubRepository
+} from '../../services/api';
 import { toast } from '../../store/uiStore';
 import { InviteMemberModal } from './InviteMemberModal';
 import { useProjectPermissions } from '../../hooks/useProjectPermissions';
 import { confirmAction, listConfirmOwnerTransfer, showSuccess, showError } from '../../utils/sweetAlert';
+import { signalRService } from '../../services/signalRService';
 
 export function ProjectSettingsPage() {
     const { key } = useParams();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
-    const [activeTab, setActiveTab] = useState<'settings' | 'members'>('settings');
+
+
+
+    const [activeTab, setActiveTab] = useState<'settings' | 'members' | 'github'>('settings');
     const [project, setProject] = useState<ProjectDto | null>(null);
     const [showInviteModal, setShowInviteModal] = useState(false);
+
+    // GitHub State
+    const [ghLoading, setGhLoading] = useState(false);
+    const [ghConnection, setGhConnection] = useState<{ repository: string; htmlUrl?: string } | null>(null);
+    const [ghInstallations, setGhInstallations] = useState<GitHubInstallation[]>([]);
+    const [ghRepos, setGhRepos] = useState<GitHubRepository[]>([]);
+    const [ghSelectedInstId, setGhSelectedInstId] = useState<number | null>(null);
+    const [ghSelectedRepo, setGhSelectedRepo] = useState<GitHubRepository | null>(null);
+
+    // Listen for SignalR updates
+    useEffect(() => {
+        const unsubscribe = signalRService.onInstallationListUpdated((msg) => {
+            console.log("Installations updated via SignalR", msg);
+            // Refresh list if we are on GitHub tab
+            if (activeTab === 'github') {
+                loadGitHubData();
+                showSuccess("GitHub Installations list updated.");
+            }
+        });
+        return () => unsubscribe();
+    }, [activeTab]);
 
     const permissions = useProjectPermissions(project);
 
@@ -65,11 +94,106 @@ export function ProjectSettingsPage() {
     // Redirect or adjust tab if permission changes (e.g. after load)
     useEffect(() => {
         if (project && !loading) {
-            if (!permissions.canEditProject && activeTab === 'settings') {
+            if (!permissions.canEditProject && (activeTab === 'settings' || activeTab === 'github')) {
                 setActiveTab('members');
             }
         }
-    }, [project, loading, permissions.canEditProject]);
+    }, [project, loading, permissions.canEditProject, activeTab]);
+
+    // Load GitHub Data when tab changes
+    useEffect(() => {
+        if (activeTab === 'github' && project) {
+            loadGitHubData();
+        }
+    }, [activeTab, project]);
+
+    const loadGitHubData = async () => {
+        setGhLoading(true);
+        try {
+            // 1. Check existing connection
+            try {
+                const connRes = await getProjectRepositoryConnection(project!.id);
+                setGhConnection(connRes.data);
+            } catch (e) {
+                setGhConnection(null);
+            }
+
+            // 2. Load installations
+            const instRes = await listGitHubInstallations();
+            setGhInstallations(instRes.data);
+        } catch (error) {
+            console.error("Failed to load GitHub data", error);
+            // toast.error("Failed to load GitHub info");
+        } finally {
+            setGhLoading(false);
+        }
+    };
+
+    const handleInstallationChange = async (instId: number) => {
+        setGhSelectedInstId(instId);
+        setGhRepos([]);
+        setGhSelectedRepo(null);
+        if (!instId) return;
+
+        setGhLoading(true);
+        try {
+            const res = await listGitHubRepositories(instId);
+            setGhRepos(res.data);
+        } catch (error) {
+            showError("Failed to fetch repositories");
+        } finally {
+            setGhLoading(false);
+        }
+    };
+
+    const handleLinkRepository = async () => {
+        if (!ghSelectedInstId || !ghSelectedRepo || !project) return;
+
+        const inst = ghInstallations.find(i => i.installationId == ghSelectedInstId);
+
+        setGhLoading(true);
+        try {
+            await linkProjectToRepository({
+                projectId: project.id,
+                installationId: ghSelectedInstId,
+                repositoryFullName: ghSelectedRepo.fullName,
+                defaultBranch: ghSelectedRepo.defaultBranch,
+                repositoryId: ghSelectedRepo.id,
+                accountLogin: inst?.accountLogin,
+                accountType: inst?.accountType
+            });
+            showSuccess("Repository linked successfully!");
+            loadGitHubData(); // refresh
+            setGhSelectedRepo(null);
+        } catch (error) {
+            showError("Failed to link repository.");
+        } finally {
+            setGhLoading(false);
+        }
+    };
+
+    const handleUnlinkRepository = async () => {
+        const confirmed = await confirmAction({
+            title: 'Unlink Repository?',
+            text: 'This will disconnect the project from GitHub. Issues will no longer be synced.',
+            confirmButtonText: 'Yes, Unlink',
+            icon: 'warning'
+        });
+
+        if (confirmed) {
+            setGhLoading(true);
+            try {
+                await unlinkProjectRepository(project!.id);
+                showSuccess("Repository unlinked.");
+                setGhConnection(null);
+                loadGitHubData();
+            } catch (error) {
+                showError("Failed to unlink.");
+            } finally {
+                setGhLoading(false);
+            }
+        }
+    };
 
 
     const loadProject = async (projectKey: string) => {
@@ -211,10 +335,20 @@ export function ProjectSettingsPage() {
                         <Users className="w-4 h-4" />
                         Members
                     </button>
+                    {permissions.canEditProject && (
+                        <button
+                            onClick={() => setActiveTab('github')}
+                            className={`px-4 py-2 rounded-md text-sm font-medium transition-all flex items-center gap-2
+                                ${activeTab === 'github' ? 'bg-surface shadow-sm text-text' : 'text-muted hover:text-text'}`}
+                        >
+                            <Github className="w-4 h-4" />
+                            GitHub
+                        </button>
+                    )}
                 </div>
             </div>
 
-            {activeTab === 'settings' && permissions.canEditProject ? (
+            {activeTab === 'settings' && permissions.canEditProject && (
                 <>
                     <form onSubmit={handleUpdate} className="bg-surface border border-muted/20 rounded-xl p-6 space-y-6 mb-8">
                         <div className="space-y-2">
@@ -278,7 +412,9 @@ export function ProjectSettingsPage() {
                         </div>
                     )}
                 </>
-            ) : (
+            )}
+
+            {activeTab === 'members' && (
                 <div className="bg-surface border border-muted/20 rounded-xl overflow-hidden">
                     <div className="border-b border-muted/10 p-6 flex items-center justify-between">
                         <div>
@@ -396,17 +532,137 @@ export function ProjectSettingsPage() {
                         )}
                     </div>
                 </div>
-            )}
+
+            )
+            }
+
+            {
+                activeTab === 'github' && permissions.canEditProject && (
+                    <div className="bg-surface border border-muted/20 rounded-xl overflow-hidden p-6">
+                        <div className="flex items-center gap-4 mb-6">
+                            <div className="p-3 bg-black/5 rounded-full">
+                                <Github className="w-8 h-8" />
+                            </div>
+                            <div>
+                                <h3 className="text-lg font-semibold text-text">GitHub Integration</h3>
+                                <p className="text-sm text-muted">Connect your project to a GitHub repository for automated GitOps.</p>
+                            </div>
+                        </div>
+
+                        {ghLoading && !ghConnection && !ghInstallations.length ? (
+                            <div className="py-8 flex justify-center"><Loader2 className="animate-spin text-primary" /></div>
+                        ) : ghConnection ? (
+                            <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-6 flex items-center justify-between">
+                                <div className="flex items-center gap-3">
+                                    <LinkIcon className="w-5 h-5 text-green-600" />
+                                    <div>
+                                        <div className="font-medium text-green-900">Connected to Repository</div>
+                                        <a
+                                            href={`https://github.com/${ghConnection.repository}`}
+                                            target="_blank"
+                                            rel="noreferrer"
+                                            className="text-green-700 hover:underline flex items-center gap-1 text-sm"
+                                        >
+                                            {ghConnection.repository}
+                                            <ExternalLink className="w-3 h-3" />
+                                        </a>
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={handleUnlinkRepository}
+                                    className="px-4 py-2 bg-white text-error border border-error/20 hover:bg-error/5 rounded-lg text-sm font-medium transition-colors"
+                                >
+                                    Unlink
+                                </button>
+                            </div>
+                        ) : (
+                            <div className="space-y-6">
+                                {/* Step 1: Install App */}
+                                <div className="bg-muted/5 p-4 rounded-lg border border-muted/10">
+                                    <h4 className="font-medium text-text mb-2">1. GitHub Configuration</h4>
+                                    <div className="text-sm text-muted mb-4">
+                                        Can't see your repository? Make sure the ForgeFlow App is installed on your GitHub account or organization.
+                                    </div>
+                                    <a
+                                        href={`https://github.com/apps/ForgeFlow-Project/installations/new`}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="inline-flex items-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors text-sm font-medium"
+                                    >
+                                        <Github className="w-4 h-4" />
+                                        Manage Installations on GitHub
+                                    </a>
+                                </div>
+
+                                {/* Step 2: Select Repo */}
+                                <div className="space-y-4">
+                                    <h4 className="font-medium text-text">2. Link Repository</h4>
+
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label className="text-sm font-medium text-muted mb-1 block">Account / Organization</label>
+                                            <select
+                                                className="w-full bg-background border border-muted/20 rounded-lg px-3 py-2 text-text"
+                                                onChange={(e) => handleInstallationChange(Number(e.target.value))}
+                                                value={ghSelectedInstId || ''}
+                                            >
+                                                <option value="">Select Account...</option>
+                                                {ghInstallations.map(inst => (
+                                                    <option key={inst.id} value={inst.installationId}>
+                                                        {inst.accountLogin} ({inst.accountType})
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+
+                                        <div>
+                                            <label className="text-sm font-medium text-muted mb-1 block">Repository</label>
+                                            <select
+                                                className="w-full bg-background border border-muted/20 rounded-lg px-3 py-2 text-text"
+                                                disabled={!ghSelectedInstId || ghLoading}
+                                                onChange={(e) => {
+                                                    const repo = ghRepos.find(r => r.id === Number(e.target.value));
+                                                    setGhSelectedRepo(repo || null);
+                                                }}
+                                                value={ghSelectedRepo?.id || ''}
+                                            >
+                                                <option value="">Select Repository...</option>
+                                                {ghRepos.map(repo => (
+                                                    <option key={repo.id} value={repo.id}>
+                                                        {repo.fullName} {repo.private ? '(Private)' : ''}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div className="pt-2 flex justify-end">
+                                        <button
+                                            onClick={handleLinkRepository}
+                                            disabled={!ghSelectedInstId || !ghSelectedRepo || ghLoading}
+                                            className="flex items-center gap-2 px-6 py-2 bg-primary hover:bg-primary/90 text-white rounded-lg font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                                        >
+                                            {ghLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <LinkIcon className="w-4 h-4" />}
+                                            Connect Repository
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                )}
 
             {/* Invite Modal */}
-            {key && (
-                <InviteMemberModal
-                    projectKey={key}
-                    isOpen={showInviteModal}
-                    onClose={() => setShowInviteModal(false)}
-                    onMemberAdded={() => loadProject(key)}
-                />
-            )}
-        </div>
+            {
+                key && (
+                    <InviteMemberModal
+                        projectKey={key}
+                        isOpen={showInviteModal}
+                        onClose={() => setShowInviteModal(false)}
+                        onMemberAdded={() => loadProject(key)}
+                    />
+                )
+            }
+        </div >
     );
 }

@@ -1,7 +1,9 @@
 using ForgeFlow.GitHub.Domain.Entities;
 using ForgeFlow.GitHub.Infrastructure.Persistence;
+using ForgeFlow.GitHub.Infrastructure.GitHub;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Octokit;
 
 namespace ForgeFlow.GitHub.Api.Controllers;
 
@@ -14,11 +16,16 @@ public class InstallationsController : ControllerBase
 {
     private readonly GitHubDbContext _db;
     private readonly ILogger<InstallationsController> _logger;
+    private readonly IGitHubClientFactory _clientFactory;
 
-    public InstallationsController(GitHubDbContext db, ILogger<InstallationsController> logger)
+    public InstallationsController(
+        GitHubDbContext db, 
+        ILogger<InstallationsController> logger,
+        IGitHubClientFactory clientFactory)
     {
         _db = db;
         _logger = logger;
+        _clientFactory = clientFactory;
     }
 
     /// <summary>
@@ -124,6 +131,36 @@ public class InstallationsController : ControllerBase
             .ToListAsync();
 
         return Ok(installations);
+    }
+
+    /// <summary>
+    /// Installation altındaki repoları listele
+    /// </summary>
+    [HttpGet("{installationId}/repositories")]
+    public async Task<IActionResult> ListRepositories(long installationId)
+    {
+        try
+        {
+            var client = await _clientFactory.CreateClientAsync(installationId);
+            var result = await client.GitHubApps.Installation.GetAllRepositoriesForCurrent();
+            
+            var repos = result.Repositories.Select(r => new
+            {
+                r.Id,
+                r.Name,
+                r.FullName,
+                r.Private,
+                r.HtmlUrl,
+                r.DefaultBranch
+            });
+
+            return Ok(repos);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to list repositories for installation {InstallationId}", installationId);
+            return StatusCode(500, new { error = "Failed to fetch repositories from GitHub" });
+        }
     }
 
     /// <summary>

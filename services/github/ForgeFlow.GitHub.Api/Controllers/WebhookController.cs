@@ -4,6 +4,7 @@ using System.Text.Json;
 using ForgeFlow.Contracts.Events;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ForgeFlow.GitHub.Api.Controllers;
 
@@ -67,6 +68,9 @@ public class WebhookController : ControllerBase
                     break;
                 case "installation":
                     await HandleInstallationEvent(payload);
+                    break;
+                case "installation_repositories":
+                    await HandleInstallationRepositoriesEvent(payload);
                     break;
                 default:
                     _logger.LogDebug("Unhandled event type: {EventType}", eventType);
@@ -168,7 +172,7 @@ public class WebhookController : ControllerBase
         }
     }
 
-    private Task HandleInstallationEvent(JsonDocument payload)
+    private async Task HandleInstallationEvent(JsonDocument payload)
     {
         var root = payload.RootElement;
         var action = root.GetProperty("action").GetString();
@@ -182,10 +186,51 @@ public class WebhookController : ControllerBase
             "Installation event: Action={Action}, InstallationId={Id}, Account={Login}",
             action, installationId, login);
 
-        // TODO: Installation'ı veritabanına kaydet
-        // Bu kısım ileride implemente edilecek
+        using var scope = HttpContext.RequestServices.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<ForgeFlow.GitHub.Infrastructure.Persistence.GitHubDbContext>();
 
-        return Task.CompletedTask;
+        var existing = await db.Installations
+            .FirstOrDefaultAsync(i => i.InstallationId == installationId);
+
+        if (action == "created" || action == "unsuspend")
+        {
+            if (existing == null)
+            {
+                var newInstallation = new ForgeFlow.GitHub.Domain.Entities.GitHubInstallation
+                {
+                    Id = Guid.NewGuid(),
+                    InstallationId = installationId,
+                    AccountLogin = login,
+                    AccountType = accountType,
+                    InstalledAtUtc = DateTime.UtcNow
+                };
+                db.Installations.Add(newInstallation);
+                _logger.LogInformation("New installation registered: {InstallationId}", installationId);
+
+                await _publishEndpoint.Publish(new GitHubInstallationCreated(
+                    installationId,
+                    login,
+                    accountType,
+                    DateTime.UtcNow
+                ));
+            }
+            else
+            {
+                existing.AccountLogin = login; // Update login if changed
+                existing.AccountType = accountType;
+                _logger.LogInformation("Installation updated: {InstallationId}", installationId);
+            }
+            await db.SaveChangesAsync();
+        }
+        else if (action == "deleted")
+        {
+            if (existing != null)
+            {
+                db.Installations.Remove(existing);
+                await db.SaveChangesAsync();
+                _logger.LogInformation("Installation deleted: {InstallationId}", installationId);
+            }
+        }
     }
 
     /// <summary>
@@ -201,5 +246,56 @@ public class WebhookController : ControllerBase
             System.Text.RegularExpressions.RegexOptions.IgnoreCase);
 
         return match.Success ? match.Groups[1].Value.ToUpperInvariant() : null;
+    }
+
+    private async Task HandleInstallationRepositoriesEvent(JsonDocument payload)
+    {
+        var root = payload.RootElement;
+        var action = root.GetProperty("action").GetString();
+        var installation = root.GetProperty("installation");
+        var installationId = installation.GetProperty("id").GetInt64();
+        var account = installation.GetProperty("account");
+        var login = account.GetProperty("login").GetString() ?? "";
+        var accountType = account.GetProperty("type").GetString() ?? "";
+
+        _logger.LogInformation(
+            "Installation Repositories event: Action={Action}, InstallationId={Id}, Account={Login}",
+            action, installationId, login);
+
+        using var scope = HttpContext.RequestServices.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<ForgeFlow.GitHub.Infrastructure.Persistence.GitHubDbContext>();
+
+        var existing = await db.Installations
+            .FirstOrDefaultAsync(i => i.InstallationId == installationId);
+
+        // repo added/removed fark etmeksizin installation kaydını garanti altına al (upsert)
+        if (existing == null)
+        {
+            var newInstallation = new ForgeFlow.GitHub.Domain.Entities.GitHubInstallation
+            {
+                Id = Guid.NewGuid(),
+                InstallationId = installationId,
+                AccountLogin = login,
+                AccountType = accountType,
+                InstalledAtUtc = DateTime.UtcNow
+            };
+            db.Installations.Add(newInstallation);
+            _logger.LogInformation("New installation registered (via repo event): {InstallationId}", installationId);
+
+            await _publishEndpoint.Publish(new GitHubInstallationCreated(
+                installationId,
+                login,
+                accountType,
+                DateTime.UtcNow
+            ));
+        }
+        else
+        {
+            // Update info if changed
+            existing.AccountLogin = login;
+            existing.AccountType = accountType;
+        }
+
+        await db.SaveChangesAsync();
     }
 }

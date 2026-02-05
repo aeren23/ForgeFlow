@@ -98,7 +98,7 @@ public class ApplyAiPlanHandler : IRequestHandler<ApplyAiPlanCommand, bool>
                     ProjectId = project.Id,
                     ParentIssueId = epic.Id,
                     ReporterId = request.UserId,
-                    AssigneeId = request.UserId, // Tetikleyen kişiye ata
+                    AssigneeId = null, // Otomatik atama yapma, unassigned kalsın.
                     CreatedAtUtc = DateTime.UtcNow
                 };
 

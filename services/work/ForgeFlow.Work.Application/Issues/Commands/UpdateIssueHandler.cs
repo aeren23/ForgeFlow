@@ -1,6 +1,8 @@
+using ForgeFlow.Contracts.Events;
 using ForgeFlow.Work.Application.Abstractions;
 using ForgeFlow.Work.Application.Services;
 using ForgeFlow.Work.Domain.Enums;
+using MassTransit;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,12 +16,14 @@ public class UpdateIssueHandler : IRequestHandler<UpdateIssueCommand, UpdateIssu
     private readonly IWorkDbContext _context;
     private readonly ICurrentUserService _currentUser;
     private readonly IProjectPermissionService _permissionService;
+    private readonly IPublishEndpoint _publishEndpoint;
 
-    public UpdateIssueHandler(IWorkDbContext context, ICurrentUserService currentUser, IProjectPermissionService permissionService)
+    public UpdateIssueHandler(IWorkDbContext context, ICurrentUserService currentUser, IProjectPermissionService permissionService, IPublishEndpoint publishEndpoint)
     {
         _context = context;
         _currentUser = currentUser;
         _permissionService = permissionService;
+        _publishEndpoint = publishEndpoint;
     }
 
     public async Task<UpdateIssueResult> Handle(UpdateIssueCommand request, CancellationToken cancellationToken)
@@ -60,6 +64,8 @@ public class UpdateIssueHandler : IRequestHandler<UpdateIssueCommand, UpdateIssu
             throw new UnauthorizedAccessException($"Role '{role}' is not allowed to edit this issue details.");
         }
 
+        var oldAssigneeId = issue.AssigneeId;
+
         issue.Title = request.Title;
         issue.Description = request.Description;
         issue.Type = request.Type;
@@ -70,6 +76,22 @@ public class UpdateIssueHandler : IRequestHandler<UpdateIssueCommand, UpdateIssu
         issue.UpdatedAtUtc = DateTime.UtcNow;
 
         await _context.SaveChangesAsync(cancellationToken);
+
+        // Eğer yeni bir atama yapıldıysa (Unassign durumu hariç veya ona da bakılabilir ama branch create için unassign önemiz)
+        // Ve Assignee değiştiyse
+        if (issue.AssigneeId != null && issue.AssigneeId != oldAssigneeId)
+        {
+            await _publishEndpoint.Publish(new IssueAssigned(
+                issue.Key,
+                issue.Title,
+                issue.ProjectId,
+                oldAssigneeId,
+                issue.AssigneeId,
+                issue.Project.RepositoryUrl ?? "",
+                issue.Project.DefaultBranch,
+                DateTime.UtcNow
+            ), cancellationToken);
+        }
 
         return new UpdateIssueResult(issue.Id, issue.Key, issue.Title);
     }

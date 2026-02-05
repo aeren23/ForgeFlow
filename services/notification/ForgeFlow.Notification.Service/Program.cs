@@ -73,6 +73,7 @@ builder.Services.AddMassTransit(x =>
     x.AddConsumer<IssueChangedConsumer>();
     x.AddConsumer<NotificationConsumer>();
     x.AddConsumer<AiPlanCompletedConsumer>();
+    x.AddConsumer<GitHubInstallationCreatedConsumer>();
     x.AddConsumer<IssueAssignedConsumer>();
     x.AddConsumer<BranchCreatedConsumer>();
 

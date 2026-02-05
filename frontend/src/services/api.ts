@@ -340,4 +340,54 @@ export const toggleUserBan = async (userId: string) => {
     return api.put<{ message: string, isActive: boolean }>(`/api/admin/users/${userId}/ban`);
 };
 
+// --- GitHub Integration ---
+
+export interface GitHubInstallation {
+    id: string;
+    installationId: number;
+    accountLogin: string;
+    accountType: string;
+    installedAt: string;
+    repositoryCount: number;
+}
+
+export interface GitHubRepository {
+    id: number;
+    name: string;
+    fullName: string;
+    private: boolean;
+    htmlUrl: string;
+    defaultBranch: string;
+}
+
+export interface LinkProjectToRepositoryRequest {
+    projectId: string;
+    installationId: number;
+    repositoryFullName: string;
+    defaultBranch?: string;
+    repositoryId?: number;
+    accountLogin?: string;
+    accountType?: string;
+}
+
+export const listGitHubInstallations = async () => {
+    return api.get<GitHubInstallation[]>('/api/installations');
+};
+
+export const listGitHubRepositories = async (installationId: number) => {
+    return api.get<GitHubRepository[]>(`/api/installations/${installationId}/repositories`);
+};
+
+export const linkProjectToRepository = async (data: LinkProjectToRepositoryRequest) => {
+    return api.post('/api/installations/link', data);
+};
+
+export const getProjectRepositoryConnection = async (projectId: string) => {
+    return api.get(`/api/installations/project/${projectId}`);
+};
+
+export const unlinkProjectRepository = async (projectId: string) => {
+    return api.delete(`/api/installations/project/${projectId}`);
+};
+
 export default api;

@@ -253,6 +253,19 @@ services:
     networks:
       - forgeflow-net
 
+  smee:
+    image: node:18-alpine
+    container_name: forgeflow-smee
+    restart: always
+    environment:
+      GITHUB_WEBHOOK_PROXY_URL: "${GITHUB_WEBHOOK_PROXY_URL}"
+    command: sh -c "npm install -g smee-client && smee -u $${GITHUB_WEBHOOK_PROXY_URL} -t http://github:8080/api/github/webhook"
+    networks:
+      - forgeflow-net
+    depends_on:
+      github:
+        condition: service_started
+
   frontend:
     build:
       context: ../frontend
