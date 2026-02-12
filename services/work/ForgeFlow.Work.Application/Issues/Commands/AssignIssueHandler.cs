@@ -77,7 +77,8 @@ public class AssignIssueHandler : IRequestHandler<AssignIssueCommand, AssignIssu
                     NewAssigneeId: request.AssigneeId,
                     RepositoryUrl: issue.Project.RepositoryUrl,
                     DefaultBranch: issue.Project.DefaultBranch,
-                    Timestamp: DateTime.UtcNow
+                    Timestamp: DateTime.UtcNow,
+                    CreateBranch: request.CreateBranch
                 ), cancellationToken);
 
                 _logger.LogInformation("Successfully published IssueAssigned event for issue {IssueKey} (Repo: {RepositoryUrl})",

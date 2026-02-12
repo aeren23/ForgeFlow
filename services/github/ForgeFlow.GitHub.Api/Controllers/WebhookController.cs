@@ -148,27 +148,63 @@ public class WebhookController : ControllerBase
         var pr = root.GetProperty("pull_request");
         var repoId = root.GetProperty("repository").GetProperty("id").GetInt64();
         var prNumber = pr.GetProperty("number").GetInt32();
+        var branchName = pr.GetProperty("head").GetProperty("ref").GetString() ?? "";
+        var issueKey = ExtractIssueKey(branchName);
 
-        _logger.LogInformation("PR event: Action={Action}, PR=#{PrNumber}", action, prNumber);
+        _logger.LogInformation("PR event: Action={Action}, PR=#{PrNumber}, Branch={Branch}, IssueKey={IssueKey}",
+            action, prNumber, branchName, issueKey ?? "N/A");
 
-        // PR merged olduğunda
-        if (action == "closed" && pr.GetProperty("merged").GetBoolean())
+        if (string.IsNullOrEmpty(issueKey))
         {
-            var branchName = pr.GetProperty("head").GetProperty("ref").GetString() ?? "";
-            var issueKey = ExtractIssueKey(branchName);
+            _logger.LogDebug("No issue key found in branch name: {Branch}", branchName);
+            return;
+        }
 
-            if (!string.IsNullOrEmpty(issueKey))
-            {
-                await _publishEndpoint.Publish(new GitHubPullRequestMerged(
-                    repoId,
-                    prNumber,
-                    issueKey
-                ));
+        switch (action)
+        {
+            // PR açıldığında → Issue otomatik "In Review"
+            case "opened":
+            case "reopened":
+                {
+                    var prTitle = pr.GetProperty("title").GetString() ?? "";
+                    var prUrl = pr.GetProperty("html_url").GetString() ?? "";
+                    var authorLogin = pr.GetProperty("user").GetProperty("login").GetString() ?? "";
 
-                _logger.LogInformation(
-                    "Published GitHubPullRequestMerged: PR=#{PrNumber}, Issue={IssueKey}",
-                    prNumber, issueKey);
-            }
+                    await _publishEndpoint.Publish(new GitHubPullRequestOpened(
+                        repoId, prNumber, issueKey, prTitle, prUrl, authorLogin, DateTime.UtcNow
+                    ));
+
+                    _logger.LogInformation(
+                        "Published GitHubPullRequestOpened: PR=#{PrNumber}, Issue={IssueKey}, Author={Author}",
+                        prNumber, issueKey, authorLogin);
+                    break;
+                }
+
+            // PR merge edildiğinde → Issue otomatik "Done"
+            case "closed" when pr.GetProperty("merged").GetBoolean():
+                {
+                    await _publishEndpoint.Publish(new GitHubPullRequestMerged(
+                        repoId, prNumber, issueKey
+                    ));
+
+                    _logger.LogInformation(
+                        "Published GitHubPullRequestMerged: PR=#{PrNumber}, Issue={IssueKey}",
+                        prNumber, issueKey);
+                    break;
+                }
+
+            // PR merge olmadan kapatıldığında → Issue "In Progress"e geri
+            case "closed":
+                {
+                    await _publishEndpoint.Publish(new GitHubPullRequestClosed(
+                        repoId, prNumber, issueKey, DateTime.UtcNow
+                    ));
+
+                    _logger.LogInformation(
+                        "Published GitHubPullRequestClosed (not merged): PR=#{PrNumber}, Issue={IssueKey}",
+                        prNumber, issueKey);
+                    break;
+                }
         }
     }
 

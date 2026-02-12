@@ -73,3 +73,56 @@ export const listConfirmOwnerTransfer = async (userName: string): Promise<boolea
 
     return result.isConfirmed;
 };
+
+/**
+ * Branch oluşturma onay dialogu - 3 seçenek sunar:
+ * - Confirm: "Yes, Create Branch" → 'branch'
+ * - Deny: "No, Just Assign" → 'no-branch'
+ * - Cancel: İptal → 'cancel'
+ */
+export const confirmBranchCreation = async (issueKey: string): Promise<'branch' | 'no-branch' | 'cancel'> => {
+    const result = await MySwal.fire({
+        title: 'Create Branch?',
+        text: `Do you want to create a feature branch for ${issueKey}?`,
+        icon: 'question',
+        showCancelButton: true,
+        showDenyButton: true,
+        confirmButtonColor: '#3085d6',
+        denyButtonColor: '#6b7280',
+        cancelButtonColor: '#d33',
+        confirmButtonText: '🌿 Yes, Create Branch',
+        denyButtonText: '📌 No, Just Assign',
+        cancelButtonText: 'Cancel',
+        background: '#1e293b',
+        color: '#f8fafc'
+    });
+
+    if (result.isConfirmed) return 'branch';
+    if (result.isDenied) return 'no-branch';
+    return 'cancel';
+};
+
+/**
+ * InReview'a geçiş onay dialogu - kullanıcı drag-and-drop ile InReview'a sürüklediğinde
+ * Onay: true → status değişir
+ * İptal: false → status değişmez
+ */
+export const confirmInReview = async (issueKey: string): Promise<boolean> => {
+    const result = await MySwal.fire({
+        title: 'Move to In Review?',
+        html: `<p>Move <strong>${issueKey}</strong> to <strong>In Review</strong>?</p>
+               <p style="font-size: 0.85em; color: #94a3b8; margin-top: 8px;">
+               💡 When you open a PR this transition is done automatically. Manual transition does not trigger any action on GitHub.
+               </p>`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#f59e0b',
+        cancelButtonColor: '#6b7280',
+        confirmButtonText: '🔍 Yes, Move to Review',
+        cancelButtonText: 'Cancel',
+        background: '#1e293b',
+        color: '#f8fafc'
+    });
+
+    return result.isConfirmed;
+};

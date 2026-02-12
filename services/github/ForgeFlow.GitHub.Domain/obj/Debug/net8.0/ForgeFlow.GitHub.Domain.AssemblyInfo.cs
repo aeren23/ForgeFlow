@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ForgeFlow.GitHub.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f07ed9215022eab1d8fbaa42319fac88a5f0fb66")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5ad9ad723b97b1a71880d37a04ed97f569fa9159")]
 [assembly: System.Reflection.AssemblyProductAttribute("ForgeFlow.GitHub.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ForgeFlow.GitHub.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

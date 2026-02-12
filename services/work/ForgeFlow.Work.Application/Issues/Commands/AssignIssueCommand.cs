@@ -8,7 +8,8 @@ namespace ForgeFlow.Work.Application.Issues.Commands;
 public record AssignIssueCommand(
     string Key,
     string? AssigneeId,
-    string? UserId
+    string? UserId,
+    bool CreateBranch = true
 ) : IRequest<AssignIssueResult>;
 
 public record AssignIssueResult(

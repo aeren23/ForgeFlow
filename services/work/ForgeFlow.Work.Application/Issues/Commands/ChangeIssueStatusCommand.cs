@@ -9,7 +9,8 @@ namespace ForgeFlow.Work.Application.Issues.Commands;
 public record ChangeIssueStatusCommand(
     string Key,
     IssueStatus NewStatus,
-    string? UserId = null
+    string? UserId = null,
+    bool IsSystemAction = false
 ) : IRequest<ChangeIssueStatusResult>;
 
 public record ChangeIssueStatusResult(

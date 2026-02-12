@@ -3,7 +3,7 @@ import { X, CheckSquare, User, Clock, ArrowUp, ArrowRight, AlertOctagon, FileCod
 import { getIssues, deleteIssue, assignIssue, IssueType, IssuePriority, IssueStatus, IssueStatusLabels, type Issue, type UserDto } from '../../services/api';
 import { toast } from '../../store/uiStore';
 import type { ProjectPermissions } from '../../hooks/useProjectPermissions';
-import { confirmAction, showSuccess, showError } from '../../utils/sweetAlert';
+import { confirmAction, confirmBranchCreation, showSuccess, showError } from '../../utils/sweetAlert';
 
 interface ProjectMember {
     userId: string;
@@ -245,11 +245,20 @@ export function IssueDetailModal({ isOpen, onClose, issue, permissions, usersMap
                                                             <button
                                                                 key={member.userId}
                                                                 onClick={async () => {
-                                                                    setAssigningTo(member.userId);
                                                                     setShowAssigneeDropdown(false);
+                                                                    // Ask user if they want to create a branch
+                                                                    const choice = await confirmBranchCreation(issue.key);
+                                                                    if (choice === 'cancel') return;
+
+                                                                    const createBranch = choice === 'branch';
+                                                                    setAssigningTo(member.userId);
                                                                     try {
-                                                                        await assignIssue(issue.key, member.userId);
-                                                                        toast.success(`Issue assigned to ${displayName}`);
+                                                                        await assignIssue(issue.key, member.userId, createBranch);
+                                                                        toast.success(
+                                                                            createBranch
+                                                                                ? `Issue assigned to ${displayName} (branch will be created)`
+                                                                                : `Issue assigned to ${displayName}`
+                                                                        );
                                                                         onAssignSuccess?.();
                                                                     } catch (error) {
                                                                         toast.error('Failed to assign issue');

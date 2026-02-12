@@ -36,13 +36,22 @@ public class ChangeIssueStatusHandler : IRequestHandler<ChangeIssueStatusCommand
             ?? throw new InvalidOperationException($"Issue '{request.Key}' not found");
 
         // Permission Check
-        var userId = request.UserId ?? throw new UnauthorizedAccessException("User ID is required for status transitions");
-        var member = issue.Project.Members.FirstOrDefault(m => m.UserId == userId);
-        var role = member?.Role ?? ProjectRole.Viewer;
+        // Resolve userId — system actions use "SYSTEM" as the actor
+        var userId = request.UserId ?? (request.IsSystemAction ? "SYSTEM" : null);
 
-        if (!_permissionService.CanTransitionIssue(role, issue.Status, request.NewStatus, issue.AssigneeId, userId))
+        // Permission Check — skip for system actions (webhook-triggered transitions)
+        if (!request.IsSystemAction)
         {
-            throw new UnauthorizedAccessException("You don't have permission to perform this status transition.");
+            if (userId == null)
+                throw new UnauthorizedAccessException("User ID is required for status transitions");
+
+            var member = issue.Project.Members.FirstOrDefault(m => m.UserId == userId);
+            var role = member?.Role ?? ProjectRole.Viewer;
+
+            if (!_permissionService.CanTransitionIssue(role, issue.Status, request.NewStatus, issue.AssigneeId, userId))
+            {
+                throw new UnauthorizedAccessException("You don't have permission to perform this status transition.");
+            }
         }
 
         var oldStatus = issue.Status;

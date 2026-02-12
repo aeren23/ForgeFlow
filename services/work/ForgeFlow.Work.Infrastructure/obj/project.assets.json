@@ -4132,11 +4132,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\work\\ForgeFlow.Work.Infrastructure\\ForgeFlow.Work.Infrastructure.csproj",
+      "projectUniqueName": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\work\\ForgeFlow.Work.Infrastructure\\ForgeFlow.Work.Infrastructure.csproj",
       "projectName": "ForgeFlow.Work.Infrastructure",
-      "projectPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\work\\ForgeFlow.Work.Infrastructure\\ForgeFlow.Work.Infrastructure.csproj",
+      "projectPath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\work\\ForgeFlow.Work.Infrastructure\\ForgeFlow.Work.Infrastructure.csproj",
       "packagesPath": "C:\\Users\\alihe\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\work\\ForgeFlow.Work.Infrastructure\\obj\\",
+      "outputPath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\work\\ForgeFlow.Work.Infrastructure\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -4157,11 +4157,11 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\work\\ForgeFlow.Work.Application\\ForgeFlow.Work.Application.csproj": {
-              "projectPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\work\\ForgeFlow.Work.Application\\ForgeFlow.Work.Application.csproj"
+            "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\work\\ForgeFlow.Work.Application\\ForgeFlow.Work.Application.csproj": {
+              "projectPath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\work\\ForgeFlow.Work.Application\\ForgeFlow.Work.Application.csproj"
             },
-            "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\work\\ForgeFlow.Work.Domain\\ForgeFlow.Work.Domain.csproj": {
-              "projectPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\work\\ForgeFlow.Work.Domain\\ForgeFlow.Work.Domain.csproj"
+            "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\work\\ForgeFlow.Work.Domain\\ForgeFlow.Work.Domain.csproj": {
+              "projectPath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\work\\ForgeFlow.Work.Domain\\ForgeFlow.Work.Domain.csproj"
             }
           }
         }

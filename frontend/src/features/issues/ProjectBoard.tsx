@@ -21,6 +21,7 @@ import { CreateIssueModal } from './CreateIssueModal';
 import { IssueDetailModal } from './IssueDetailModal';
 import { toast } from '../../store/uiStore';
 import { useAuthStore } from '../../store/authStore';
+import { confirmInReview } from '../../utils/sweetAlert';
 import { useProjectPermissions } from '../../hooks/useProjectPermissions';
 
 interface ProjectBoardProps {
@@ -203,6 +204,12 @@ export function ProjectBoard({ project }: ProjectBoardProps) {
         }
 
         if (newStatus === undefined || newStatus === issue.status) return;
+
+        // InReview'a geçişte onay dialogu göster
+        if (newStatus === IssueStatus.InReview && issue.status !== IssueStatus.InReview) {
+            const confirmed = await confirmInReview(issue.key);
+            if (!confirmed) return;
+        }
 
         // --- Smart Validation Logic ---
         let shouldAutoAssign = false;

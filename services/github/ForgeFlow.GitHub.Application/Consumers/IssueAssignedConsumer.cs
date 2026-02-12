@@ -49,6 +49,13 @@ public class IssueAssignedConsumer : IConsumer<IssueAssigned>
             return;
         }
 
+        // Branch oluşturma opsiyonel - kullanıcı istemezse çık
+        if (!msg.CreateBranch)
+        {
+            _logger.LogInformation("Skipping branch creation for issue {IssueKey} - user opted out", msg.IssueKey);
+            return;
+        }
+
         if (string.IsNullOrEmpty(msg.RepositoryUrl))
         {
             _logger.LogDebug("Skipping - no repository URL configured for project");
@@ -159,15 +166,15 @@ public class IssueAssignedConsumer : IConsumer<IssueAssigned>
             // https://github.com/owner/repo veya https://github.com/owner/repo.git
             var uri = new Uri(url);
             var path = uri.AbsolutePath.Trim('/');
-            
+
             // .git uzantısını kaldır
             if (path.EndsWith(".git"))
                 path = path[..^4];
-            
+
             var parts = path.Split('/');
             if (parts.Length >= 2)
                 return $"{parts[0]}/{parts[1]}";
-            
+
             return null;
         }
         catch

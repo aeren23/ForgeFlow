@@ -142,7 +142,7 @@ public class IssuesController : ControllerBase
     {
         try
         {
-            var result = await _mediator.Send(new AssignIssueCommand(key, request.AssigneeId, _currentUser.UserId));
+            var result = await _mediator.Send(new AssignIssueCommand(key, request.AssigneeId, _currentUser.UserId, request.CreateBranch));
             return Ok(result);
         }
         catch (UnauthorizedAccessException ex)
@@ -234,7 +234,7 @@ public record UpdateIssueRequest(
 );
 
 public record ChangeStatusRequest(IssueStatus Status);
-public record AssignIssueRequest(string? AssigneeId);
+public record AssignIssueRequest(string? AssigneeId, bool CreateBranch = true);
 
 /// <summary>
 /// Request for AI plan generation

@@ -50,7 +50,8 @@ public record IssueAssigned(
     string? NewAssigneeId,
     string? RepositoryUrl,
     string DefaultBranch,
-    DateTime Timestamp
+    DateTime Timestamp,
+    bool CreateBranch = true
 );
 
 /// <summary>
@@ -73,6 +74,31 @@ public record GitHubPullRequestMerged(
     long RepositoryId,
     int PullNumber,
     string IssueKey
+);
+
+/// <summary>
+/// GitHub Webhook → Work Service
+/// PR açıldığında issue durumu InReview olarak güncellenir.
+/// </summary>
+public record GitHubPullRequestOpened(
+    long RepositoryId,
+    int PullNumber,
+    string IssueKey,
+    string PrTitle,
+    string PrUrl,
+    string AuthorLogin,
+    DateTime Timestamp
+);
+
+/// <summary>
+/// GitHub Webhook → Work Service
+/// PR merge olmadan kapatıldığında issue InProgress'e geri döner.
+/// </summary>
+public record GitHubPullRequestClosed(
+    long RepositoryId,
+    int PullNumber,
+    string IssueKey,
+    DateTime Timestamp
 );
 
 /// <summary>

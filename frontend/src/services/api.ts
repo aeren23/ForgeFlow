@@ -168,8 +168,8 @@ export const generateProjectAiPlan = async (projectKey: string, data: GenerateAi
 };
 
 // Issue assignment
-export const assignIssue = async (issueKey: string, assigneeId: string | null) => {
-    return api.post(`/api/issues/${issueKey}/assign`, { assigneeId });
+export const assignIssue = async (issueKey: string, assigneeId: string | null, createBranch: boolean = true) => {
+    return api.post(`/api/issues/${issueKey}/assign`, { assigneeId, createBranch });
 };
 
 // Flag to prevent multiple refresh attempts

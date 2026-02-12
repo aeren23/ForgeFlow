@@ -20,7 +20,7 @@ public class ForgeHub : Hub
     public override async Task OnConnectedAsync()
     {
         var userId = Context.UserIdentifier;
-        _logger.LogInformation("User {UserId} connected to ForgeHub. ConnectionId: {ConnectionId}", 
+        _logger.LogInformation("User {UserId} connected to ForgeHub. ConnectionId: {ConnectionId}",
             userId, Context.ConnectionId);
 
         // Join user-specific group for targeted messages
@@ -35,7 +35,7 @@ public class ForgeHub : Hub
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
         var userId = Context.UserIdentifier;
-        _logger.LogInformation("User {UserId} disconnected from ForgeHub. ConnectionId: {ConnectionId}", 
+        _logger.LogInformation("User {UserId} disconnected from ForgeHub. ConnectionId: {ConnectionId}",
             userId, Context.ConnectionId);
 
         if (!string.IsNullOrEmpty(userId))
@@ -59,6 +59,7 @@ public class ForgeHub : Hub
     /// <summary>
     /// Leave a project-specific group.
     /// </summary>
+    /// 
     public async Task LeaveProjectGroup(string projectId)
     {
         var userId = Context.UserIdentifier;
