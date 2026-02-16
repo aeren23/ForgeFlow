@@ -75,7 +75,9 @@ builder.Services.AddMassTransit(x =>
     x.AddConsumer<AiPlanCompletedConsumer>();
     x.AddConsumer<GitHubInstallationCreatedConsumer>();
     x.AddConsumer<IssueAssignedConsumer>();
+    x.AddConsumer<IssueAssignedConsumer>();
     x.AddConsumer<BranchCreatedConsumer>();
+    x.AddConsumer<CodeReviewUpdatedConsumer>();
 
     x.UsingRabbitMq((context, cfg) =>
     {

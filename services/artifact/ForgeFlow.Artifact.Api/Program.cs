@@ -19,6 +19,8 @@ builder.Services.AddMassTransit(x =>
     x.SetKebabCaseEndpointNameFormatter();
     x.AddConsumer<ArtifactGeneratedConsumer>();
     x.AddConsumer<AiPlanGeneratedConsumer>();
+    x.AddConsumer<CodeReviewCompletedConsumer>();
+    x.AddConsumer<PullRequestStatusChangedConsumer>();
 
     x.UsingRabbitMq((context, cfg) =>
     {
@@ -43,6 +45,18 @@ builder.Services.AddMassTransit(x =>
         {
             e.UseMessageRetry(r => r.Incremental(3, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(2)));
             e.ConfigureConsumer<AiPlanGeneratedConsumer>(context);
+        });
+
+        cfg.ReceiveEndpoint("q.artifact.code-review-completed", e =>
+        {
+            e.UseMessageRetry(r => r.Incremental(3, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(2)));
+            e.ConfigureConsumer<CodeReviewCompletedConsumer>(context);
+        });
+
+        cfg.ReceiveEndpoint("q.artifact.pr-status-changed", e =>
+        {
+            e.UseMessageRetry(r => r.Incremental(3, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(2)));
+            e.ConfigureConsumer<PullRequestStatusChangedConsumer>(context);
         });
     });
 });

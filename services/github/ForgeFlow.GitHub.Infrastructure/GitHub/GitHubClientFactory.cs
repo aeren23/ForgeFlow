@@ -1,10 +1,10 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using Octokit;
 using Polly;
 using Polly.Retry;
@@ -24,7 +24,7 @@ public class GitHubClientFactory : IGitHubClientFactory
     {
         _config = config;
         _logger = logger;
-        
+
         _retryPolicy = Policy
             .Handle<ApiException>(ex => ex.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
             .Or<ApiException>(ex => ex.StatusCode >= System.Net.HttpStatusCode.InternalServerError)
@@ -37,7 +37,7 @@ public class GitHubClientFactory : IGitHubClientFactory
         {
             // 1. Base64 Private Key → PEM string
             string pemKey;
-            try 
+            try
             {
                 var base64Key = _config["GitHub:PrivateKeyBase64"]
                     ?? throw new InvalidOperationException("GitHub:PrivateKeyBase64 not configured");
@@ -45,10 +45,10 @@ public class GitHubClientFactory : IGitHubClientFactory
                 base64Key = base64Key.Trim().Replace(" ", "").Replace("\n", "").Replace("\r", "");
                 var pemBytes = Convert.FromBase64String(base64Key);
                 pemKey = Encoding.UTF8.GetString(pemBytes);
-                
+
                 // Log key format
                 var lines = pemKey.Split('\n', StringSplitOptions.RemoveEmptyEntries);
-                 _logger.LogInformation("Parsed PEM key: Length={Length}, Lines={LineCount}", pemKey.Length, lines.Length);
+                _logger.LogInformation("Parsed PEM key: Length={Length}, Lines={LineCount}", pemKey.Length, lines.Length);
             }
             catch (Exception ex)
             {
@@ -83,25 +83,30 @@ public class GitHubClientFactory : IGitHubClientFactory
 
     private string CreateJwtToken(string appId, string pemKey)
     {
-        using var rsa = RSA.Create();
-        rsa.ImportFromPem(pemKey);
+        // RSA parametrelerini export et, sonra RSA nesnesini hemen dispose et.
+        // RsaSecurityKey'e RSAParameters (struct) ver — dispose edilecek obje yok.
+        RSAParameters rsaParams;
+        using (var rsa = RSA.Create())
+        {
+            rsa.ImportFromPem(pemKey);
+            rsaParams = rsa.ExportParameters(true);
+        }
 
-        var securityKey = new RsaSecurityKey(rsa);
+        var securityKey = new RsaSecurityKey(rsaParams);
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.RsaSha256);
 
         var now = DateTimeOffset.UtcNow;
-        
-        // Manuel Payload oluşturma (kontrol bizde olsun)
+
         var payload = new JwtPayload
         {
-            { "iat", now.AddSeconds(-60).ToUnixTimeSeconds() }, // Clock skew
+            { "iat", now.AddSeconds(-60).ToUnixTimeSeconds() },
             { "exp", now.AddMinutes(5).ToUnixTimeSeconds() },
-            { "iss", appId } // String olarak
+            { "iss", appId }
         };
 
         var header = new JwtHeader(credentials);
         var token = new JwtSecurityToken(header, payload);
-        
+
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 }

@@ -5,6 +5,7 @@ public class ArtifactRevision
     public Guid Id { get; private set; } = Guid.NewGuid();
 
     public Guid ArtifactId { get; private set; }
+    public Artifact Artifact { get; private set; } = null!; // Navigation property
     public int RevisionNo { get; private set; }
 
     public string ContentJson { get; private set; } = "{}";
@@ -33,5 +34,10 @@ public class ArtifactRevision
         CorrelationId = correlationId;
         Metadata = metadata;
     }
+
+    /// <summary>
+    /// Metadata JSON'ını günceller (örn: PR durumu ekleme).
+    /// </summary>
+    public void UpdateMetadata(string metadata) => Metadata = metadata;
 }
 

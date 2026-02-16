@@ -40,25 +40,34 @@ public class UpsertArtifactRevisionHandler : IRequestHandler<UpsertArtifactRevis
 
         if (artifact == null)
         {
-            // Create new artifact using the proper constructor
             artifact = new ArtifactEntity(
                 request.ProjectId,
                 request.IssueId,
                 request.Type
             );
 
-            await _repository.AddAsync(artifact, cancellationToken);
+            // Calculate content hash
+            var contentHash = ComputeHash(request.ContentJson);
+
+            // Add revision BEFORE adding to repository to ensure entire graph is marked as 'Added'
+            var revision = artifact.AddRevision(request.ContentJson, contentHash, request.CorrelationId, request.Metadata);
+
+            _repository.Add(artifact);
+            await _repository.SaveChangesAsync(cancellationToken);
+
+            return revision.RevisionNo;
         }
+        else
+        {
+            // Artifact var, yeni revision ekle
+            var contentHash = ComputeHash(request.ContentJson);
+            var revision = artifact.AddRevision(request.ContentJson, contentHash, request.CorrelationId, request.Metadata);
 
-        // Calculate content hash
-        var contentHash = ComputeHash(request.ContentJson);
+            // EF tracker nesneyi zaten izliyor olmalı, SaveChanges yeterli olacaktır
+            await _repository.SaveChangesAsync(cancellationToken);
 
-        // Add revision using the domain method (with correlationId for idempotency)
-        var revision = artifact.AddRevision(request.ContentJson, contentHash, request.CorrelationId, request.Metadata);
-
-        await _repository.SaveChangesAsync(cancellationToken);
-
-        return revision.RevisionNo;
+            return revision.RevisionNo;
+        }
     }
 
     private static string ComputeHash(string content)

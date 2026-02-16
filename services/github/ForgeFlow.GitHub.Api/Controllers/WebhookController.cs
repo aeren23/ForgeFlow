@@ -170,9 +170,47 @@ public class WebhookController : ControllerBase
                     var prUrl = pr.GetProperty("html_url").GetString() ?? "";
                     var authorLogin = pr.GetProperty("user").GetProperty("login").GetString() ?? "";
 
+                    // Repo bilgileri
+                    var repoFullName = root.GetProperty("repository").GetProperty("full_name").GetString() ?? "";
+                    var repoParts = repoFullName.Split('/');
+                    var repoOwner = repoParts.Length >= 2 ? repoParts[0] : "";
+                    var repoName = repoParts.Length >= 2 ? repoParts[1] : "";
+
+                    // Installation ID (GitHub App webhook payload'ında bulunur)
+                    long installationId = 0;
+                    if (root.TryGetProperty("installation", out var installation))
+                    {
+                        installationId = installation.GetProperty("id").GetInt64();
+                    }
+
+                    // Issue durumu güncelleme event'i
                     await _publishEndpoint.Publish(new GitHubPullRequestOpened(
                         repoId, prNumber, issueKey, prTitle, prUrl, authorLogin, DateTime.UtcNow
                     ));
+
+                    // AI Code Review tetikleme event'i
+                    if (installationId > 0)
+                    {
+                        await _publishEndpoint.Publish(new CodeReviewRequested(
+                            IssueKey: issueKey,
+                            ProjectId: "", // Consumer, RepositoryConnection tablosundan çözecek
+                            PullNumber: prNumber,
+                            PrTitle: prTitle,
+                            PrUrl: prUrl,
+                            RepositoryOwner: repoOwner,
+                            RepositoryName: repoName,
+                            InstallationId: installationId,
+                            Timestamp: DateTime.UtcNow
+                        ));
+
+                        _logger.LogInformation(
+                            "Published CodeReviewRequested: PR=#{PrNumber}, Issue={IssueKey}, Repo={Owner}/{Repo}",
+                            prNumber, issueKey, repoOwner, repoName);
+                    }
+
+                    // PR durumu takibi için Artifact Service'e bildir
+                    await _publishEndpoint.Publish(new PullRequestStatusChanged(
+                        issueKey, prNumber, "open", DateTime.UtcNow));
 
                     _logger.LogInformation(
                         "Published GitHubPullRequestOpened: PR=#{PrNumber}, Issue={IssueKey}, Author={Author}",
@@ -187,6 +225,10 @@ public class WebhookController : ControllerBase
                         repoId, prNumber, issueKey
                     ));
 
+                    // PR durumu takibi
+                    await _publishEndpoint.Publish(new PullRequestStatusChanged(
+                        issueKey, prNumber, "merged", DateTime.UtcNow));
+
                     _logger.LogInformation(
                         "Published GitHubPullRequestMerged: PR=#{PrNumber}, Issue={IssueKey}",
                         prNumber, issueKey);
@@ -199,6 +241,10 @@ public class WebhookController : ControllerBase
                     await _publishEndpoint.Publish(new GitHubPullRequestClosed(
                         repoId, prNumber, issueKey, DateTime.UtcNow
                     ));
+
+                    // PR durumu takibi
+                    await _publishEndpoint.Publish(new PullRequestStatusChanged(
+                        issueKey, prNumber, "closed", DateTime.UtcNow));
 
                     _logger.LogInformation(
                         "Published GitHubPullRequestClosed (not merged): PR=#{PrNumber}, Issue={IssueKey}",

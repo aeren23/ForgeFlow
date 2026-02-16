@@ -1,4 +1,5 @@
 using ForgeFlow.Artifact.Application.Abstractions;
+using ForgeFlow.Artifact.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using ArtifactEntity = ForgeFlow.Artifact.Domain.Entities.Artifact;
 using ArtifactRevisionEntity = ForgeFlow.Artifact.Domain.Entities.ArtifactRevision;
@@ -16,8 +17,12 @@ public class ArtifactRepository : IArtifactRepository
             .Include(a => a.Revisions)
             .FirstOrDefaultAsync(a => a.ProjectId == projectId && a.IssueId == issueId && a.Type == type, ct);
 
-    public Task AddAsync(ArtifactEntity artifact, CancellationToken ct)
-        => _db.Artifacts.AddAsync(artifact, ct).AsTask();
+    public Task<ArtifactRevisionEntity?> FindRevisionByCorrelationIdAsync(string correlationId, string type, CancellationToken ct)
+        => _db.ArtifactRevisions
+            .Include(r => r.Artifact)
+            .FirstOrDefaultAsync(r => r.CorrelationId == correlationId && r.Artifact.Type == type, ct);
+
+    public void Add(ArtifactEntity artifact) => _db.Artifacts.Add(artifact);
 
     public Task SaveChangesAsync(CancellationToken ct)
         => _db.SaveChangesAsync(ct);

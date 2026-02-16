@@ -18,6 +18,7 @@ public class ArtifactDbContext : DbContext
         modelBuilder.Entity<ArtifactEntity>(b =>
         {
             b.HasKey(x => x.Id);
+            b.Property(x => x.Id).ValueGeneratedNever();
 
             b.Property(x => x.ProjectId).IsRequired();
             b.Property(x => x.IssueId).IsRequired();
@@ -31,7 +32,7 @@ public class ArtifactDbContext : DbContext
             nav!.SetPropertyAccessMode(PropertyAccessMode.Field);
 
             b.HasMany(x => x.Revisions)
-                .WithOne()
+                .WithOne(r => r.Artifact)
                 .HasForeignKey(nameof(ArtifactRevisionEntity.ArtifactId))
                 .OnDelete(DeleteBehavior.Cascade);
         });
@@ -39,6 +40,7 @@ public class ArtifactDbContext : DbContext
         modelBuilder.Entity<ArtifactRevisionEntity>(b =>
         {
             b.HasKey(x => x.Id);
+            b.Property(x => x.Id).ValueGeneratedNever();
 
             b.Property(x => x.ContentJson).IsRequired();
             b.Property(x => x.ContentHash).IsRequired();

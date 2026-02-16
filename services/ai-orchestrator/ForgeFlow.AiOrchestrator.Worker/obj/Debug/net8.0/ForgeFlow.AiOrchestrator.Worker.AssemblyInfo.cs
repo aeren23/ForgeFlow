@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ForgeFlow.AiOrchestrator.Worker")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5ad9ad723b97b1a71880d37a04ed97f569fa9159")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e21f21ab71db4a371e917a4314c645fa07027d36")]
 [assembly: System.Reflection.AssemblyProductAttribute("ForgeFlow.AiOrchestrator.Worker")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ForgeFlow.AiOrchestrator.Worker")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

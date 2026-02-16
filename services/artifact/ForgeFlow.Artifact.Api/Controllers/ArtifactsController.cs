@@ -22,4 +22,17 @@ public class ArtifactsController : ControllerBase
         var dto = await _mediator.Send(new GetLatestArtifactQuery(projectId, issueId, type), ct);
         return dto is null ? NotFound() : Ok(dto);
     }
+
+    /// <summary>
+    /// Bir issue'ya ait tüm AI Code Review'ları döndürür (en yeniden eskiye sıralı)
+    /// </summary>
+    [HttpGet("reviews")]
+    public async Task<IActionResult> GetCodeReviews(
+        [FromQuery] string issueId,
+        [FromQuery] string projectId,
+        CancellationToken ct = default)
+    {
+        var reviews = await _mediator.Send(new GetCodeReviewsQuery(projectId, issueId), ct);
+        return Ok(reviews);
+    }
 }

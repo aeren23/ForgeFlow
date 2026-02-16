@@ -172,6 +172,23 @@ export const assignIssue = async (issueKey: string, assigneeId: string | null, c
     return api.post(`/api/issues/${issueKey}/assign`, { assigneeId, createBranch });
 };
 
+// --- AI Code Reviews ---
+
+export interface CodeReviewDto {
+    artifactId: string;
+    revisionNo: number;
+    contentJson: string;
+    correlationId?: string;
+    metadata?: string;
+    createdAtUtc: string;
+}
+
+export const getCodeReviews = async (issueId: string, projectId: string) => {
+    return api.get<CodeReviewDto[]>(`/api/artifacts/reviews`, {
+        params: { issueId, projectId }
+    });
+};
+
 // Flag to prevent multiple refresh attempts
 let isRefreshing = false;
 let failedQueue: Array<{

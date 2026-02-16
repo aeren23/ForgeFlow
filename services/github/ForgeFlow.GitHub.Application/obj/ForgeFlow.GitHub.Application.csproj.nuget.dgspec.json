@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Application\\ForgeFlow.GitHub.Application.csproj": {}
+    "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Application\\ForgeFlow.GitHub.Application.csproj": {}
   },
   "projects": {
-    "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\contracts\\ForgeFlow.Contracts\\ForgeFlow.Contracts.csproj": {
+    "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\contracts\\ForgeFlow.Contracts\\ForgeFlow.Contracts.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\contracts\\ForgeFlow.Contracts\\ForgeFlow.Contracts.csproj",
+        "projectUniqueName": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\contracts\\ForgeFlow.Contracts\\ForgeFlow.Contracts.csproj",
         "projectName": "ForgeFlow.Contracts",
-        "projectPath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\contracts\\ForgeFlow.Contracts\\ForgeFlow.Contracts.csproj",
+        "projectPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\contracts\\ForgeFlow.Contracts\\ForgeFlow.Contracts.csproj",
         "packagesPath": "C:\\Users\\alihe\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\contracts\\ForgeFlow.Contracts\\obj\\",
+        "outputPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\contracts\\ForgeFlow.Contracts\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -69,14 +69,14 @@
         }
       }
     },
-    "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Application\\ForgeFlow.GitHub.Application.csproj": {
+    "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Application\\ForgeFlow.GitHub.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Application\\ForgeFlow.GitHub.Application.csproj",
+        "projectUniqueName": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Application\\ForgeFlow.GitHub.Application.csproj",
         "projectName": "ForgeFlow.GitHub.Application",
-        "projectPath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Application\\ForgeFlow.GitHub.Application.csproj",
+        "projectPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Application\\ForgeFlow.GitHub.Application.csproj",
         "packagesPath": "C:\\Users\\alihe\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Application\\obj\\",
+        "outputPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Application\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -97,14 +97,14 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\contracts\\ForgeFlow.Contracts\\ForgeFlow.Contracts.csproj": {
-                "projectPath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\contracts\\ForgeFlow.Contracts\\ForgeFlow.Contracts.csproj"
+              "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\contracts\\ForgeFlow.Contracts\\ForgeFlow.Contracts.csproj": {
+                "projectPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\contracts\\ForgeFlow.Contracts\\ForgeFlow.Contracts.csproj"
               },
-              "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Domain\\ForgeFlow.GitHub.Domain.csproj": {
-                "projectPath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Domain\\ForgeFlow.GitHub.Domain.csproj"
+              "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Domain\\ForgeFlow.GitHub.Domain.csproj": {
+                "projectPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Domain\\ForgeFlow.GitHub.Domain.csproj"
               },
-              "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Infrastructure\\ForgeFlow.GitHub.Infrastructure.csproj": {
-                "projectPath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Infrastructure\\ForgeFlow.GitHub.Infrastructure.csproj"
+              "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Infrastructure\\ForgeFlow.GitHub.Infrastructure.csproj": {
+                "projectPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Infrastructure\\ForgeFlow.GitHub.Infrastructure.csproj"
               }
             }
           }
@@ -132,6 +132,10 @@
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[8.0.11, )"
+            },
+            "Microsoft.Extensions.Http": {
+              "target": "Package",
+              "version": "[8.0.1, )"
             }
           },
           "imports": [
@@ -154,14 +158,14 @@
         }
       }
     },
-    "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Domain\\ForgeFlow.GitHub.Domain.csproj": {
+    "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Domain\\ForgeFlow.GitHub.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Domain\\ForgeFlow.GitHub.Domain.csproj",
+        "projectUniqueName": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Domain\\ForgeFlow.GitHub.Domain.csproj",
         "projectName": "ForgeFlow.GitHub.Domain",
-        "projectPath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Domain\\ForgeFlow.GitHub.Domain.csproj",
+        "projectPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Domain\\ForgeFlow.GitHub.Domain.csproj",
         "packagesPath": "C:\\Users\\alihe\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Domain\\obj\\",
+        "outputPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -219,14 +223,14 @@
         }
       }
     },
-    "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Infrastructure\\ForgeFlow.GitHub.Infrastructure.csproj": {
+    "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Infrastructure\\ForgeFlow.GitHub.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Infrastructure\\ForgeFlow.GitHub.Infrastructure.csproj",
+        "projectUniqueName": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Infrastructure\\ForgeFlow.GitHub.Infrastructure.csproj",
         "projectName": "ForgeFlow.GitHub.Infrastructure",
-        "projectPath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Infrastructure\\ForgeFlow.GitHub.Infrastructure.csproj",
+        "projectPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Infrastructure\\ForgeFlow.GitHub.Infrastructure.csproj",
         "packagesPath": "C:\\Users\\alihe\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Infrastructure\\obj\\",
+        "outputPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -247,8 +251,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Domain\\ForgeFlow.GitHub.Domain.csproj": {
-                "projectPath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Domain\\ForgeFlow.GitHub.Domain.csproj"
+              "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Domain\\ForgeFlow.GitHub.Domain.csproj": {
+                "projectPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\github\\ForgeFlow.GitHub.Domain\\ForgeFlow.GitHub.Domain.csproj"
               }
             }
           }

@@ -112,3 +112,25 @@ public record GitHubPushReceived(
     string[] ModifiedFiles,
     DateTime Timestamp
 );
+
+/// <summary>
+/// GitHub Webhook → Artifact Service
+/// PR durumu değiştiğinde artifact metadata'sını günceller.
+/// </summary>
+public record PullRequestStatusChanged(
+    string IssueKey,
+    int PullNumber,
+    string Status,        // "open", "merged", "closed"
+    DateTime Timestamp
+);
+
+/// <summary>
+/// Artifact Service → Notification Service
+/// CODE_REVIEW metadata güncellendiğinde SignalR ile frontend'e bildirir.
+/// </summary>
+public record CodeReviewUpdated(
+    string IssueKey,
+    Guid ProjectId,
+    int PullNumber,
+    string PrStatus       // "open", "merged", "closed"
+);

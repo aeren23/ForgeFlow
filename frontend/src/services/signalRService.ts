@@ -28,6 +28,12 @@ export interface NotificationMessage {
     timestamp: string;
 }
 
+export interface ReviewUpdateMessage {
+    issueKey: string;
+    pullNumber: number;
+    prStatus: 'open' | 'merged' | 'closed';
+}
+
 type EventCallback<T> = (message: T) => void;
 
 const eventHandlers: {
@@ -35,11 +41,13 @@ const eventHandlers: {
     boardUpdate: EventCallback<BoardUpdateMessage>[];
     notification: EventCallback<NotificationMessage>[];
     installationListUpdated: EventCallback<{ installationId: number; accountLogin: string }>[];
+    reviewUpdate: EventCallback<ReviewUpdateMessage>[];
 } = {
     aiProgress: [],
     boardUpdate: [],
     notification: [],
     installationListUpdated: [],
+    reviewUpdate: [],
 };
 
 export const signalRService = {
@@ -86,6 +94,11 @@ export const signalRService = {
         connection.on('InstallationListUpdated', (msg: { installationId: number; accountLogin: string }) => {
             console.log('[SignalR] InstallationListUpdated:', msg);
             eventHandlers.installationListUpdated.forEach(cb => cb(msg));
+        });
+
+        connection.on('ReviewUpdate', (msg: ReviewUpdateMessage) => {
+            console.log('[SignalR] ReviewUpdate:', msg);
+            eventHandlers.reviewUpdate.forEach(cb => cb(msg));
         });
 
         // Connection state change handlers
@@ -182,6 +195,17 @@ export const signalRService = {
         return () => {
             const idx = eventHandlers.installationListUpdated.indexOf(callback);
             if (idx > -1) eventHandlers.installationListUpdated.splice(idx, 1);
+        };
+    },
+
+    /**
+     * Subscribe to code review update events.
+     */
+    onReviewUpdate(callback: EventCallback<ReviewUpdateMessage>): () => void {
+        eventHandlers.reviewUpdate.push(callback);
+        return () => {
+            const idx = eventHandlers.reviewUpdate.indexOf(callback);
+            if (idx > -1) eventHandlers.reviewUpdate.splice(idx, 1);
         };
     },
 

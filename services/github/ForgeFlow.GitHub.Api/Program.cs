@@ -27,11 +27,21 @@ builder.Services.AddDbContext<GitHubDbContext>(options =>
 builder.Services.AddSingleton<IGitHubClientFactory, GitHubClientFactory>();
 builder.Services.AddScoped<IBranchService, BranchService>();
 builder.Services.AddScoped<IRepositoryContentService, RepositoryContentService>();
+builder.Services.AddScoped<IPullRequestService, PullRequestService>();
+
+// HttpClient for inter-service communication (Artifact Service)
+builder.Services.AddHttpClient("ArtifactService", client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["Services:ArtifactApiUrl"] ?? "http://localhost:5290");
+    client.Timeout = TimeSpan.FromSeconds(10);
+});
 
 // MassTransit with RabbitMQ
 builder.Services.AddMassTransit(x =>
 {
     x.AddConsumer<IssueAssignedConsumer>();
+    x.AddConsumer<CodeReviewRequestedConsumer>();
+    x.AddConsumer<CodeReviewCompletedConsumer>();
 
     x.UsingRabbitMq((context, cfg) =>
     {
@@ -46,6 +56,20 @@ builder.Services.AddMassTransit(x =>
         cfg.ReceiveEndpoint("issue-assigned-github", e =>
         {
             e.ConfigureConsumer<IssueAssignedConsumer>(context);
+        });
+
+        // Code review: fetch diff + send to AI
+        cfg.ReceiveEndpoint("q.github.code-review-requested", e =>
+        {
+            e.UseMessageRetry(r => r.Incremental(3, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(2)));
+            e.ConfigureConsumer<CodeReviewRequestedConsumer>(context);
+        });
+
+        // Code review: write review to GitHub PR
+        cfg.ReceiveEndpoint("q.github.code-review-completed", e =>
+        {
+            e.UseMessageRetry(r => r.Incremental(3, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(2)));
+            e.ConfigureConsumer<CodeReviewCompletedConsumer>(context);
         });
 
         cfg.ConfigureEndpoints(context);

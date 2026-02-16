@@ -29,6 +29,7 @@ builder.Services.AddMassTransit(x =>
 {
     x.SetKebabCaseEndpointNameFormatter();
     x.AddConsumer<AiPlanRequestedConsumer>();
+    x.AddConsumer<CodeReviewRequestedConsumer>();
 
     x.UsingRabbitMq((context, cfg) =>
     {
@@ -51,6 +52,14 @@ builder.Services.AddMassTransit(x =>
 
             // Configure the consumer
             e.ConfigureConsumer<AiPlanRequestedConsumer>(context);
+        });
+
+        // Code review consumer endpoint
+        cfg.ReceiveEndpoint("q.ai.code-review", e =>
+        {
+            e.UseMessageRetry(r => r
+                .Incremental(3, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(2)));
+            e.ConfigureConsumer<CodeReviewRequestedConsumer>(context);
         });
     });
 });

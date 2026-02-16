@@ -173,3 +173,6 @@ C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\github\ForgeFlow.G
 C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\github\ForgeFlow.GitHub.Api\obj\Debug\net8.0\ForgeFlow.GitHub.Api.pdb
 C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\github\ForgeFlow.GitHub.Api\obj\Debug\net8.0\ForgeFlow.GitHub.Api.genruntimeconfig.cache
 C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\github\ForgeFlow.GitHub.Api\obj\Debug\net8.0\ref\ForgeFlow.GitHub.Api.dll
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\github\ForgeFlow.GitHub.Api\bin\Debug\net8.0\Microsoft.Extensions.Diagnostics.dll
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\github\ForgeFlow.GitHub.Api\bin\Debug\net8.0\Microsoft.Extensions.Diagnostics.Abstractions.dll
+C:\Users\alihe\OneDrive\Masaüstü\ForgeFlow Project\services\github\ForgeFlow.GitHub.Api\bin\Debug\net8.0\Microsoft.Extensions.Http.dll

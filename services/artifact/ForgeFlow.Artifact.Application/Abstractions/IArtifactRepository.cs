@@ -1,3 +1,4 @@
+using ForgeFlow.Artifact.Domain.Entities;
 using ArtifactEntity = ForgeFlow.Artifact.Domain.Entities.Artifact;
 
 namespace ForgeFlow.Artifact.Application.Abstractions;
@@ -5,7 +6,8 @@ namespace ForgeFlow.Artifact.Application.Abstractions;
 public interface IArtifactRepository
 {
     Task<ArtifactEntity?> FindAsync(string projectId, string issueId, string type, CancellationToken ct);
-    Task AddAsync(ArtifactEntity artifact, CancellationToken ct);
+    Task<ArtifactRevision?> FindRevisionByCorrelationIdAsync(string correlationId, string type, CancellationToken ct);
+    void Add(ArtifactEntity artifact);
     Task SaveChangesAsync(CancellationToken ct);
 
     /// <summary>

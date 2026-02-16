@@ -74,6 +74,7 @@ public class ListIssuesHandler : IRequestHandler<ListIssuesQuery, ListIssuesResu
                 i.Status,
                 i.Priority,
                 i.Type,
+                i.ProjectId,
                 i.Project.Key,
                 i.AssigneeId,
                 i.DueDate,

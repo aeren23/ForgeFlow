@@ -33,6 +33,7 @@ public record IssueListItemDto(
     IssueStatus Status,
     IssuePriority Priority,
     IssueType Type,
+    Guid ProjectId,
     string ProjectKey,
     string? AssigneeId,
     DateTime? DueDate,
