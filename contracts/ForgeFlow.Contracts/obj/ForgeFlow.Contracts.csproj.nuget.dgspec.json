@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\contracts\\ForgeFlow.Contracts\\ForgeFlow.Contracts.csproj": {}
+    "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\contracts\\ForgeFlow.Contracts\\ForgeFlow.Contracts.csproj": {}
   },
   "projects": {
-    "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\contracts\\ForgeFlow.Contracts\\ForgeFlow.Contracts.csproj": {
+    "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\contracts\\ForgeFlow.Contracts\\ForgeFlow.Contracts.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\contracts\\ForgeFlow.Contracts\\ForgeFlow.Contracts.csproj",
+        "projectUniqueName": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\contracts\\ForgeFlow.Contracts\\ForgeFlow.Contracts.csproj",
         "projectName": "ForgeFlow.Contracts",
-        "projectPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\contracts\\ForgeFlow.Contracts\\ForgeFlow.Contracts.csproj",
+        "projectPath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\contracts\\ForgeFlow.Contracts\\ForgeFlow.Contracts.csproj",
         "packagesPath": "C:\\Users\\alihe\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\contracts\\ForgeFlow.Contracts\\obj\\",
+        "outputPath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\contracts\\ForgeFlow.Contracts\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
