@@ -101,6 +101,28 @@ public class Issue
     /// </summary>
     public string? BranchName { get; set; }
 
+    // ========== CI/CD Integration ==========
+
+    /// <summary>
+    /// Son CI/CD pipeline durumu (success, failure, in_progress, queued, cancelled)
+    /// </summary>
+    public string? CiCdStatus { get; set; }
+
+    /// <summary>
+    /// Son CI/CD pipeline workflow adı
+    /// </summary>
+    public string? CiCdWorkflowName { get; set; }
+
+    /// <summary>
+    /// GitHub Actions run URL'i
+    /// </summary>
+    public string? CiCdRunUrl { get; set; }
+
+    /// <summary>
+    /// Son CI/CD güncelleme zamanı
+    /// </summary>
+    public DateTime? CiCdUpdatedAtUtc { get; set; }
+
     // ========== Concurrency ==========
 
     /// <summary>

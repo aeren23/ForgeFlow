@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ForgeFlow.Contracts")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3d3e2434c10da84e64ebdbd148b9fc9b6c043158")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5ce32678c9b15c06d541f8aa1e2f8c66d3ec9bf7")]
 [assembly: System.Reflection.AssemblyProductAttribute("ForgeFlow.Contracts")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ForgeFlow.Contracts")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

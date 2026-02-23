@@ -55,6 +55,21 @@ public class ChangeIssueStatusHandler : IRequestHandler<ChangeIssueStatusCommand
         }
 
         var oldStatus = issue.Status;
+
+        // ========== Quality Gate: CI/CD Check ==========
+        // Done'a geçişte (sistem aksiyonları hariç) CI/CD durumunu kontrol et
+        if (request.NewStatus == IssueStatus.Done && !request.IsSystemAction)
+        {
+            if (issue.CiCdStatus != null &&
+                issue.CiCdStatus != "success" &&
+                issue.CiCdStatus != "skipped")
+            {
+                throw new InvalidOperationException(
+                    $"Quality Gate: CI/CD pipeline durumu '{issue.CiCdStatus}'. " +
+                    $"Issue'yu Done olarak işaretlemek için pipeline'ın başarılı olması gerekiyor.");
+            }
+        }
+
         issue.Status = request.NewStatus;
         issue.UpdatedAtUtc = DateTime.UtcNow;
 

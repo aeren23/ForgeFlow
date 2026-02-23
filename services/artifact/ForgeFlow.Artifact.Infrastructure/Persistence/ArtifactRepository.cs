@@ -29,5 +29,8 @@ public class ArtifactRepository : IArtifactRepository
 
     public Task<bool> RevisionExistsByCorrelationIdAsync(string correlationId, CancellationToken ct)
         => _db.ArtifactRevisions.AnyAsync(r => r.CorrelationId == correlationId, ct);
+
+    public void DetachAll()
+        => _db.ChangeTracker.Clear();
 }
 

@@ -11,6 +11,12 @@ public interface IArtifactRepository
     Task SaveChangesAsync(CancellationToken ct);
 
     /// <summary>
+    /// Change Tracker'daki tüm entity'leri detach eder.
+    /// Race condition retry senaryolarında kullanılır.
+    /// </summary>
+    void DetachAll();
+
+    /// <summary>
     /// Idempotency kontrolü: Bu CorrelationId ile daha önce bir revision kaydedilmiş mi?
     /// </summary>
     Task<bool> RevisionExistsByCorrelationIdAsync(string correlationId, CancellationToken ct);

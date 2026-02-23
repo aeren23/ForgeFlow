@@ -2,7 +2,8 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import {
     Bug, FileCode, CheckSquare, Bookmark, AlertOctagon,
-    ArrowUp, ArrowRight, ArrowDown, User, GitBranch, Clock
+    ArrowUp, ArrowRight, ArrowDown, User, GitBranch, Clock,
+    CircleCheck, CircleX, Loader2, CircleDot, Ban
 } from 'lucide-react';
 import { IssueType, IssuePriority, IssueTypeLabels, type Issue } from '../../services/api';
 
@@ -108,6 +109,27 @@ export function IssueCard({ issue, assigneeName, onClick }: IssueCardProps) {
                             <Clock className="w-3 h-3" />
                             <span>{getTimeElapsed(issue.startedAtUtc)}</span>
                         </div>
+                    )}
+                    {issue.ciCdStatus && (
+                        <a
+                            href={issue.ciCdRunUrl || '#'}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={(e) => e.stopPropagation()}
+                            className={`flex items-center gap-1 text-xs transition-colors ${issue.ciCdStatus === 'success' ? 'text-green-500 hover:text-green-400' :
+                                    issue.ciCdStatus === 'failure' ? 'text-red-500 hover:text-red-400' :
+                                        issue.ciCdStatus === 'in_progress' ? 'text-yellow-500 hover:text-yellow-400' :
+                                            issue.ciCdStatus === 'cancelled' ? 'text-gray-500 hover:text-gray-400' :
+                                                'text-blue-400 hover:text-blue-300'
+                                }`}
+                            title={`CI/CD: ${issue.ciCdStatus}`}
+                        >
+                            {issue.ciCdStatus === 'success' && <CircleCheck className="w-3.5 h-3.5" />}
+                            {issue.ciCdStatus === 'failure' && <CircleX className="w-3.5 h-3.5" />}
+                            {issue.ciCdStatus === 'in_progress' && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+                            {issue.ciCdStatus === 'queued' && <CircleDot className="w-3.5 h-3.5" />}
+                            {issue.ciCdStatus === 'cancelled' && <Ban className="w-3.5 h-3.5" />}
+                        </a>
                     )}
                 </div>
 

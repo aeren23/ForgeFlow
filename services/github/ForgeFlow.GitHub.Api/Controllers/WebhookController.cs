@@ -66,6 +66,12 @@ public class WebhookController : ControllerBase
                 case "pull_request":
                     await HandlePullRequestEvent(payload);
                     break;
+                case "check_suite":
+                    await HandleCheckSuiteEvent(payload);
+                    break;
+                case "workflow_run":
+                    await HandleWorkflowRunEvent(payload);
+                    break;
                 case "installation":
                     await HandleInstallationEvent(payload);
                     break;
@@ -252,6 +258,119 @@ public class WebhookController : ControllerBase
                     break;
                 }
         }
+    }
+
+    /// <summary>
+    /// GitHub Actions check_suite tamamlandığında CI/CD durumunu yayınlar.
+    /// Sadece "completed" action'ını işler (noise azaltma).
+    /// </summary>
+    private async Task HandleCheckSuiteEvent(JsonDocument payload)
+    {
+        var root = payload.RootElement;
+        var action = root.GetProperty("action").GetString();
+
+        // Sadece tamamlanan check suite'leri işle
+        if (action != "completed")
+        {
+            _logger.LogDebug("Skipping check_suite action: {Action}", action);
+            return;
+        }
+
+        var checkSuite = root.GetProperty("check_suite");
+        var branchName = checkSuite.GetProperty("head_branch").GetString() ?? "";
+        var issueKey = ExtractIssueKey(branchName);
+
+        if (string.IsNullOrEmpty(issueKey))
+        {
+            _logger.LogDebug("No issue key found in check_suite branch: {Branch}", branchName);
+            return;
+        }
+
+        var repoId = root.GetProperty("repository").GetProperty("id").GetInt64();
+        var conclusion = checkSuite.GetProperty("conclusion").GetString() ?? "unknown";
+        var headSha = checkSuite.GetProperty("head_sha").GetString() ?? "";
+
+        // check_suite'in kendi ID'sini RunId olarak kullan
+        var suiteId = checkSuite.GetProperty("id").GetInt64();
+
+        // HTML URL: check_suite doğrudan URL vermez, repo URL'i + commit SHA ile oluştur
+        var repoUrl = root.GetProperty("repository").GetProperty("html_url").GetString() ?? "";
+        var htmlUrl = !string.IsNullOrEmpty(repoUrl) ? $"{repoUrl}/commit/{headSha}/checks" : null;
+
+        await _publishEndpoint.Publish(new CiCdStatusReceived(
+            IssueKey: issueKey,
+            RepositoryId: repoId,
+            WorkflowName: "Check Suite",
+            Status: "completed",
+            Conclusion: conclusion,
+            BranchName: branchName,
+            CommitSha: headSha,
+            HtmlUrl: htmlUrl,
+            RunId: suiteId,
+            Timestamp: DateTime.UtcNow
+        ));
+
+        _logger.LogInformation(
+            "Published CiCdStatusReceived (check_suite): Issue={IssueKey}, Conclusion={Conclusion}, SHA={Sha}",
+            issueKey, conclusion, headSha[..Math.Min(7, headSha.Length)]);
+    }
+
+    /// <summary>
+    /// GitHub Actions workflow_run lifecycle event'lerini işler.
+    /// Tüm durumları takip eder: requested(queued) → in_progress → completed.
+    /// </summary>
+    private async Task HandleWorkflowRunEvent(JsonDocument payload)
+    {
+        var root = payload.RootElement;
+        var action = root.GetProperty("action").GetString();
+        var workflowRun = root.GetProperty("workflow_run");
+        var branchName = workflowRun.GetProperty("head_branch").GetString() ?? "";
+        var issueKey = ExtractIssueKey(branchName);
+
+        if (string.IsNullOrEmpty(issueKey))
+        {
+            _logger.LogDebug("No issue key found in workflow_run branch: {Branch}", branchName);
+            return;
+        }
+
+        var repoId = root.GetProperty("repository").GetProperty("id").GetInt64();
+        var workflowName = workflowRun.GetProperty("name").GetString() ?? "Unknown Workflow";
+        var headSha = workflowRun.GetProperty("head_sha").GetString() ?? "";
+        var htmlUrl = workflowRun.GetProperty("html_url").GetString();
+        var runId = workflowRun.GetProperty("id").GetInt64();
+
+        // Action → Status mapping
+        var status = action switch
+        {
+            "requested" => "queued",
+            "in_progress" => "in_progress",
+            "completed" => "completed",
+            _ => action ?? "unknown"
+        };
+
+        // Conclusion sadece completed durumunda anlamlı
+        string? conclusion = null;
+        if (status == "completed" && workflowRun.TryGetProperty("conclusion", out var conclusionProp))
+        {
+            conclusion = conclusionProp.GetString();
+        }
+
+        await _publishEndpoint.Publish(new CiCdStatusReceived(
+            IssueKey: issueKey,
+            RepositoryId: repoId,
+            WorkflowName: workflowName,
+            Status: status,
+            Conclusion: conclusion,
+            BranchName: branchName,
+            CommitSha: headSha,
+            HtmlUrl: htmlUrl,
+            RunId: runId,
+            Timestamp: DateTime.UtcNow
+        ));
+
+        _logger.LogInformation(
+            "Published CiCdStatusReceived (workflow_run): Issue={IssueKey}, Workflow={Workflow}, Status={Status}, Conclusion={Conclusion}",
+            issueKey, workflowName, status, conclusion ?? "N/A");
     }
 
     private async Task HandleInstallationEvent(JsonDocument payload)

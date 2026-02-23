@@ -47,7 +47,11 @@ public class GetIssueHandler : IRequestHandler<GetIssueQuery, IssueDto?>
             issue.ClosedAtUtc,
             issue.StartedAtUtc,
             issue.BranchName,
-            issue.ChildIssues.Count
+            issue.ChildIssues.Count,
+            issue.CiCdStatus,
+            issue.CiCdWorkflowName,
+            issue.CiCdRunUrl,
+            issue.CiCdUpdatedAtUtc
         );
     }
 }

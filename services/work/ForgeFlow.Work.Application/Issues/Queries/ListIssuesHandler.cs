@@ -81,7 +81,9 @@ public class ListIssuesHandler : IRequestHandler<ListIssuesQuery, ListIssuesResu
                 i.CreatedAtUtc,
                 i.ParentIssueId,
                 i.BranchName,
-                i.StartedAtUtc
+                i.StartedAtUtc,
+                i.CiCdStatus,
+                i.CiCdRunUrl
             ))
             .ToListAsync(cancellationToken);
 

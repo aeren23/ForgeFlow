@@ -123,12 +123,23 @@ export function ProjectBoard({ project }: ProjectBoardProps) {
             }
         };
 
+        const handleCiCdUpdate = (msg: any) => {
+            // CI/CD status güncellemesi geldiğinde ilgili issue'yu güncelle
+            setIssues(prev => prev.map(issue =>
+                issue.key === msg.issueKey
+                    ? { ...issue, ciCdStatus: msg.status, ciCdRunUrl: msg.htmlUrl }
+                    : issue
+            ));
+        };
+
         const unsubscribeBoard = signalRService.onBoardUpdate(handleBoardUpdate);
         const unsubscribeNotify = signalRService.onNotification(handleNotification);
+        const unsubscribeCiCd = signalRService.onCiCdUpdate(handleCiCdUpdate);
 
         return () => {
             unsubscribeBoard();
             unsubscribeNotify();
+            unsubscribeCiCd();
             signalRService.leaveProject(key);
         };
     }, [key]);

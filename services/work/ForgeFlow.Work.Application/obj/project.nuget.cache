@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "nZ/TDFXVBlI=",
+  "dgSpecHash": "vVq/71g74VM=",
   "success": true,
-  "projectFilePath": "c:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\work\\ForgeFlow.Work.Application\\ForgeFlow.Work.Application.csproj",
+  "projectFilePath": "C:\\Users\\alihe\\OneDrive\\Masaüstü\\ForgeFlow Project\\services\\work\\ForgeFlow.Work.Application\\ForgeFlow.Work.Application.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\alihe\\.nuget\\packages\\masstransit.abstractions\\8.3.0\\masstransit.abstractions.8.3.0.nupkg.sha512",
     "C:\\Users\\alihe\\.nuget\\packages\\mediatr\\12.2.0\\mediatr.12.2.0.nupkg.sha512",

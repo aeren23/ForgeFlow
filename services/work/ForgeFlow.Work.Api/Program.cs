@@ -25,6 +25,7 @@ builder.Services.AddMassTransit(x =>
     x.AddConsumer<ForgeFlow.Work.Api.Consumers.PullRequestOpenedConsumer>();
     x.AddConsumer<ForgeFlow.Work.Api.Consumers.PullRequestMergedConsumer>();
     x.AddConsumer<ForgeFlow.Work.Api.Consumers.PullRequestClosedConsumer>();
+    x.AddConsumer<ForgeFlow.Work.Api.Consumers.CiCdStatusReceivedConsumer>();
 
     x.UsingRabbitMq((context, cfg) =>
     {

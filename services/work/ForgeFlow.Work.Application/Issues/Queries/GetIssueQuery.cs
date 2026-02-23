@@ -31,5 +31,9 @@ public record IssueDto(
     DateTime? ClosedAtUtc,
     DateTime? StartedAtUtc,
     string? BranchName,
-    int ChildIssueCount
+    int ChildIssueCount,
+    string? CiCdStatus,
+    string? CiCdWorkflowName,
+    string? CiCdRunUrl,
+    DateTime? CiCdUpdatedAtUtc
 );

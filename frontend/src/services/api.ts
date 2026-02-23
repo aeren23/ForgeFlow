@@ -110,6 +110,8 @@ export interface Issue {
     createdAtUtc: string;
     startedAtUtc?: string;
     branchName?: string;
+    ciCdStatus?: string;
+    ciCdRunUrl?: string;
 }
 
 export interface CreateIssueRequest {

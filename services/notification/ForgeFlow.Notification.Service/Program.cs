@@ -78,6 +78,7 @@ builder.Services.AddMassTransit(x =>
     x.AddConsumer<IssueAssignedConsumer>();
     x.AddConsumer<BranchCreatedConsumer>();
     x.AddConsumer<CodeReviewUpdatedConsumer>();
+    x.AddConsumer<CiCdStatusUpdatedConsumer>();
 
     x.UsingRabbitMq((context, cfg) =>
     {

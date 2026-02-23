@@ -34,6 +34,15 @@ export interface ReviewUpdateMessage {
     prStatus: 'open' | 'merged' | 'closed';
 }
 
+export interface CiCdUpdateMessage {
+    issueKey: string;
+    projectId: string;
+    workflowName: string;
+    status: 'queued' | 'in_progress' | 'success' | 'failure' | 'cancelled';
+    htmlUrl?: string;
+    timestamp: string;
+}
+
 type EventCallback<T> = (message: T) => void;
 
 const eventHandlers: {
@@ -42,12 +51,14 @@ const eventHandlers: {
     notification: EventCallback<NotificationMessage>[];
     installationListUpdated: EventCallback<{ installationId: number; accountLogin: string }>[];
     reviewUpdate: EventCallback<ReviewUpdateMessage>[];
+    cicdUpdate: EventCallback<CiCdUpdateMessage>[];
 } = {
     aiProgress: [],
     boardUpdate: [],
     notification: [],
     installationListUpdated: [],
     reviewUpdate: [],
+    cicdUpdate: [],
 };
 
 export const signalRService = {
@@ -99,6 +110,11 @@ export const signalRService = {
         connection.on('ReviewUpdate', (msg: ReviewUpdateMessage) => {
             console.log('[SignalR] ReviewUpdate:', msg);
             eventHandlers.reviewUpdate.forEach(cb => cb(msg));
+        });
+
+        connection.on('CiCdUpdate', (msg: CiCdUpdateMessage) => {
+            console.log('[SignalR] CiCdUpdate:', msg);
+            eventHandlers.cicdUpdate.forEach(cb => cb(msg));
         });
 
         // Connection state change handlers
@@ -206,6 +222,17 @@ export const signalRService = {
         return () => {
             const idx = eventHandlers.reviewUpdate.indexOf(callback);
             if (idx > -1) eventHandlers.reviewUpdate.splice(idx, 1);
+        };
+    },
+
+    /**
+     * Subscribe to CI/CD status update events.
+     */
+    onCiCdUpdate(callback: EventCallback<CiCdUpdateMessage>): () => void {
+        eventHandlers.cicdUpdate.push(callback);
+        return () => {
+            const idx = eventHandlers.cicdUpdate.indexOf(callback);
+            if (idx > -1) eventHandlers.cicdUpdate.splice(idx, 1);
         };
     },
 

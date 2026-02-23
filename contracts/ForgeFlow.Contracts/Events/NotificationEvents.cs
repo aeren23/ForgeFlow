@@ -134,3 +134,36 @@ public record CodeReviewUpdated(
     int PullNumber,
     string PrStatus       // "open", "merged", "closed"
 );
+
+// ========== CI/CD Integration Events ==========
+
+/// <summary>
+/// GitHub Webhook → Work Service + Artifact Service
+/// GitHub Actions workflow/check suite sonucunu taşır.
+/// WebhookController tarafından check_suite veya workflow_run event'lerinde yayınlanır.
+/// </summary>
+public record CiCdStatusReceived(
+    string IssueKey,
+    long RepositoryId,
+    string WorkflowName,      // "Build & Test", "Deploy Staging" vb.
+    string Status,            // "queued", "in_progress", "completed"
+    string? Conclusion,       // "success", "failure", "cancelled", "skipped" (status=completed ise)
+    string BranchName,
+    string CommitSha,
+    string? HtmlUrl,          // GitHub Actions run URL
+    long RunId,               // Workflow run ID (idempotency için)
+    DateTime Timestamp
+);
+
+/// <summary>
+/// Work Service → Notification Service
+/// Issue'ya bağlanmış CI/CD durumu değiştiğinde SignalR ile frontend'e bildirir.
+/// </summary>
+public record CiCdStatusUpdated(
+    string IssueKey,
+    Guid ProjectId,
+    string WorkflowName,
+    string Status,            // "queued", "in_progress", "success", "failure", "cancelled"
+    string? HtmlUrl,
+    DateTime Timestamp
+);

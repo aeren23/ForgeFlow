@@ -36,6 +36,18 @@ namespace ForgeFlow.Work.Infrastructure.Persistence.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<string>("CiCdRunUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CiCdStatus")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CiCdUpdatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CiCdWorkflowName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("ClosedAtUtc")
                         .HasColumnType("datetime2");
 

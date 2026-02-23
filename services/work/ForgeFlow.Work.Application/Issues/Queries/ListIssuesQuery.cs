@@ -40,5 +40,7 @@ public record IssueListItemDto(
     DateTime CreatedAtUtc,
     Guid? ParentIssueId,
     string? BranchName,
-    DateTime? StartedAtUtc
+    DateTime? StartedAtUtc,
+    string? CiCdStatus,
+    string? CiCdRunUrl
 );

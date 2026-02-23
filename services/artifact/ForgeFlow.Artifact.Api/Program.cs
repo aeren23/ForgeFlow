@@ -21,6 +21,7 @@ builder.Services.AddMassTransit(x =>
     x.AddConsumer<AiPlanGeneratedConsumer>();
     x.AddConsumer<CodeReviewCompletedConsumer>();
     x.AddConsumer<PullRequestStatusChangedConsumer>();
+    x.AddConsumer<CiCdStatusReceivedConsumer>();
 
     x.UsingRabbitMq((context, cfg) =>
     {
@@ -57,6 +58,12 @@ builder.Services.AddMassTransit(x =>
         {
             e.UseMessageRetry(r => r.Incremental(3, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(2)));
             e.ConfigureConsumer<PullRequestStatusChangedConsumer>(context);
+        });
+
+        cfg.ReceiveEndpoint("q.artifact.cicd-status-received", e =>
+        {
+            e.UseMessageRetry(r => r.Incremental(3, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(2)));
+            e.ConfigureConsumer<CiCdStatusReceivedConsumer>(context);
         });
     });
 });
