@@ -63,7 +63,7 @@ var redisConnection = Environment.GetEnvironmentVariable("Redis__ConnectionStrin
 builder.Services.AddSignalR()
     .AddStackExchangeRedis(redisConnection, options =>
     {
-        options.Configuration.ChannelPrefix = "ForgeFlow";
+        options.Configuration.ChannelPrefix = StackExchange.Redis.RedisChannel.Literal("ForgeFlow");
     });
 
 // MassTransit with RabbitMQ
@@ -75,10 +75,11 @@ builder.Services.AddMassTransit(x =>
     x.AddConsumer<AiPlanCompletedConsumer>();
     x.AddConsumer<GitHubInstallationCreatedConsumer>();
     x.AddConsumer<IssueAssignedConsumer>();
-    x.AddConsumer<IssueAssignedConsumer>();
     x.AddConsumer<BranchCreatedConsumer>();
     x.AddConsumer<CodeReviewUpdatedConsumer>();
     x.AddConsumer<CiCdStatusUpdatedConsumer>();
+    x.AddConsumer<WorkflowGenerationCompletedConsumer>();
+    x.AddConsumer<WorkflowGenerationFailedConsumer>();
 
     x.UsingRabbitMq((context, cfg) =>
     {

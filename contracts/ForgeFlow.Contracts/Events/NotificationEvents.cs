@@ -10,7 +10,16 @@ public record AiProcessingProgress(
     string UserId,
     string Message,
     int ProgressPercentage,
-    DateTime Timestamp
+    DateTime Timestamp,
+    /// <summary>
+    /// Live log satırları — her progress event'inde biriken log'lar SignalR ile frontend'e akar
+    /// </summary>
+    List<string>? LogEntries = null,
+    /// <summary>
+    /// AI'ın okumak istediği dosya listesi (Multi-Turn AI pattern'da kullanılır)
+    /// Frontend'de "AI şu dosyaları okuyor" olarak gösterilir
+    /// </summary>
+    List<string>? RequestedFiles = null
 );
 
 /// <summary>

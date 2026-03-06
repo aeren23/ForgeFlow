@@ -5,6 +5,7 @@ using ForgeFlow.Contracts.Events;
 using MassTransit;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using System.Text.Json;
 
 namespace ForgeFlow.AiOrchestrator.Application.Commands;
 
@@ -38,70 +39,125 @@ public class GenerateAiPlanCommandHandler : IRequestHandler<GenerateAiPlanComman
             "Generating AI plan for Issue={IssueKey}, Project={ProjectId}, Provider={Provider}",
             request.IssueKey, request.ProjectId, request.PreferredProvider?.ToString() ?? "Default");
 
-        // Progress: Starting
-        await PublishProgressAsync(request, "AI plan üretimi başlatılıyor...", 5);
+        var logEntries = new List<string>();
 
-        // 1. Gather context from Work Service
-        await PublishProgressAsync(request, "Proje ve issue bilgileri alınıyor...", 15);
+        // Progress: Starting
+        logEntries.Add("[START] AI plan üretimi başlatılıyor...");
+        await PublishProgressAsync(request, "AI plan üretimi başlatılıyor...", 5, logEntries);
+
+        // 1. Gather context from Work Service + GitHub Service (Code Context Bridge)
+        logEntries.Add("[CONTEXT] Proje, issue ve kod bağlamı alınıyor...");
+        await PublishProgressAsync(request, "Proje, issue ve kod bağlamı alınıyor...", 10, logEntries);
+
         var context = await _contextProvider.GetContextAsync(
             request.ProjectId,
             request.IssueKey,
             cancellationToken);
 
-        // Progress: Context gathered
-        await PublishProgressAsync(request, "Context toplandı, prompt hazırlanıyor...", 30);
+        // Log code context status
+        if (context.HasCodeContext)
+        {
+            logEntries.Add($"[GITHUB] ✅ Kod bağlamı yüklendi: {context.SourceFiles.Count} dosya, dosya ağacı mevcut");
+            await PublishProgressAsync(request, $"Kod bağlamı yüklendi: {context.SourceFiles.Count} kritik dosya", 20, logEntries);
+        }
+        else
+        {
+            logEntries.Add("[GITHUB] ⚠️ GitHub bağlantısı yok, genel mimari ile devam ediliyor");
+            await PublishProgressAsync(request, "GitHub bağlantısı yok, genel mimari ile devam ediliyor", 20, logEntries);
+        }
 
-        // 2. Build prompts
-        var (systemPrompt, userPrompt) = BuildPrompts(request, context);
-
-        // 3. Parse preferred provider from string (Worker sends string, we parse to enum here)
+        // 2. Parse preferred provider
         AiProviderType? preferredProvider = null;
         if (!string.IsNullOrEmpty(request.PreferredProvider))
         {
             if (Enum.TryParse<AiProviderType>(request.PreferredProvider, ignoreCase: true, out var parsedProvider))
-            {
                 preferredProvider = parsedProvider;
+            else
+                _logger.LogWarning("Invalid PreferredProvider value: {Value}. Using default.", request.PreferredProvider);
+        }
+
+        var aiService = _aiServiceFactory.GetService(preferredProvider);
+        logEntries.Add($"[AI] Provider: {aiService.ProviderType}, Model: {aiService.ModelName}");
+
+        // ===== MULTI-TURN AI LOOP =====
+        // Phase 1: Eğer code context varsa, AI'a dosya ağacını gönder ve hangi dosyaları okumak istediğini sor
+        if (context.HasCodeContext && !string.IsNullOrEmpty(context.FileTreeStructure))
+        {
+            logEntries.Add("[PHASE-1] AI'a dosya ağacı gönderiliyor, okunacak dosyalar sorulacak...");
+            await PublishProgressAsync(request, "AI dosya ağacını analiz ediyor...", 30, logEntries);
+
+            var discoveryResponse = await ExecuteFileDiscoveryPhase(
+                aiService, request, context, cancellationToken);
+
+            if (discoveryResponse != null && discoveryResponse.Count > 0)
+            {
+                logEntries.Add($"[PHASE-1] AI {discoveryResponse.Count} dosya okumak istiyor: {string.Join(", ", discoveryResponse.Take(5))}");
+                await PublishProgressAsync(request,
+                    $"AI {discoveryResponse.Count} dosya okumak istiyor...", 40,
+                    logEntries, requestedFiles: discoveryResponse);
+
+                // Phase 2: İstenen dosyaları GitHub Service'den çek
+                logEntries.Add("[PHASE-2] İstenen dosyalar GitHub'dan çekiliyor...");
+                await PublishProgressAsync(request, "İstenen dosyalar GitHub'dan çekiliyor...", 45, logEntries);
+
+                var fetchedFiles = await _contextProvider.FetchRequestedFilesAsync(
+                    request.ProjectId, discoveryResponse.ToArray(), cancellationToken);
+
+                // Okunan dosyaları context'e ekle
+                foreach (KeyValuePair<string, string> kvp in fetchedFiles)
+                {
+                    if (!context.SourceFiles.Any(f => f.Path == kvp.Key))
+                    {
+                        context.SourceFiles.Add(new CodeFileDto
+                        {
+                            Path = kvp.Key,
+                            Content = kvp.Value,
+                            Language = null
+                        });
+                    }
+                }
+
+                logEntries.Add($"[PHASE-2] ✅ {fetchedFiles.Count} dosya başarıyla okundu");
+                await PublishProgressAsync(request, $"{fetchedFiles.Count} dosya okundu, plan üretiliyor...", 55, logEntries);
             }
             else
             {
-                _logger.LogWarning("Invalid PreferredProvider value: {Value}. Using default.", request.PreferredProvider);
+                logEntries.Add("[PHASE-1] AI ek dosya istemedi, doğrudan plan üretecek");
             }
         }
 
-        // 4. Get the appropriate AI service
-        var aiService = _aiServiceFactory.GetService(preferredProvider);
+        // ===== PLAN GENERATION =====
+        logEntries.Add("[GENERATE] Prompt hazırlanıyor...");
+        await PublishProgressAsync(request, "Prompt hazırlanıyor...", 60, logEntries);
 
-        _logger.LogInformation("Using AI provider: {Provider}, Model: {Model}",
-            aiService.ProviderType, aiService.ModelName);
+        var (systemPrompt, userPrompt) = BuildPrompts(request, context);
 
-        // Progress: AI call starting
-        await PublishProgressAsync(request, $"AI modeline ({aiService.ModelName}) gönderiliyor...", 50);
+        logEntries.Add($"[GENERATE] AI modeline ({aiService.ModelName}) gönderiliyor...");
+        await PublishProgressAsync(request, $"AI modeline ({aiService.ModelName}) gönderiliyor...", 65, logEntries);
 
-        // 5. Generate content
         var aiRequest = new AiRequest
         {
             RequestId = request.RequestId,
             SystemPrompt = systemPrompt,
             UserPrompt = userPrompt,
-            MaxTokens = 8192, // Increased from 4096 to prevent JSON truncation
+            MaxTokens = 8192,
             Temperature = 0.7,
             PreferredProvider = preferredProvider
         };
 
         var response = await aiService.GenerateContentAsync(aiRequest, cancellationToken);
 
-        // Progress: Response received
-        await PublishProgressAsync(request, "AI yanıtı alındı, işleniyor...", 85);
+        logEntries.Add($"[GENERATE] AI yanıtı alındı ({response.DurationMs}ms)");
+        await PublishProgressAsync(request, "AI yanıtı alındı, işleniyor...", 85, logEntries);
 
-        // 6. Return result
         if (response.IsSuccess)
         {
             _logger.LogInformation(
                 "AI plan generated successfully. Tokens: {Prompt}+{Completion}, Duration: {Duration}ms",
                 response.PromptTokens, response.CompletionTokens, response.DurationMs);
 
-            // Progress: Orchestrator Complete (Step 1/2)
-            await PublishProgressAsync(request, "AI plan başarıyla oluşturuldu! Issue'lar oluşturulacak...", 90);
+            logEntries.Add($"[SUCCESS] ✅ Plan üretildi! Tokens: {response.PromptTokens}+{response.CompletionTokens}");
+            await PublishProgressAsync(request, "AI plan başarıyla oluşturuldu! Issue'lar oluşturulacak...", 90, logEntries);
 
             return GenerateAiPlanResult.Success(response);
         }
@@ -111,8 +167,8 @@ public class GenerateAiPlanCommandHandler : IRequestHandler<GenerateAiPlanComman
                 "AI plan generation failed: {ErrorCode} - {ErrorMessage}",
                 response.ErrorCode, response.ErrorMessage);
 
-            // Progress: Failed
-            await PublishProgressAsync(request, $"Hata: {response.ErrorMessage}", 100);
+            logEntries.Add($"[ERROR] ❌ Hata: {response.ErrorCode} - {response.ErrorMessage}");
+            await PublishProgressAsync(request, $"Hata: {response.ErrorMessage}", 100, logEntries);
 
             return GenerateAiPlanResult.Failure(
                 response.ErrorMessage ?? "Unknown error",
@@ -122,9 +178,99 @@ public class GenerateAiPlanCommandHandler : IRequestHandler<GenerateAiPlanComman
     }
 
     /// <summary>
-    /// Publishes AI processing progress event for real-time updates via SignalR
+    /// Phase 1: AI'a dosya ağacını gösterir ve hangi dosyaları okumak istediğini sorar
     /// </summary>
-    private async Task PublishProgressAsync(GenerateAiPlanCommand request, string message, int progressPercentage)
+    private async Task<List<string>?> ExecuteFileDiscoveryPhase(
+        IAiService aiService,
+        GenerateAiPlanCommand request,
+        AiContext context,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            var discoveryPrompt = $$"""
+            Aşağıdaki issue için bir geliştirme planı üreteceksin.
+            Önce proje dosya yapısını incele ve planı üretmek için hangi dosyaları okuman gerektiğini belirle.
+            
+            ### Issue
+            - {{context.Issue.Key}}: {{context.Issue.Title}}
+            - Açıklama: {{context.Issue.Description ?? "Yok"}}
+            - Tip: {{context.Issue.Type}}
+            
+            ### Proje Dosya Yapısı
+            ```
+            {{context.FileTreeStructure}}
+            ```
+            
+            SADECE JSON formatında yanıt ver:
+            {
+              "filesToRead": ["path/to/file1.cs", "path/to/file2.ts"]
+            }
+            
+            Kurallar:
+            - Maksimum 10 dosya seçebilirsin
+            - Sadece plan için en kritik dosyaları seç
+            - Binary dosyalar (resim, font vb.) seçme
+            - Eğer dosya okumana gerek yoksa boş liste döndür: { "filesToRead": [] }
+            """;
+
+            var discoveryRequest = new AiRequest
+            {
+                RequestId = Guid.NewGuid(),
+                SystemPrompt = "Sen bir dosya analiz asistanısın. Sadece JSON yanıt ver.",
+                UserPrompt = discoveryPrompt,
+                MaxTokens = 1024,
+                Temperature = 0.3,
+                PreferredProvider = aiService.ProviderType
+            };
+
+            var response = await aiService.GenerateContentAsync(discoveryRequest, cancellationToken);
+
+            if (!response.IsSuccess || string.IsNullOrEmpty(response.Content))
+            {
+                _logger.LogWarning("File discovery phase failed, skipping multi-turn");
+                return null;
+            }
+
+            // Parse AI response for file list
+            var content = response.Content.Trim();
+            // JSON bloğunu temizle (```json ... ``` wrapper'ı varsa)
+            if (content.StartsWith("```"))
+            {
+                var lines = content.Split('\n');
+                content = string.Join("\n", lines.Skip(1).SkipLast(1));
+            }
+
+            var parsed = JsonSerializer.Deserialize<FileDiscoveryResponse>(content,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+            if (parsed?.FilesToRead != null && parsed.FilesToRead.Count > 0)
+            {
+                // Max 10 dosya sınırı
+                return parsed.FilesToRead.Take(10).ToList();
+            }
+
+            return null;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "File discovery phase error, skipping multi-turn");
+            return null;
+        }
+    }
+
+    private record FileDiscoveryResponse(List<string>? FilesToRead);
+
+    /// <summary>
+    /// Publishes AI processing progress event for real-time updates via SignalR
+    /// LogEntries ve RequestedFiles ile live log desteği sağlar
+    /// </summary>
+    private async Task PublishProgressAsync(
+        GenerateAiPlanCommand request,
+        string message,
+        int progressPercentage,
+        List<string>? logEntries = null,
+        List<string>? requestedFiles = null)
     {
         try
         {
@@ -134,7 +280,9 @@ public class GenerateAiPlanCommandHandler : IRequestHandler<GenerateAiPlanComman
                 UserId: request.UserId,
                 Message: message,
                 ProgressPercentage: progressPercentage,
-                Timestamp: DateTime.UtcNow
+                Timestamp: DateTime.UtcNow,
+                LogEntries: logEntries?.ToList(), // Snapshot of current logs
+                RequestedFiles: requestedFiles
             );
 
             await _publishEndpoint.Publish(progressEvent);

@@ -181,6 +181,7 @@ services:
       ConnectionStrings__AiOrchestratorDb: "Server=mssql,1433;Database=ForgeFlow_AiOrchestrator;User Id=sa;Password=YourStrong(!)Password123;TrustServerCertificate=True;Encrypt=False"
       # Service URLs
       Services__WorkApiUrl: http://work:8080
+      Services__GitHubApiUrl: http://github:8080
       # AI Providers
       AI__DefaultProvider: Gemini
       AI__Providers__Gemini__ApiKey: "${GEMINI_API_KEY:-}"
@@ -193,6 +194,8 @@ services:
       rabbitmq:
         condition: service_started
       work:
+        condition: service_started
+      github:
         condition: service_started
       db-init:
         condition: service_completed_successfully

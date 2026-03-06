@@ -169,6 +169,14 @@ export const generateProjectAiPlan = async (projectKey: string, data: GenerateAi
     return api.post(`/api/projects/${projectKey}/generate-plan`, data);
 };
 
+export interface GenerateWorkflowRequest {
+    preferredProvider?: string;
+}
+
+export const generateWorkflow = async (projectKey: string, data: GenerateWorkflowRequest = {}) => {
+    return api.post(`/api/projects/${projectKey}/generate-workflow`, data);
+};
+
 // Issue assignment
 export const assignIssue = async (issueKey: string, assigneeId: string | null, createBranch: boolean = true) => {
     return api.post(`/api/issues/${issueKey}/assign`, { assigneeId, createBranch });

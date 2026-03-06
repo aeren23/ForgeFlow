@@ -11,6 +11,8 @@ export interface AiProgressMessage {
     message: string;
     progressPercentage: number;
     isComplete: boolean;
+    logEntries?: string[];
+    requestedFiles?: string[];
 }
 
 export interface BoardUpdateMessage {

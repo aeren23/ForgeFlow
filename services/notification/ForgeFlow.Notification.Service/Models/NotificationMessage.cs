@@ -20,7 +20,9 @@ public record AiProgressMessage(
     Guid RequestId,
     string Message,
     int ProgressPercentage,
-    bool IsComplete = false
+    bool IsComplete = false,
+    List<string>? LogEntries = null,
+    List<string>? RequestedFiles = null
 );
 
 /// <summary>

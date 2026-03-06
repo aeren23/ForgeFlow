@@ -30,6 +30,7 @@ builder.Services.AddMassTransit(x =>
     x.SetKebabCaseEndpointNameFormatter();
     x.AddConsumer<AiPlanRequestedConsumer>();
     x.AddConsumer<CodeReviewRequestedConsumer>();
+    x.AddConsumer<WorkflowGenerationRequestedConsumer>();
 
     x.UsingRabbitMq((context, cfg) =>
     {
@@ -60,6 +61,14 @@ builder.Services.AddMassTransit(x =>
             e.UseMessageRetry(r => r
                 .Incremental(3, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(2)));
             e.ConfigureConsumer<CodeReviewRequestedConsumer>(context);
+        });
+
+        // Workflow generation consumer endpoint
+        cfg.ReceiveEndpoint("q.ai.workflow.generation", e =>
+        {
+            e.UseMessageRetry(r => r
+                .Incremental(3, TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(5)));
+            e.ConfigureConsumer<WorkflowGenerationRequestedConsumer>(context);
         });
     });
 });

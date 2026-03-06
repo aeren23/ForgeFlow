@@ -106,9 +106,6 @@ public class ProjectsController : ControllerBase
     /// <summary>
     /// Yapay zeka ile plan oluştur (Epic + AI Trigger)
     /// </summary>
-    /// <summary>
-    /// Yapay zeka ile plan oluştur (Epic + AI Trigger)
-    /// </summary>
     [HttpPost("{key}/generate-plan")]
     public async Task<ActionResult> GenerateAiPlan(string key, [FromBody] GenerateAiPlanRequest request)
     {
@@ -129,18 +126,46 @@ public class ProjectsController : ControllerBase
         var epicResult = await _mediator.Send(createEpicCommand);
 
         // 2. AI Plan Command'i tetikle (Bu command Orchestrator'a gidecek)
-        // Not: Bu command Work servisinde tanımlı olmayabilir, Orchestrator'a HTTP veya Masstransit ile gitmeliyiz.
-        // Ancak HttpWorkContextProvider kullandığımız için AI servisimiz Work servisini biliyor.
-        // Ama buradan AI servisine nasıl ulaşacağız?
-        // Çözüm: Work servisi bir "Event" fırlatabilir (AiPlanRequested) veya direkt AI servisine istek atabilir.
-        // Mevcut mimaride: Gateway -> Orchestrator(GenerateAiPlanCommand) -> AI -> Event -> Consumer
-        // Yani bizim buradan AI servisine ulaşmamız lazım.
         // Kestirme yol: Biz burada sadece Epic oluşturduk. Frontend'e Epic Key dönelim.
         // Frontend, mevcut "generateAiPlan" metodunu bu Epic Key ile çağırsın.
-        // Bu sayede Orchestrator'a giden yol değişmez.
 
         return Ok(new { EpicKey = epicResult.Key, EpicId = epicResult.Id });
     }
+
+    /// <summary>
+    /// AI ile GitHub Actions Workflow YAML üretir
+    /// </summary>
+    [HttpPost("{key}/generate-workflow")]
+    public async Task<ActionResult> GenerateWorkflow(
+        string key, 
+        [FromBody] GenerateWorkflowRequest request,
+        [FromServices] MassTransit.IPublishEndpoint publishEndpoint)
+    {
+        // Projeyi kontrol et
+        var project = await _mediator.Send(new GetProjectQuery(key));
+        if (project == null)
+            return NotFound(new { message = "Project not found" });
+
+        // Event fırlat (AI Orchestrator Worker dinliyor)
+        var msg = new ForgeFlow.Contracts.Events.WorkflowGenerationRequested(
+            ProjectId: project.Id.ToString(),
+            RequestedByUserId: _currentUser.UserId ?? "anonymous",
+            PreferredProvider: request.PreferredProvider
+        );
+
+        await publishEndpoint.Publish(new ForgeFlow.Contracts.Events.EventEnvelope<ForgeFlow.Contracts.Events.WorkflowGenerationRequested>(
+            EventId: Guid.NewGuid(),
+            OccurredAtUtc: DateTime.UtcNow,
+            CorrelationId: "",
+            UserId: _currentUser.UserId ?? "anonymous",
+            CausationId: null,
+            Data: msg
+        ));
+
+        // Kabul edildi (Asenkron işlem)
+        return Accepted(new { message = "Workflow generation started", projectId = project.Id });
+    }
+
 
     /// <summary>
     /// Proje üyesinin rolünü güncelle
@@ -224,4 +249,8 @@ public record GenerateAiPlanRequest(
     string PlanName,
     string Description,
     string BundleType = "FullStack"
+);
+
+public record GenerateWorkflowRequest(
+    string? PreferredProvider = null
 );

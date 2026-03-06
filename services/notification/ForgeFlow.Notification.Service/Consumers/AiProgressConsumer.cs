@@ -31,7 +31,9 @@ public class AiProgressConsumer : IConsumer<AiProcessingProgress>
             msg.RequestId,
             msg.Message,
             msg.ProgressPercentage,
-            msg.ProgressPercentage >= 100
+            msg.ProgressPercentage >= 100,
+            msg.LogEntries,
+            msg.RequestedFiles
         );
 
         // Send to specific user

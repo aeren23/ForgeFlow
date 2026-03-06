@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Save, Trash2, Loader2, AlertCircle, Users, UserPlus, Settings as SettingsIcon, X, Github, Link as LinkIcon, ExternalLink } from 'lucide-react';
+import { Save, Trash2, Loader2, AlertCircle, Users, UserPlus, Settings as SettingsIcon, X, Github, Link as LinkIcon, ExternalLink, Play } from 'lucide-react';
 import {
     getProject, updateProject, deleteProject, updateProjectMemberRole, removeProjectMember, getUsersBatch,
     listGitHubInstallations, listGitHubRepositories, linkProjectToRepository, getProjectRepositoryConnection, unlinkProjectRepository,
@@ -11,6 +11,7 @@ import { InviteMemberModal } from './InviteMemberModal';
 import { useProjectPermissions } from '../../hooks/useProjectPermissions';
 import { confirmAction, listConfirmOwnerTransfer, showSuccess, showError } from '../../utils/sweetAlert';
 import { signalRService } from '../../services/signalRService';
+import { WorkflowGeneratorModal } from './WorkflowGeneratorModal';
 
 export function ProjectSettingsPage() {
     const { key } = useParams();
@@ -23,6 +24,7 @@ export function ProjectSettingsPage() {
     const [activeTab, setActiveTab] = useState<'settings' | 'members' | 'github'>('settings');
     const [project, setProject] = useState<ProjectDto | null>(null);
     const [showInviteModal, setShowInviteModal] = useState(false);
+    const [showWorkflowModal, setShowWorkflowModal] = useState(false);
 
     // GitHub State
     const [ghLoading, setGhLoading] = useState(false);
@@ -568,12 +570,21 @@ export function ProjectSettingsPage() {
                                         </a>
                                     </div>
                                 </div>
-                                <button
-                                    onClick={handleUnlinkRepository}
-                                    className="px-4 py-2 bg-white text-error border border-error/20 hover:bg-error/5 rounded-lg text-sm font-medium transition-colors"
-                                >
-                                    Unlink
-                                </button>
+                                <div className="flex items-center gap-3">
+                                    <button
+                                        onClick={() => setShowWorkflowModal(true)}
+                                        className="px-4 py-2 bg-indigo-500/10 text-indigo-500 hover:bg-indigo-500/20 border border-indigo-500/20 rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
+                                    >
+                                        <Play className="w-4 h-4 fill-current" />
+                                        AI Workflow Üret
+                                    </button>
+                                    <button
+                                        onClick={handleUnlinkRepository}
+                                        className="px-4 py-2 bg-white text-error border border-error/20 hover:bg-error/5 rounded-lg text-sm font-medium transition-colors"
+                                    >
+                                        Unlink
+                                    </button>
+                                </div>
                             </div>
                         ) : (
                             <div className="space-y-6">
@@ -660,6 +671,17 @@ export function ProjectSettingsPage() {
                         isOpen={showInviteModal}
                         onClose={() => setShowInviteModal(false)}
                         onMemberAdded={() => loadProject(key)}
+                    />
+                )
+            }
+
+            {/* Workflow Generator Modal */}
+            {
+                key && project?.id && (
+                    <WorkflowGeneratorModal
+                        projectKey={key}
+                        isOpen={showWorkflowModal}
+                        onClose={() => setShowWorkflowModal(false)}
                     />
                 )
             }

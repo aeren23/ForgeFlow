@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ForgeFlow.Identity.Infrastructure")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5ce32678c9b15c06d541f8aa1e2f8c66d3ec9bf7")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4f2a35c7dda70e7a0fe9f178a0f9602e689499ee")]
 [assembly: System.Reflection.AssemblyProductAttribute("ForgeFlow.Identity.Infrastructure")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ForgeFlow.Identity.Infrastructure")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
